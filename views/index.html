@@ -1,0 +1,132 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Faster than - Tell me how much faster Y is vs X</title>
+    
+    <!-- 
+inspired by http://math.stackexchange.com/questions/1227389/what-is-the-difference-between-faster-by-factor-and-faster-by-percent 
+but i think he's wrong ;)
+-->
+    
+<!--     <meta name="description" content="A cool thing made with HyperDev"> -->
+    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  
+<!--  
+  TODO:
+
+  * add checkbox to indicate: this is a rate not a scalar. (100mph vs 150mph)
+
+-->
+  
+  <h1>Faster Than</h1>
+  
+  <section id="calculatorContainer">
+    
+
+    <form class="wrapper">
+      
+      <fieldset class="calculator" id="areaCalculator">
+        <h2>What was the baseline value?</h2>
+        
+        <div>
+          <input type="number" id="baseline" step="any" value="">
+          <span>(time units)</span>  
+          <label for="areaHeight">Can u believe <em>so slow</em>?</label>
+        </div>
+        
+      </fieldset>
+      
+      <fieldset class="calculator" id="tileDimensions">
+        <h2>What is the new value?</h2>
+     
+        <div>
+          <input type="number" id="newvalue" value="">
+          <span>(time units)</span>
+          <label for="areaHeight">OMG, u so <em>fast</em> now.</label>
+        </div>
+        
+      </fieldset>
+      
+      <input type="submit" value="Calculate">
+      
+    </form>
+  </section>
+  
+  <section id="results">
+    <span id="basic-summary" class="wrapper">Alright! <strong id="tilesPerMeterSquared" class="result">you could say</strong>…</span>  
+    <div id="calculatorResults" class="wrapper">
+      
+    </div>
+  </section>
+  
+  
+  
+  
+  <script>
+    const $ = document.querySelector.bind(document);
+
+    function calculate(baseline, newvalue) {
+      const difference = Math.abs(newvalue - baseline);
+
+      return {
+        fasterPct:  difference / newvalue * 100,
+        fasterX:    difference / newvalue + 1,
+        lessTimePct: difference / baseline * 100,
+        
+        // speedOfPct: newvalue / newvalue * 100,
+        // speedOfX:   newvalue / newvalue,
+        //factorFaster,
+        
+        
+        baseline,
+        newvalue,
+      }
+    }
+    function interpolate(values){
+      // round decimal places
+      Object.keys(values).forEach(key => {
+        values[key] = values[key].toLocaleString(undefined, {maximumFractionDigits: 2})
+      });
+      const val = values;
+
+      let str = `
+        You're now <strong id="faster">${val.fasterPct}% faster</strong> .
+        You're now <strong id="fasterX">${val.fasterX} times faster</strong>.
+        You now spend <strong id="lessTime">${val.lessTimePct}% less time </strong> than before.
+      `;
+      // The new duration is <strong id="speedOfX">${val.speedOfX} times faster</strong>  before.
+      // The new duration (<b>${val.newvalue}</b>) is <strong id="speedOf">${val.speedOfPct}%</strong> of the baseline (<b>${val.baseline}</b>).a
+      // The new speed (<b>${val.newvalue}</b>) is greater than the baseline (<b>${val.baseline}</b>) by a factor of <strong id="factor">${val.factorFaster}</strong>.
+      str = '<p>' + str.split(/\n/).join('<p>');
+      return str;
+
+    }
+    var listeneraddedtobaseline = false;
+    function run() {
+     const baseline = $('#baseline').value;
+      const newvalue = $('#newvalue').value;
+      
+      const values = calculate(baseline, newvalue);
+      const str = interpolate(values);
+      $('#calculatorResults').innerHTML = str;
+      
+      $('#results').classList.add('open');
+      $('#calculatorContainer').classList.add('submitted');
+      if (!listeneraddedtobaseline){
+        listeneraddedtobaseline = true;
+        $('#baseline').addEventListener('keyup', run);
+      }
+    }
+    $('#newvalue').addEventListener('keyup', run);
+    $('form').addEventListener('submit', e => { e.preventDefault(); run(); });
+     
+
+  </script>
+  
+</html>
