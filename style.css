@@ -18,6 +18,7 @@ html, body {
 
 body {
   font-family: Avenir,helvetica, arial, sans-serif;
+    color:white;
   margin: 25px;
   display:flex;
   flex-direction:column;

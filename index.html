@@ -31,18 +31,65 @@ but i think he's wrong ;)
 
     <form class="wrapper">
       
-      <fieldset class="calculator" id="areaCalculator">
-        <h2>What was the baseline value?</h2>
-        
-        <div>
-          <input type="number" id="baseline" step="any" value="">
-          <span>(time units)</span>  
-          <label for="areaHeight">Can u believe <em>so slow</em>?</label>
-        </div>
-        
-      </fieldset>
+      <table>
+        <thead><tr>
+          <th>Metric</th>
+          <th>Value</th>
+          <th>Score</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>FCP</td>
+            <td>
+              <input type="range" class="FCP metric-value">
+              <output></output>
+            </td>
+            <td><meter class="FCP" min="0" max="1" value="0.5"/></td>
+          </tr>
+          <tr>
+            <td>SI</td>
+            <td>
+              <input type="range" class="SI metric-value">
+              <output></output>
+            </td>
+            <td><meter class="SI" min="0" max="1" value="0.5"/></td>
+          </tr>
+          <tr>
+            <td>LCP</td>
+            <td>
+              <input type="range" class="LCP metric-value">
+              <output></output>
+            </td>
+            <td><meter class="LCP" min="0" max="1" value="0.5"/></td>
+          </tr>
+          <tr>
+            <td>TTI</td>
+            <td>
+              <input type="range" class="TTI metric-value">
+              <output></output>
+            </td>
+            <td><meter class="TTI" min="0" max="1" value="0.5"/></td>
+          </tr>
+          <tr>
+            <td>TBT</td>
+            <td>
+              <input type="range" class="TBT metric-value">
+              <output></output>
+            </td>
+            <td><meter class="TBT" min="0" max="1" value="0.5"/></td>
+          </tr>
+        </tbody>
+      </table>
       
-      <fieldset class="calculator" id="tileDimensions">
+      <div class="perfscore">
+        <h3>
+          Performance score: <output>score</output>
+        </h3>
+        <meter class="perf-score"></meter>
+      </div>
+      
+      
+      <!-- <fieldset class="calculator" id="tileDimensions">
         <h2>What is the new value?</h2>
      
         <div>
@@ -53,7 +100,7 @@ but i think he's wrong ;)
         
       </fieldset>
       
-      <input type="submit" value="Calculate">
+      <input type="submit" value="Calculate"> -->
       
     </form>
   </section>
