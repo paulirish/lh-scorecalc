@@ -72,7 +72,7 @@ for (const metricRow of $$("tbody tr")) {
       .pipe(rxjs.operators.startWith(rangeElem.value));
 
     if (type === "score") {
-      scoreObservers.push(rangeValueObsr);
+      scoreObservers.push({[metricId]: rangeValueObsr});
     }
 
     rangeValueObsr.subscribe(x => (outputElem.textContent = x));
@@ -81,13 +81,13 @@ for (const metricRow of $$("tbody tr")) {
 
 
 
- 
-const perfScore = rxjs.combineLatest(...scoreObservers).pipe(
+debugger;
+const perfScore = rxjs.combineLatest(...Object.values(scoreObservers)).pipe(
   rxjs.operators.map((...data) => console.log(data)),
 );
  
-perfScore.subscribe(x => $('h3 output')
-)
+perfScore.subscribe(x => $('h3 output').textContent = x);
+
 
 // for (const [metricId, weight] of Object.entries(weights)) {
 //   const meterElem = $(`meter.${metricId}`);
