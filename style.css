@@ -5,65 +5,71 @@
 /* less: http://lesscss.org/ */
 * {
   box-sizing: border-box;
-  
 }
 
-
-html, body {
-  background-color:hsla(225, 68%, 25%, 1);
-  height:100%;
-  margin:0;
-  padding:0;
+html,
+body {
+  background-color: hsla(225, 68%, 25%, 1);
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  font-family: Avenir,helvetica, arial, sans-serif;
-    color:white;
+  font-family: Avenir, helvetica, arial, sans-serif;
+  color: white;
   margin: 25px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  margin:0;
-  -webkit-font-smoothing:antialiased
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 table {
-  layout-fixed;
+  table-layout: fixed;
 }
+
 .th--score {
   width: 200px;
 }
 meter {
   width: 20vw;
 }
-span.meter, span.meter__inner { display:inline-block; }
+span.meter,
+span.meter__inner {
+  display: inline-block;
+}
 
 span.meter {
   background: gray;
+  width: 200px;
+  height: 10px;
+
 }
-span.meter__inner { width: 50%; background: purple; }
+span.meter__inner {
+  width: 50%;
+  background: purple;
+  height: 10px;
+
+}
 
 section {
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
   font-weight: bold;
   color: pink;
-  font-size:16px;
-  margin:20px;
+  font-size: 16px;
+  margin: 20px;
 }
 
 #results {
-  background-color:hsla(217, 95%, 63%, 1);
+  background-color: hsla(217, 95%, 63%, 1);
 }
-
-
-
-
 
 .wrapper {
   max-width: 960px;
@@ -73,189 +79,182 @@ h1 {
 }
 
 h2 {
-  font-weight:200;
-  color:white;
-  font-size:21px;
+  font-weight: 200;
+  color: white;
+  font-size: 21px;
 }
 
-form{
-  overflow:hidden;
+form {
+  overflow: hidden;
 }
 
 fieldset {
-  border:none;
-  overflow:hidden;
-  margin-bottom:40px;
-  width:45%;
-  float:left;
+  border: none;
+  overflow: hidden;
+  margin-bottom: 40px;
+  width: 45%;
+  float: left;
   // background:url(https://cdn.hyperdev.com/43cbc4ff-8131-436e-943a-21e8bac7f71a%2Ficon_cross.svg) center 90px no-repeat;
-  background-size:20px 20px;
-  transition:all .3s ease;
-  
+  background-size: 20px 20px;
+  transition: all 0.3s ease;
 }
 
 fieldset:first-of-type {
-  margin-right:9%;
+  margin-right: 9%;
 }
 
-
-
 fieldset div {
-  width:42%;
-  float:left;
-  position:relative;
+  width: 42%;
+  float: left;
+  position: relative;
 }
 
 fieldset div:first-of-type {
-  margin-right:16%;
+  margin-right: 16%;
 }
 
-input[type=number], form span {
-  padding:.3em 0 0 0;
-  color:white;
+input[type="number"] {
+  padding: 0.3em 0 0 0;
+  color: white;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-input[type=number] {
-  border:none;
-  border-bottom:solid 5px hsla(227, 100%, 71%, 1);
-  background-color:transparent;
-  margin-bottom:5px;
-  text-align:left;
-  display:inline-block;
-  width:100%;
-  font-size:3em;
-  position:relative;
-  box-sizing:border-box;
-  -webkit-appearance:none;
-  transition:all .2s ease;
-  outline:none;
+input[type="number"] {
+  border: none;
+  border-bottom: solid 5px hsla(227, 100%, 71%, 1);
+  background-color: transparent;
+  margin-bottom: 5px;
+  text-align: left;
+  display: inline-block;
+  width: 100%;
+  font-size: 3em;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  transition: all 0.2s ease;
+  outline: none;
 }
 
-input[type=submit] {
-    background-color: transparent;
-    border: solid 3px white;
-    font-size: 24px;
-    padding: 1em 2em;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.9);
-    color: white;
-    text-align: center;
-    display: block;
-    margin: 0 auto;
-    margin-top: 20px;
-    transition:all .3s ease;
-    position:relative;
-    cursor:pointer;
+input[type="submit"] {
+  background-color: transparent;
+  border: solid 3px white;
+  font-size: 24px;
+  padding: 1em 2em;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  color: white;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
 }
 
-input[type=submit]:hover {
-    border: solid 3px hsla(192, 78%, 51%, 1);
-    color:hsla(192, 78%, 51%, 1);
+input[type="submit"]:hover {
+  border: solid 3px hsla(192, 78%, 51%, 1);
+  color: hsla(192, 78%, 51%, 1);
 }
 
-
-input[type=submit]:active, input[type=submit]:focus {
-    top:1px;
+input[type="submit"]:active,
+input[type="submit"]:focus {
+  top: 1px;
 }
 
-.submitted input[type=submit] {
-  opacity:0;
-  pointer-events:none
+.submitted input[type="submit"] {
+  opacity: 0;
+  pointer-events: none;
 }
 
-.submitted fieldset{
-  margin-top:60px;
+.submitted fieldset {
+  margin-top: 60px;
 }
 
-fieldset:first-of-type input{
-  text-align:center;
+fieldset:first-of-type input {
+  text-align: center;
 }
 
-input[type=number]:hover {
-  border:none;
-  border-bottom:solid 5px white;
+input[type="number"]:hover {
+  border: none;
+  border-bottom: solid 5px white;
 }
 
-input[type=number]:active, input[type=number]:focus {
-  border:none;
-  border-bottom:solid 5px hsla(189, 100%, 61%, 1);
+input[type="number"]:active,
+input[type="number"]:focus {
+  border: none;
+  border-bottom: solid 5px hsla(189, 100%, 61%, 1);
 }
 
 form span {
   font-weight: 100;
   font-size: 19px;
   color: hsla(226, 35%, 40%, 1);
-  position: absolute;
-  top: 40px;
-  left: 100%;
-  width: 106px;
 }
 
 label {
-  display:block;
-  color:rgba(255,255,255,.8);
-  margin-bottom:5px;
-  display:block;
-  font-size:1.2em;
-  font-size:14px;
-  font-weight:100;
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 5px;
+  display: block;
+  font-size: 1.2em;
+  font-size: 14px;
+  font-weight: 100;
 }
 
 label em {
-  color:hsla(192, 48%, 51%, 1);
-  font-style:normal;
+  color: hsla(192, 48%, 51%, 1);
+  font-style: normal;
 }
-
 
 /* Results */
 
 #results span {
-  color:white;
-  display:block;
-  font-weight:100;
-  margin-bottom:35px;
+  color: white;
+  display: block;
+  font-weight: 100;
+  margin-bottom: 35px;
 }
 
 #basic-summary {
-  font-size:21px;
+  font-size: 21px;
 }
 
 .sayings {
-  font-size:48px;
+  font-size: 48px;
 }
 
 #results {
-  height:0%;
-  overflow:hidden;
-  transition:all .6s ease;
+  height: 0%;
+  overflow: hidden;
+  transition: all 0.6s ease;
   flex-direction: column;
   align-items: baseline;
 }
 
 #results.open {
-  height:70%;
+  height: 70%;
 }
 
-strong{
-  position:relative;
-  display:inline-block;
+strong {
+  position: relative;
+  display: inline-block;
 }
 
 #results strong::after {
-  display:block;
-  content:'';
-  height:4px;
-  background-color:white;
-  bottom:0px;
-  position:absolute;
-  width:100%;
+  display: block;
+  content: "";
+  height: 4px;
+  background-color: white;
+  bottom: 0px;
+  position: absolute;
+  width: 100%;
 }
 #results #calculatorResults strong::after {
-  height:2px;
+  height: 2px;
 }

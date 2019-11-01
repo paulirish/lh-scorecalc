@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Faster than - Tell me how much faster Y is vs X</title>
+    <title>Scoring calculator</title>
 
-    <!-- 
-inspired by http://math.stackexchange.com/questions/1227389/what-is-the-difference-between-faster-by-factor-and-faster-by-percent 
-but i think he's wrong ;)
--->
-
+  
     <!--     <meta name="description" content="A cool thing made with HyperDev"> -->
     <link
       id="favicon"
@@ -18,6 +14,7 @@ but i think he's wrong ;)
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js" ></script>
   </head>
 
   <!--  
@@ -154,7 +151,7 @@ but i think he's wrong ;)
     
     $$('span.meter').forEach(elem => {
       const inner = document.createElement('span');
-      inner.classList.add('.meter__inner');
+      inner.classList.add('meter__inner');
       elem.append(inner);
     });
  
