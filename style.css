@@ -1,8 +1,6 @@
 /* styles */
 /* called by your view template */
 
-/* You might want to try something fancier: */
-/* less: http://lesscss.org/ */
 * {
   box-sizing: border-box;
 }
@@ -17,12 +15,12 @@ body {
 
 @font-face {
   font-family: "Exo2";
-  src: url("https://cdn.glitch.com/722a76de-66ae-475a-8f8d-58107d5d8832%2Fexo-2-latin-400.woff2?v=1572577359632") format("woff2"),;
+  src: url("https://cdn.glitch.com/722a76de-66ae-475a-8f8d-58107d5d8832%2Fexo-2-latin-400.woff2?v=1572577359632")
+    format("woff2");
 }
 
 body {
-
-  font-family: "Exo2", 'Exo 2', Avenir, helvetica, arial, sans-serif;
+  font-family: "Exo2", "Exo 2", Avenir, helvetica, arial, sans-serif;
   color: white;
   margin: 25px;
   display: flex;
@@ -34,16 +32,22 @@ body {
 
 table {
   table-layout: fixed;
+
   /* this is some amazing shit. https://kennethormandy.com/journal/flipping-on-tabular-numbers/ */
-  font-variant-numeric: lining-nums tabular-nums;
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
 }
 
-/* .th--score {
-  width: 200px;
+th {
+  border-bottom: solid 3px hsla(227, 100%, 71%, 1);
 }
- */
+tr:first-child td {
+  border-top: 8px solid transparent;
+}
+
 tbody td:nth-child(3) {
-width: 110px;
+  width: 110px;
   text-align: right;
   padding-right: 30px;
 }
