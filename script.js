@@ -62,11 +62,6 @@ function arithmeticMean(items) {
 
 
 
-$$('input.metric-value').forEach(elem => {
-  elem.min = 0;
-  elem.max = 20 * 1000;
-  elem.value = Math.random() * 3000 + 5000;
-});
 
 $$("span.meter").forEach(elem => {
   const inner = document.createElement("span");
@@ -92,6 +87,14 @@ const scoring = {
   FCPUI: { median: 6500, falloff: 2900 }
 };
 
+$$('input.metric-value').forEach(elem => {
+  elem.min = 0;
+  elem.max = 20 * 1000;
+  elem.value = Math.random() * 3000 + 5000;
+});
+
+
+
 // make sure weights total to 1
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
@@ -106,7 +109,8 @@ console.clear();
 const map = rxjs.operators.map;
 const scoreObsevers = [];
 const valueObservers = [];
-// set up observables
+
+// Output slider observables
 for (const metricRow of $$("tbody tr")) {
   const metricId = metricRow.id;  
 
@@ -128,18 +132,23 @@ for (const metricRow of $$("tbody tr")) {
       x => (outputElem.textContent = giveElement(x).value)
     );
   }
-} 
+}  
 
+// On value change, set score value
 for (const obs of valueObservers) {
   obs.subscribe(eventOrElem => {
     const elem = giveElement(eventOrElem);
     const metricId = elem.closest("tr").id;
-    $$(`input.${metricId}.metric-score`).value = Math.random() * 50;
+    const computedScore = Math.round(QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100);
+    
+    
+    const scoreElem = $(`input.${metricId}.metric-score`);
+    scoreElem.value = computedScore; // Math.random() * 100;
+    scoreElem.dispatchEvent(new Event('input'));
   })
 }
-
-// this is so lame and there's gotta be a better way.
-
+ 
+// Compute the perf score
 const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
   map(([...elems]) => {
     const items = elems.map(eventOrElem => {
