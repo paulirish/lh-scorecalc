@@ -66,25 +66,11 @@ tbody td:nth-child(7) {
   text-align: right;
 }
 
-
-meter {
-  width: 20vw;
-}
-span.meter,
-span.meter__inner {
-  display: inline-block;
+input.metric-value {
+  width: 210px;
 }
 
-span.meter {
-  background: gray;
-  width: 200px;
-  height: 10px;
-}
-span.meter__inner {
-  width: 50%;
-  background: purple;
-  height: 10px;
-}
+
 
 section {
   display: flex;

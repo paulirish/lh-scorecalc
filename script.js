@@ -9,36 +9,28 @@ const $$ = document.querySelectorAll.bind(document);
 const NBSP = '\xa0';
 const numberFormatter = new Intl.NumberFormat();
 
+// thx Lighthouse's util.js
 function arithmeticMean(items) {
-  // Filter down to just the items with a weight as they have no effect on score
   items = items.filter(item => item.weight > 0);
-  // If there is 1 null score, return a null average
-  if (items.some(item => item.score === null)) return null;
-
   const results = items.reduce(
     (result, item) => {
       const score = item.score;
       const weight = item.weight;
-
       return {
         weight: result.weight + weight,
-        sum: result.sum + /** @type {number} */ (score) * weight,
+        sum: result.sum + score * weight,
       };
     },
     {weight: 0, sum: 0}
   );
-
   return results.sum / results.weight || 0;
 }
-
 const RATINGS = {
   PASS: {label: 'pass', minScore: 0.9},
   AVERAGE: {label: 'average', minScore: 0.5},
   FAIL: {label: 'fail'},
 };
-
 function calculateRating(score) {
-  // At this point, we're rating a standard binary/numeric audit
   let rating = RATINGS.FAIL.label;
   if (score >= RATINGS.PASS.minScore) {
     rating = RATINGS.PASS.label;
@@ -48,6 +40,10 @@ function calculateRating(score) {
   return rating;
 }
 
+/**
+ * V6 weights 
+ */
+
 const weights = {
   FCP: 0.25,
   SI: 0.15,
@@ -56,6 +52,9 @@ const weights = {
   TBT: 0.25,
 };
 
+/** 
+ * V5/v6 scoring curves
+ */
 const scoring = {
   FCP: {median: 4000, falloff: 2000},
   FMP: {median: 4000, falloff: 2000},
@@ -66,7 +65,7 @@ const scoring = {
   FCPUI: {median: 6500, falloff: 2900},
 };
 
-// make sure weights total to 1
+// Nake sure weights total to 1
 const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(weightSum === 1);
 const maxWeight = Math.max(...Object.values(weights));
@@ -78,9 +77,7 @@ const giveElement = eventOrElem =>
 // Gotta avoid infinite loop since we dispatchEvent ourselves
 const isManuallyDispatched = eventOrElem => eventOrElem instanceof Event && !eventOrElem.isTrusted;
 
-const map = rxjs.operators.map;
-
-// Set weighting text
+// Set weighting column
 $$('.weight-text').forEach(elem => {
   const metricId = elem.closest('tr').id;
   elem.textContent = `${weights[metricId] * 100}%`;
@@ -89,6 +86,8 @@ $$('.weight-text').forEach(elem => {
 // Set up value sliders
 const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   const metricId = elem.closest('tr').id;
+  const outputElem = $(`.value-output.${metricId}`);
+  const scoreElem = $(`input.${metricId}.metric-score`);
 
   // Calibrate min & max using scoring curve
   const valueAtScore100 = VALUE_AT_QUANTILE(
@@ -106,7 +105,7 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   const max = Math.ceil(valueAtScoreZero / 1000) * 1000;
   elem.min = min;
   elem.max = max;
-  
+
   // Restore cached value if available, otherwise generate reasonable random stuff
   if (localStorage.metricValues) {
     const cachedValues = JSON.parse(localStorage.metricValues);
@@ -115,41 +114,34 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
     elem.value = Math.max((Math.random() * (max - min)) / 2, min);
   }
 
-  const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs.fromEvent(elem, 'input').pipe(rxjs.operators.startWith(elem));
 
-  obs.subscribe(x => {
-    const milliseconds = Math.round(giveElement(x).value / 10);
-    outputElem.textContent = `${numberFormatter.format(
-        milliseconds * 10
-    )}${NBSP}ms`;
+  obs.subscribe(eventOrElem => {
+    const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
+    outputElem.textContent = `${numberFormatter.format(milliseconds * 10)}${NBSP}ms`;
+  });
+
+  // On value slider change, set score
+  obs.subscribe(eventOrElem => {
+    if (isManuallyDispatched(eventOrElem)) return;
+    const elem = giveElement(eventOrElem);
+
+    const computedScore = Math.round(
+      QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100
+    );
+
+    scoreElem.value = computedScore;
+    scoreElem.dispatchEvent(new Event('input'));
   });
 
   return obs;
 });
 
-// On value slider change, set score
-for (const obs of valueObservers) {
-  obs.subscribe(eventOrElem => {
-    if (isManuallyDispatched(eventOrElem)) return;
-    const elem = giveElement(eventOrElem);
-
-    const metricId = elem.closest('tr').id;
-    const computedScore = Math.round(
-      QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100
-    );
-
-    const scoreElem = $(`input.${metricId}.metric-score`);
-    scoreElem.value = computedScore; // Math.random() * 100;
-    scoreElem.dispatchEvent(new Event('input'));
-  });
-}
-
-// cache metric value to localStorage (debounced at 1s)
+// Cache the metric values to localStorage (debounced at 1s)
 rxjs
   .combineLatest(...valueObservers)
   .pipe(
-    map(([...elems]) => {
+    rxjs.operators.map(([...elems]) => {
       return Object.fromEntries(
         elems.map(eventOrElem => {
           const elem = giveElement(eventOrElem);
@@ -159,67 +151,70 @@ rxjs
       );
     })
   )
-  .pipe(rxjs.operators.debounce(() => rxjs.interval(1000))).subscribe(values => {
-  localStorage.metricValues = JSON.stringify(values);
-});
+  .pipe(rxjs.operators.debounce(() => rxjs.interval(1000)))
+  .subscribe(values => {
+    localStorage.metricValues = JSON.stringify(values);
+  });
 
-// Decorate score sliders
+// Setup the score sliders
 const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   const metricId = elem.closest('tr').id;
   const rangeElem = $(`.metric-score.${metricId}`);
   const outputElem = $(`.score-output.${metricId}`);
+  const valueElem = $(`input.${metricId}.metric-value`);
 
   const scaledWidth = weights[metricId] / maxWeight;
   rangeElem.style.width = `${scaledWidth * 100}%`;
 
   const obs = rxjs.fromEvent(rangeElem, 'input').pipe(rxjs.operators.startWith(rangeElem));
-  obs.subscribe(x => {
-    const score = giveElement(x).value;
-
-    giveElement(x).closest('tr').className = `lh-metric--${calculateRating(score / 100)}`;
+  obs.subscribe(eventOrElem => {
+    const elem = giveElement(eventOrElem);
+    const score = elem.value;
+    // Set class for icon
+    elem.closest('tr').className = `lh-metric--${calculateRating(score / 100)}`;
     outputElem.textContent = score;
   });
-  return obs;
-});
 
-// On score slider change, update values (backwards direction!)
-for (const obs of scoreObservers) {
+  // On score slider change, update values (backwards direction!)
   obs.subscribe(eventOrElem => {
     if (isManuallyDispatched(eventOrElem)) return;
     const elem = giveElement(eventOrElem);
 
-    const metricId = elem.closest('tr').id;
     let computedValue = Math.round(
       VALUE_AT_QUANTILE(scoring[metricId].median, scoring[metricId].falloff, elem.value / 100)
     );
 
-    const valueElem = $(`input.${metricId}.metric-value`);
-    if (computedValue === Infinity) valueElem.value = valueElem.max;
-    else valueElem.value = computedValue;
+    // Clamp because we can end up with Infinity
+    valueElem.value = Math.min(computedValue, valueElem.max);
     valueElem.dispatchEvent(new Event('input'));
   });
-}
+
+  return obs;
+});
 
 // Compute the perf score
-rxjs.combineLatest(...scoreObservers).pipe(
-  map(([...elems]) => {
-    const items = elems.map(eventOrElem => {
-      const elem = giveElement(eventOrElem);
-      const metricId = elem.closest('tr').id;
-      return {weight: weights[metricId], score: elem.value};
-    });
-    const weightedMean = arithmeticMean(items);
-    return weightedMean;
-  })
-).subscribe(score => {
-  const wrapper = $('.lh-gauge__wrapper');
-  wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
+rxjs
+  .combineLatest(...scoreObservers)
+  .pipe(
+    rxjs.operators.map(([...elems]) => {
+      const items = elems.map(eventOrElem => {
+        const elem = giveElement(eventOrElem);
+        const metricId = elem.closest('tr').id;
+        return {weight: weights[metricId], score: elem.value};
+      });
+      const weightedMean = arithmeticMean(items);
+      return weightedMean;
+    })
+  )
+  .subscribe(score => {
+    const wrapper = $('.lh-gauge__wrapper');
+    wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
+    wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
 
-  const gaugeArc = $('.lh-gauge-arc');
-  gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
+    const gaugeArc = $('.lh-gauge-arc');
+    gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
 
-  const scoreOutOf100 = Math.round(score);
-  const percentageEl = $('.lh-gauge__percentage');
-  percentageEl.textContent = scoreOutOf100.toString();
-});
+    const scoreOutOf100 = Math.round(score);
+    const percentageEl = $('.lh-gauge__percentage');
+    percentageEl.textContent = scoreOutOf100.toString();
+  });
