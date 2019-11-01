@@ -171,7 +171,7 @@
 
       <div class="perfscore">
         <h3>Performance score: <output>score</output></h3>
-        <meter class="perf-score" value="0.45"></meter>
+        <meter class="perf-score" min=0 max=100 ></meter>
       </div>
 
     
@@ -183,6 +183,6 @@
     defer
     src="https://unpkg.com/@reactivex/rxjs@6.5.3/dist/global/rxjs.umd.js"
   ></script> 
-
+  <script defer src="math.js"></script>
   <script defer src="script.js"></script>
 </html>

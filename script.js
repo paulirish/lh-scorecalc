@@ -14,6 +14,28 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function(
   });
 };
 
+function arithmeticMean(items) {
+  // Filter down to just the items with a weight as they have no effect on score
+  items = items.filter(item => item.weight > 0);
+  // If there is 1 null score, return a null average
+  if (items.some(item => item.score === null)) return null;
+
+  const results = items.reduce(
+    (result, item) => {
+      const score = item.score;
+      const weight = item.weight;
+
+      return {
+        weight: result.weight + weight,
+        sum: result.sum + /** @type {number} */ (score) * weight
+      };
+    },
+    { weight: 0, sum: 0 }
+  );
+
+  return results.sum / results.weight || 0;
+}
+
 /* global rxjs */
 
 // BMI Calculator
@@ -81,23 +103,25 @@ for (const metricRow of $$("tbody tr")) {
   }
 }
 
-console.clear();
-const {fcpObs, siObs, lcpObs, ttiObs, tbtObs} = scoreObservers;
+// this is so lame and there's gotta be a better way.
+const { fcpObs, siObs, lcpObs, ttiObs, tbtObs } = scoreObservers;
 const perfScore = rxjs
-  .combineLatest(scoreObservers.keys(), scoreObservers.values())
+  .combineLatest(fcpObs, siObs, lcpObs, ttiObs, tbtObs)
   .pipe(
-    map(([obs, metricId]) => {
-      console.log({ obs, metricId });
-      return obs.pipe(
-        map(lol => {
-          debugger;
-          console.log(lol);
-        })
-      );
+    map(([FCP, SI, LCP, TTI, TBT]) => {
+      const weightedMean = arithmeticMean([
+        { weight: weights["FCP"], score: FCP },
+        { weight: weights["SI"], score: SI },
+        { weight: weights["LCP"], score: LCP },
+        { weight: weights["TTI"], score: TTI },
+        { weight: weights["TBT"], score: TBT }
+      ]);
+      return Math.round(weightedMean);
     })
   );
 
-perfScore.subscribe(x => ($("h3 output").textContent = JSON.stringify(x)));
+perfScore.subscribe(x => ($("h3 output").textContent = x));
+perfScore.subscribe(x => ($(".perf-score").value = x));
 
 // for (const [metricId, weight] of Object.entries(weights)) {
 //   const meterElem = $(`meter.${metricId}`);
