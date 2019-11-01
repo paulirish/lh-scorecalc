@@ -151,7 +151,7 @@ rxjs
       );
     })
   )
-  .pipe(rxjs.operators.debounce(() => rxjs.interval(1000)))
+  .pipe(rxjs.operators.debounce(() => rxjs.interval(500)))
   .subscribe(values => {
     localStorage.metricValues = JSON.stringify(values);
   });
