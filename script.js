@@ -60,6 +60,14 @@ function arithmeticMean(items) {
 //   elem.optimum = 0.9
 // })
 
+
+
+$$('input.metric-value').forEach(elem => {
+  elem.min = 0;
+  elem.max = 20 * 1000;
+  elem.value = Math.random() * 3000 + 5000;
+});
+
 $$("span.meter").forEach(elem => {
   const inner = document.createElement("span");
   inner.classList.add("meter__inner");
@@ -88,50 +96,59 @@ const scoring = {
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
 
-const giveElement = eventOrElem => (eventOrElem instanceof Event) ? eventOrElem.currentTarget : eventOrElem;
-
+const giveElement = eventOrElem =>
+  eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
 
 const maxWeight = Math.max(...Object.values(weights));
-const scoreObservers = {};
-const valueObservers = {};
+
+console.clear();
+
 const map = rxjs.operators.map;
-const lol = [];
+const scoreObsevers = [];
+const valueObservers = [];
 // set up observables
 for (const metricRow of $$("tbody tr")) {
-  const metricId = metricRow.id;
+  const metricId = metricRow.id;  
 
   for (const type of ["value", "score"]) {
     const rangeElem = $(`.metric-${type}.${metricId}`);
     const outputElem = $(`.${type}-output.${metricId}`);
 
-    const rangeValueObsr = rxjs
+    const obs = rxjs
       .fromEvent(rangeElem, "input")
       .pipe(rxjs.operators.startWith(rangeElem));
 
     if (type === "score") {
-      scoreObservers[`${metricId}score`] = rangeValueObsr;
-      lol.push(rangeValueObsr);
+      scoreObsevers.push(obs);
     } else if (type === "value") {
-      valueObservers[`${metricId}val`] = rangeValueObsr;
+      valueObservers.push(obs);
     }
 
-    rangeValueObsr.subscribe(x => (outputElem.textContent = giveElementx.value));
+    obs.subscribe(
+      x => (outputElem.textContent = giveElement(x).value)
+    );
   }
+} 
+
+for (const obs of valueObservers) {
+  obs.subscribe(eventOrElem => {
+    const elem = giveElement(eventOrElem);
+    const metricId = elem.closest("tr").id;
+    $$(`input.${metricId}.metric-score`).value = Math.random() * 50;
+  })
 }
 
 // this is so lame and there's gotta be a better way.
-const { FCPscore, SIscore, LCPscore, TTIscore, TBTscore } = scoreObservers;
-const perfScore = rxjs.combineLatest(...lol).pipe(
+
+const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
   map(([...elems]) => {
-    const items = elems.map(elem => {
-      if (elem instanceof Event) {
-        elem = elem.currentTarget;
-      }
+    const items = elems.map(eventOrElem => {
+      const elem = giveElement(eventOrElem);
       const metricId = elem.closest("tr").id;
       return { weight: weights[metricId], score: elem.value };
     });
     const weightedMean = arithmeticMean(items);
-    return Math.round(weightedMean);
+    return Math.round(weightedMean); 
   })
 );
 
