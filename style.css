@@ -15,8 +15,14 @@ body {
   padding: 0;
 }
 
+@font-face {
+  font-family: "Exo2";
+  src: url("https://cdn.glitch.com/722a76de-66ae-475a-8f8d-58107d5d8832%2Fexo-2-latin-400.woff2?v=1572577359632") format("woff2"),;
+}
+
 body {
-  font-family: Avenir, helvetica, arial, sans-serif;
+
+  font-family: "Exo2", 'Exo 2', Avenir, helvetica, arial, sans-serif;
   color: white;
   margin: 25px;
   display: flex;
@@ -29,7 +35,7 @@ body {
 table {
   table-layout: fixed;
   /* this is some amazing shit. https://kennethormandy.com/journal/flipping-on-tabular-numbers/ */
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* .th--score {
@@ -43,9 +49,8 @@ width: 110px;
 }
 
 tbody td:nth-child(5) {
-width: 40px;
+  width: 20px;
   text-align: right;
-  padding-right: 30px;
 }
 
 meter {
