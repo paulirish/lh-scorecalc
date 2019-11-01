@@ -88,11 +88,14 @@ const scoring = {
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
 
+const giveElement = eventOrElem => (eventOrElem instanceof Event) ? eventOrElem.currentTarget : eventOrElem;
+
+
 const maxWeight = Math.max(...Object.values(weights));
 const scoreObservers = {};
 const valueObservers = {};
 const map = rxjs.operators.map;
-
+const lol = [];
 // set up observables
 for (const metricRow of $$("tbody tr")) {
   const metricId = metricRow.id;
@@ -103,36 +106,34 @@ for (const metricRow of $$("tbody tr")) {
 
     const rangeValueObsr = rxjs
       .fromEvent(rangeElem, "input")
-      .pipe(map(ev => ev.target.value))
       .pipe(rxjs.operators.startWith(rangeElem));
 
     if (type === "score") {
       scoreObservers[`${metricId}score`] = rangeValueObsr;
+      lol.push(rangeValueObsr);
     } else if (type === "value") {
       valueObservers[`${metricId}val`] = rangeValueObsr;
-
     }
 
-    rangeValueObsr.subscribe(x => (outputElem.textContent = x));
+    rangeValueObsr.subscribe(x => (outputElem.textContent = giveElementx.value));
   }
 }
 
 // this is so lame and there's gotta be a better way.
-const { FCPscore, SIscore, LCPscore, TTIscore, TBTscore  } = scoreObservers;
-const perfScore = rxjs
-  .combineLatest(FCPscore, SIscore, LCPscore, TTIscore, TBTscore )
-  .pipe(
-    map(([FCP, SI, LCP, TTI, TBT]) => {
-      const weightedMean = arithmeticMean([
-        { weight: weights["FCP"], score: FCP },
-        { weight: weights["SI"], score: SI },
-        { weight: weights["LCP"], score: LCP },
-        { weight: weights["TTI"], score: TTI },
-        { weight: weights["TBT"], score: TBT }
-      ]);
-      return Math.round(weightedMean);
-    })
-  );
+const { FCPscore, SIscore, LCPscore, TTIscore, TBTscore } = scoreObservers;
+const perfScore = rxjs.combineLatest(...lol).pipe(
+  map(([...elems]) => {
+    const items = elems.map(elem => {
+      if (elem instanceof Event) {
+        elem = elem.currentTarget;
+      }
+      const metricId = elem.closest("tr").id;
+      return { weight: weights[metricId], score: elem.value };
+    });
+    const weightedMean = arithmeticMean(items);
+    return Math.round(weightedMean);
+  })
+);
 
 perfScore.subscribe(x => ($("h3 output").textContent = x));
 perfScore.subscribe(x => ($(".perf-score").value = x));
