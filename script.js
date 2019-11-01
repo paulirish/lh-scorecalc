@@ -108,9 +108,13 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   elem.min = min;
   elem.max = max;
 
-  // initialize with randomish values
-  elem.value = Math.max((Math.random() * (max - min)) / 2, min);
-  // TODO save values to localstorage
+  if (localStorage.metricValues) {
+    const cachedValues = JSON.parse(localStorage.metricValues);
+    elem.value = cachedValues[metricId];
+  } else {
+    // initialize with randomish values
+    elem.value = Math.max((Math.random() * (max - min)) / 2, min);
+  }
 
   const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs.fromEvent(elem, 'input').pipe(rxjs.operators.startWith(elem));
@@ -123,6 +127,7 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   
   return obs;
 });
+
 
 // On value slider change, set score
 for (const obs of valueObservers) {
@@ -140,6 +145,25 @@ for (const obs of valueObservers) {
     scoreElem.dispatchEvent(new Event('input'));
   });
 }
+ 
+const valuesToSave = rxjs.combineLatest(...valueObservers).pipe(
+  map(([...elems]) => {
+    console.log({elems});
+
+    const valuesToSave = Object.fromEntries(elems.map(elem => {
+      const metricId = elem.closest('tr').id;
+      return [metricId, elem.value]
+    }));
+    console.log({valuesToSave});
+    // const cachedValues = JSON.stringify(localStorage.metricValues);
+//     elem.value = cachedValues[metricId];
+}));
+valuesToSave.subscribe(score => {
+  console.log({score});
+});
+
+    
+
 
 // Decorate score sliders
 const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
