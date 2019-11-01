@@ -1,6 +1,6 @@
-/* global rxjs */
-
-console.clear();
+import {QUANTILE_AT_VALUE, VALUE_AT_QUANTILE} from './math.js';
+import { fromEvent, combineLatest, interval } from 'rxjs';
+import { map, startWith, debounce } from 'rxjs/operators';
 
 // blingjs
 const $ = document.querySelector.bind(document);
@@ -114,7 +114,7 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
     elem.value = Math.max((Math.random() * (max - min)) / 2, min);
   }
 
-  const obs = rxjs.fromEvent(elem, 'input').pipe(rxjs.operators.startWith(elem));
+  const obs = fromEvent(elem, 'input').pipe(startWith(elem));
 
   obs.subscribe(eventOrElem => {
     const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
@@ -138,10 +138,9 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
 });
 
 // Cache the metric values to localStorage (debounced at 1s)
-rxjs
-  .combineLatest(...valueObservers)
+combineLatest(...valueObservers)
   .pipe(
-    rxjs.operators.map(([...elems]) => {
+    map(([...elems]) => {
       return Object.fromEntries(
         elems.map(eventOrElem => {
           const elem = giveElement(eventOrElem);
@@ -151,7 +150,7 @@ rxjs
       );
     })
   )
-  .pipe(rxjs.operators.debounce(() => rxjs.interval(500)))
+  .pipe(debounce(() => interval(500)))
   .subscribe(values => {
     localStorage.metricValues = JSON.stringify(values);
   });
@@ -166,7 +165,7 @@ const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   const scaledWidth = weights[metricId] / maxWeight;
   rangeElem.style.width = `${scaledWidth * 100}%`;
 
-  const obs = rxjs.fromEvent(rangeElem, 'input').pipe(rxjs.operators.startWith(rangeElem));
+  const obs = fromEvent(rangeElem, 'input').pipe(startWith(rangeElem));
   obs.subscribe(eventOrElem => {
     const elem = giveElement(eventOrElem);
     const score = elem.value;
@@ -193,10 +192,9 @@ const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
 });
 
 // Compute the perf score
-rxjs
-  .combineLatest(...scoreObservers)
+combineLatest(...scoreObservers)
   .pipe(
-    rxjs.operators.map(([...elems]) => {
+    map(([...elems]) => {
       const items = elems.map(eventOrElem => {
         const elem = giveElement(eventOrElem);
         const metricId = elem.closest('tr').id;

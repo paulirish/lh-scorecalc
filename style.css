@@ -12,8 +12,7 @@ body {
 
 @font-face {
   font-family: "Exo2";
-  src: url("https://cdn.glitch.com/722a76de-66ae-475a-8f8d-58107d5d8832%2Fexo-2-latin-400.woff2?v=1572577359632")
-    format("woff2");
+  src: url("./exo-2-latin-400.woff2") format("woff2");
 }
 
 body {
@@ -35,7 +34,7 @@ table {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
 }
- 
+
 th {
   border-bottom: solid 3px hsla(227, 100%, 71%, 1);
 }

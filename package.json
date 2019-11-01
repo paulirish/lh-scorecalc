@@ -1,0 +1,22 @@
+{
+  "name": "lh-scorecalc",
+  "version": "1.0.0",
+  "description": "wassup ===========",
+  "main": "math.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^1.26.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "@reactivex/rxjs": "^6.5.3",
+    "rxjs": "^6.5.3"
+  }
+}
