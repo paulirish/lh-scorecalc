@@ -28,6 +28,16 @@ body {
   
 }
 
+table {
+  layout-fixed;
+}
+.th--score {
+  width: 200px;
+}
+meter {
+  width: 100%;
+}
+
 section {
   display:flex;
   justify-content:center;

@@ -1,94 +1,93 @@
-
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>Faster than - Tell me how much faster Y is vs X</title>
-    
+
     <!-- 
 inspired by http://math.stackexchange.com/questions/1227389/what-is-the-difference-between-faster-by-factor-and-faster-by-percent 
 but i think he's wrong ;)
 -->
-    
-<!--     <meta name="description" content="A cool thing made with HyperDev"> -->
-    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+
+    <!--     <meta name="description" content="A cool thing made with HyperDev"> -->
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://hyperdev.com/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
   </head>
-  
-<!--  
+
+  <!--  
   TODO:
 
   * add checkbox to indicate: this is a rate not a scalar. (100mph vs 150mph)
 
 -->
-  
-  <h1>Faster Than</h1>
-  
-  <section id="calculatorContainer">
-    
 
+  <h1>Faster Than</h1>
+
+  <section id="calculatorContainer">
     <form class="wrapper">
-      
       <table>
-        <thead><tr>
-          <th>Metric</th>
-          <th>Value</th>
-          <th>Score</th>
-        </tr></thead>
+        <thead>
+          <tr>
+            <th class="th--metric">Metric</th>
+            <th class="th--value">Value</th>
+            <th class="th--score">Score</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
             <td>FCP</td>
             <td>
-              <input type="range" class="FCP metric-value">
+              <input type="range" class="FCP metric-value" />
               <output></output>
             </td>
-            <td><meter class="FCP" min="0" max="1" value="0.5"/></td>
+            <td><meter class="FCP" value="0.5" /></td>
           </tr>
           <tr>
             <td>SI</td>
             <td>
-              <input type="range" class="SI metric-value">
+              <input type="range" class="SI metric-value" />
               <output></output>
             </td>
-            <td><meter class="SI" min="0" max="1" value="0.5"/></td>
+            <td><meter class="SI" value="0.5" /></td>
           </tr>
           <tr>
             <td>LCP</td>
             <td>
-              <input type="range" class="LCP metric-value">
+              <input type="range" class="LCP metric-value" />
               <output></output>
             </td>
-            <td><meter class="LCP" min="0" max="1" value="0.5"/></td>
+            <td><meter class="LCP" value="0.5" /></td>
           </tr>
           <tr>
             <td>TTI</td>
             <td>
-              <input type="range" class="TTI metric-value">
+              <input type="range" class="TTI metric-value" />
               <output></output>
             </td>
-            <td><meter class="TTI" min="0" max="1" value="0.5"/></td>
+            <td><meter class="TTI" value="0.5" /></td>
           </tr>
           <tr>
             <td>TBT</td>
             <td>
-              <input type="range" class="TBT metric-value">
+              <input type="range" class="TBT metric-value" />
               <output></output>
             </td>
-            <td><meter class="TBT" min="0" max="1" value="0.5"/></td>
+            <td><meter class="TBT" value="0.5" /></td>
           </tr>
         </tbody>
       </table>
-      
+
       <div class="perfscore">
-        <h3>
-          Performance score: <output>score</output>
-        </h3>
-        <meter class="perf-score"></meter>
+        <h3>Performance score: <output>score</output></h3>
+        <meter class="perf-score" value=0.45></meter>
       </div>
-      
-      
+
       <!-- <fieldset class="calculator" id="tileDimensions">
         <h2>What is the new value?</h2>
      
@@ -101,44 +100,86 @@ but i think he's wrong ;)
       </fieldset>
       
       <input type="submit" value="Calculate"> -->
-      
     </form>
   </section>
-  
+
   <section id="results">
-    <span id="basic-summary" class="wrapper">Alright! <strong id="tilesPerMeterSquared" class="result">you could say</strong>…</span>  
-    <div id="calculatorResults" class="wrapper">
-      
-    </div>
+    <span id="basic-summary" class="wrapper"
+      >Alright!
+      <strong id="tilesPerMeterSquared" class="result">you could say</strong
+      >…</span
+    >
+    <div id="calculatorResults" class="wrapper"></div>
   </section>
-  
-  
-  
-  
+
   <script>
     const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+
+    Node.prototype.on = window.on = function(name, fn) {
+      this.addEventListener(name, fn);
+    };
+
+    NodeList.prototype.__proto__ = Array.prototype;
+
+    NodeList.prototype.on = NodeList.prototype.addEventListener = function(
+      name,
+      fn
+    ) {
+      this.forEach(function(elem, i) {
+        elem.on(name, fn);
+      });
+    };
+
+    // set meter defaults
+    $$('meter').forEach(elem => {
+      elem.min = 0;
+      elem.max = 1;
+      elem.low = .9;
+      elem.high = .5;
+    })
+
+    const weights = {
+      FCP: 0.25,
+      SI: 0.15,
+      LCP: 0.2,
+      TTI: 0.15,
+      TBT: 0.25
+    };
+
+    // make sure weights total to 1
+    const sum = Object.values(weights).reduce((agg, val) => (agg += val));
+    console.assert(sum === 1);
+
+    const maxWeight = Math.max(...Object.values(weights));
+
+    for (const [metricId, weight] of Object.entries(weights)) {
+      const meterElem = $(`meter.${metricId}`);
+      meterElem.style.width = `${(weight / maxWeight) * 100}%`;
+    }
 
     function calculate(baseline, newvalue) {
       const difference = Math.abs(newvalue - baseline);
 
       return {
-        fasterPct:  difference / newvalue * 100,
-        fasterX:    difference / newvalue + 1,
-        lessTimePct: difference / baseline * 100,
-        
+        fasterPct: (difference / newvalue) * 100,
+        fasterX: difference / newvalue + 1,
+        lessTimePct: (difference / baseline) * 100,
+
         // speedOfPct: newvalue / newvalue * 100,
         // speedOfX:   newvalue / newvalue,
         //factorFaster,
-        
-        
+
         baseline,
-        newvalue,
-      }
+        newvalue
+      };
     }
-    function interpolate(values){
+    function interpolate(values) {
       // round decimal places
       Object.keys(values).forEach(key => {
-        values[key] = values[key].toLocaleString(undefined, {maximumFractionDigits: 2})
+        values[key] = values[key].toLocaleString(undefined, {
+          maximumFractionDigits: 2
+        });
       });
       const val = values;
 
@@ -150,30 +191,29 @@ but i think he's wrong ;)
       // The new duration is <strong id="speedOfX">${val.speedOfX} times faster</strong>  before.
       // The new duration (<b>${val.newvalue}</b>) is <strong id="speedOf">${val.speedOfPct}%</strong> of the baseline (<b>${val.baseline}</b>).a
       // The new speed (<b>${val.newvalue}</b>) is greater than the baseline (<b>${val.baseline}</b>) by a factor of <strong id="factor">${val.factorFaster}</strong>.
-      str = '<p>' + str.split(/\n/).join('<p>');
+      str = "<p>" + str.split(/\n/).join("<p>");
       return str;
-
     }
     var listeneraddedtobaseline = false;
     function run() {
-     const baseline = $('#baseline').value;
-      const newvalue = $('#newvalue').value;
-      
+      const baseline = $("#baseline").value;
+      const newvalue = $("#newvalue").value;
+
       const values = calculate(baseline, newvalue);
       const str = interpolate(values);
-      $('#calculatorResults').innerHTML = str;
-      
-      $('#results').classList.add('open');
-      $('#calculatorContainer').classList.add('submitted');
-      if (!listeneraddedtobaseline){
+      $("#calculatorResults").innerHTML = str;
+
+      $("#results").classList.add("open");
+      $("#calculatorContainer").classList.add("submitted");
+      if (!listeneraddedtobaseline) {
         listeneraddedtobaseline = true;
-        $('#baseline').addEventListener('keyup', run);
+        $("#baseline").addEventListener("keyup", run);
       }
     }
-    $('#newvalue').addEventListener('keyup', run);
-    $('form').addEventListener('submit', e => { e.preventDefault(); run(); });
-     
-
+    $("#newvalue").addEventListener("keyup", run);
+    $("form").addEventListener("submit", e => {
+      e.preventDefault();
+      run();
+    });
   </script>
-  
 </html>
