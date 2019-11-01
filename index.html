@@ -88,14 +88,14 @@
       <table>
         <thead>
           <tr>
-            <th class="th--metric">Metric</th>
+            <th class="th--metric"></th>
             <th class="th--value" colspan="2">Value</th>
-            <th class="th--score" colspan="2">Score</th>
+            <th class="th--score" colspan="2">Metric Score</th>
           </tr>
         </thead>
         <tbody>
           <tr id="FCP">
-            <td>FCP</td>
+            <td>FCP (First  Contentful Paint)</td>
             <td>
               <input type="range" class="FCP metric-value" />
             </td>
@@ -108,9 +108,12 @@
             <td>
               <output class="FCP score-output"></output>
             </td>
+            <td>
+              <span class="FCP weight"
+            </td>
           </tr>
           <tr id="SI">
-            <td>SI</td>
+            <td>SI (Speed Index)</td>
             <td>
               <input type="range" class="SI metric-value" />
             </td>
@@ -123,9 +126,12 @@
             <td>
               <output class="SI score-output"></output>
             </td>
+            <td>
+              <span class="SI weight"
+            </td>
           </tr>
           <tr id="LCP">
-            <td>LCP</td>
+            <td>LCP (Largest Contentful Paint)</td>
             <td>
               <input type="range" class="LCP metric-value" />
             </td>
@@ -138,9 +144,12 @@
             <td>
               <output class="LCP score-output"></output>
             </td>
+            <td>
+              <span class="LCP weight"
+            </td>
           </tr>
           <tr id="TTI">
-            <td>TTI</td>
+            <td>TTI (Time to Interactive)</td>
             <td>
               <input type="range" class="TTI metric-value" />
             </td>
@@ -153,9 +162,12 @@
             <td>
               <output class="TTI score-output"></output>
             </td>
+            <td>
+              <span class="TTI weight"
+            </td>
           </tr>
           <tr id="TBT">
-            <td>TBT</td>
+            <td>TBT (Total Blocking Time)</td>
             <td>
               <input type="range" class="TBT metric-value" />
             </td>
@@ -167,6 +179,9 @@
             </td>
             <td>
               <output class="TBT score-output"></output>
+            </td>
+            <td>
+              <span class="TBT weight"
             </td>
           </tr>
         </tbody>

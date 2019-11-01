@@ -69,8 +69,9 @@ const scoring = {
 };
 
 // make sure weights total to 1
-const sum = Object.values(weights).reduce((agg, val) => (agg += val));
-console.assert(sum === 1);
+const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
+console.assert(weightSum === 1);
+const maxWeight = Math.max(...Object.values(weights));
 
 // The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
 const giveElement = eventOrElem =>
@@ -100,14 +101,14 @@ $$("input.metric-value").forEach(elem => {
 
   const min = Math.floor(valueAtScore100 / 1000) * 1000;
   const max = Math.ceil(valueAtScoreZero / 1000) * 1000;
-  console.log({ valueAtScore100, min, valueAtScoreZero, max });
 
   elem.min = min;
   elem.max = max;
   
-  elem.value = Math.random() * (max - min) / 2 + min;  
-  
-   
+  // initialize with randomish values
+  elem.value = Math.max(Math.random() * (max - min) / 2, min);  
+  // TODO save values to localstorage
+         
 
   const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs
@@ -145,13 +146,17 @@ for (const obs of valueObservers) {
 }
 
 
+
 // Decorate score sliders
 $$("input.metric-score").forEach(elem => {
   const metricId = elem.closest("tr").id;
 
   const rangeElem = $(`.metric-score.${metricId}`);
   const outputElem = $(`.score-output.${metricId}`);
-
+   
+  const scaledWidth = weights[metricId] / maxWeight;
+  rangeElem.style.width = `${scaledWidth * 100}%`;
+  
   const obs = rxjs
     .fromEvent(rangeElem, "input")
     .pipe(rxjs.operators.startWith(rangeElem));
