@@ -57,7 +57,7 @@ const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
 
 const maxWeight = Math.max(...Object.values(weights));
-const scoreObservers = [];
+const scoreObservers = new Map();
 // set up observables
 for (const metricRow of $$("tbody tr")) {
   const metricId = metricRow.id;
@@ -72,7 +72,7 @@ for (const metricRow of $$("tbody tr")) {
       .pipe(rxjs.operators.startWith(rangeElem.value));
 
     if (type === "score") {
-      scoreObservers.push({[metricId]: rangeValueObsr});
+      scoreObservers.set(rangeValueObsr, metricId);
     }
 
     rangeValueObsr.subscribe(x => (outputElem.textContent = x));
@@ -80,11 +80,11 @@ for (const metricRow of $$("tbody tr")) {
 }
 
 
-
-debugger;
-const perfScore = rxjs.combineLatest(...Object.values(scoreObservers)).pipe(
-  rxjs.operators.map((...data) => console.log(data)),
+console.clear();
+const perfScore = rxjs.combineLatest(scoreObservers.keys(), ).pipe(
+  rxjs.operators.map((i, ...data) => console.log({data, i})),
 );
+
  
 perfScore.subscribe(x => $('h3 output').textContent = x);
 
