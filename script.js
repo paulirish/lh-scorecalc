@@ -74,12 +74,23 @@ const weights = {
   TBT: 0.25
 };
 
+const scoring = {
+  FCP: { median: 4000, falloff: 2000 },
+  FMP: { median: 4000, falloff: 2000 },
+  SI: { median: 5800, falloff: 2900 },
+  TTI: { median: 7300, falloff: 2900 },
+  TBT: { median: 600, falloff: 200 }, // mostly uncalibrated
+  LCP: { median: 4000, falloff: 2000 }, // these are not chosen yet
+  FCPUI: { median: 6500, falloff: 2900 }
+};
+
 // make sure weights total to 1
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
 
 const maxWeight = Math.max(...Object.values(weights));
 const scoreObservers = {};
+const valueObservers = {};
 const map = rxjs.operators.map;
 
 // set up observables
@@ -93,10 +104,13 @@ for (const metricRow of $$("tbody tr")) {
     const rangeValueObsr = rxjs
       .fromEvent(rangeElem, "input")
       .pipe(map(ev => ev.target.value))
-      .pipe(rxjs.operators.startWith(rangeElem.value));
+      .pipe(rxjs.operators.startWith(rangeElem));
 
     if (type === "score") {
-      scoreObservers[`${metricId.toLowerCase()}Obs`] = rangeValueObsr;
+      scoreObservers[`${metricId}score`] = rangeValueObsr;
+    } else if (type === "value") {
+      valueObservers[`${metricId}val`] = rangeValueObsr;
+
     }
 
     rangeValueObsr.subscribe(x => (outputElem.textContent = x));
@@ -104,9 +118,9 @@ for (const metricRow of $$("tbody tr")) {
 }
 
 // this is so lame and there's gotta be a better way.
-const { fcpObs, siObs, lcpObs, ttiObs, tbtObs } = scoreObservers;
+const { FCPscore, SIscore, LCPscore, TTIscore, TBTscore  } = scoreObservers;
 const perfScore = rxjs
-  .combineLatest(fcpObs, siObs, lcpObs, ttiObs, tbtObs)
+  .combineLatest(FCPscore, SIscore, LCPscore, TTIscore, TBTscore )
   .pipe(
     map(([FCP, SI, LCP, TTI, TBT]) => {
       const weightedMean = arithmeticMean([
