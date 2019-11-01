@@ -156,12 +156,12 @@ const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   obs.subscribe(x => {
     const score = giveElement(x).value;
     
-    const rating = calculateRating(score);
+    const rating = calculateRating(score / 100);
     giveElement(x).closest('tr').className = `lh-metric--${rating}`;
   
     outputElem.textContent = score;
   });
-  
+   
   return obs;
 });
 
