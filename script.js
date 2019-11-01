@@ -1,20 +1,10 @@
+/* global rxjs */
+
 console.clear();
 
 // blingjs
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
-Node.prototype.on = window.on = function(name, fn) {
-  this.addEventListener(name, fn);
-};
-NodeList.prototype.__proto__ = Array.prototype;
-NodeList.prototype.on = NodeList.prototype.addEventListener = function(
-  name,
-  fn
-) {
-  this.forEach(function(elem, i) {
-    elem.on(name, fn);
-  });
-};
 
 const NBSP = "\xa0";
 const numberFormatter = new Intl.NumberFormat();
@@ -58,35 +48,7 @@ function calculateRating(score) {
   return rating;
 }
 
-/* global rxjs */
 
-// BMI Calculator
-// const weight = Rx.Observable.fromEvent(weightSliderElem, "input")
-//   .map(ev => ev.target.value)
-//   .startWith(weightSliderElem.value);
-
-// const height = Rx.Observable.fromEvent(heightSliderElem, "input")
-//   .map(ev => ev.target.value)
-//   .startWith(heightSliderElem.value);
-
-// const bmi = weight.combineLatest(height, (w, h) =>
-//   (w / (h * h * 0.0001)).toFixed(1)
-// );
-
-// // set meter defaults
-// $$('meter table').forEach(elem => {
-//   elem.min = 0;
-//   elem.max = 1;
-//   elem.low = .5;
-//   elem.high = .9;
-//   elem.optimum = 0.9
-// })
-
-$$("span.meter").forEach(elem => {
-  const inner = document.createElement("span");
-  inner.classList.add("meter__inner");
-  elem.append(inner);
-});
 
 const weights = {
   FCP: 0.25,
@@ -114,7 +76,8 @@ console.assert(sum === 1);
 const giveElement = eventOrElem =>
   eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
 
-const maxWeight = Math.max(...Object.values(weights));
+const isManuallyDispatched = eventOrElem => eventOrElem instanceof Event && !eventOrElem.isTrusted;
+
 
 const map = rxjs.operators.map;
 const scoreObsevers = [];
@@ -157,7 +120,29 @@ $$("input.metric-value").forEach(elem => {
   });
 });
 
-// Calibrate value slider scales
+// On value change, set score
+for (const obs of valueObservers) {
+  obs.subscribe(eventOrElem => {
+    if (isManuallyDispatched(eventOrElem)) return;
+    const elem = giveElement(eventOrElem);
+    
+    const metricId = elem.closest("tr").id;
+    const computedScore = Math.round(
+      QUANTILE_AT_VALUE(
+        scoring[metricId].median,
+        scoring[metricId].falloff,
+        elem.value
+      ) * 100
+    );
+
+    const scoreElem = $(`input.${metricId}.metric-score`);
+    scoreElem.value = computedScore; // Math.random() * 100;
+    scoreElem.dispatchEvent(new Event("input"));
+  });
+}
+
+
+// Decorate score sliders
 $$("input.metric-score").forEach(elem => {
   const metricId = elem.closest("tr").id;
 
@@ -173,22 +158,26 @@ $$("input.metric-score").forEach(elem => {
   obs.subscribe(x => (outputElem.textContent = giveElement(x).value));
 });
 
-// On value change, set score value
-for (const obs of valueObservers) {
+// On score slider change, update values (backwards direction!)
+for (const obs of scoreObsevers) {
   obs.subscribe(eventOrElem => {
+    if (isManuallyDispatched(eventOrElem)) return;
     const elem = giveElement(eventOrElem);
+    
     const metricId = elem.closest("tr").id;
-    const computedScore = Math.round(
-      QUANTILE_AT_VALUE(
+    const computedValue = Math.round(
+      VALUE_AT_QUANTILE(
         scoring[metricId].median,
         scoring[metricId].falloff,
-        elem.value
-      ) * 100
+        elem.value / 100
+      )
     );
+    if (Infinity === Infinity)
+    console.log({computedValue});
 
-    const scoreElem = $(`input.${metricId}.metric-score`);
-    scoreElem.value = computedScore; // Math.random() * 100;
-    scoreElem.dispatchEvent(new Event("input"));
+    const valueElem = $(`input.${metricId}.metric-value`);
+    valueElem.value = computedValue; 
+    valueElem.dispatchEvent(new Event("input"));
   });
 }
 
@@ -206,8 +195,6 @@ const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
 );
 
 perfScore.subscribe(score => {
-
-
   const wrapper = $(".lh-gauge__wrapper");
   wrapper.className = "lh-gauge__wrapper"; // clear any other labels already set
   wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
@@ -219,8 +206,3 @@ perfScore.subscribe(score => {
   const percentageEl = $(".lh-gauge__percentage");
   percentageEl.textContent = scoreOutOf100.toString();
 });
-
-// for (const [metricId, weight] of Object.entries(weights)) {
-//   const meterElem = $(`meter.${metricId}`);
-//   meterElem.style.width = `${(weight / maxWeight) * 100}%`;
-// }
