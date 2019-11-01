@@ -21,18 +21,33 @@ body {
   margin: 25px;
   display: flex;
   flex-direction: column;
-/*   justify-content: space-between; */
+  /*   justify-content: space-between; */
   margin: 0;
   -webkit-font-smoothing: antialiased;
 }
 
 table {
   table-layout: fixed;
+  /* this is some amazing shit. https://kennethormandy.com/journal/flipping-on-tabular-numbers/ */
+  font-variant-numeric: tabular-nums;
 }
 
-.th--score {
+/* .th--score {
   width: 200px;
 }
+ */
+tbody td:nth-child(3) {
+width: 110px;
+  text-align: right;
+  padding-right: 30px;
+}
+
+tbody td:nth-child(5) {
+width: 40px;
+  text-align: right;
+  padding-right: 30px;
+}
+
 meter {
   width: 20vw;
 }
@@ -45,13 +60,11 @@ span.meter {
   background: gray;
   width: 200px;
   height: 10px;
-
 }
 span.meter__inner {
   width: 50%;
   background: purple;
   height: 10px;
-
 }
 
 section {

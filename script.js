@@ -16,6 +16,10 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function(
   });
 };
 
+const NBSP = '\xa0';
+const numberFormatter = new Intl.NumberFormat();
+
+
 function arithmeticMean(items) {
   // Filter down to just the items with a weight as they have no effect on score
   items = items.filter(item => item.weight > 0);
@@ -135,7 +139,7 @@ $$("input.metric-value").forEach(elem => {
   valueObservers.push(obs);
 
   obs.subscribe(x => {
-    outputElem.textContent = giveElement(x).value;
+    outputElem.textContent = `${numberFormatter.format(giveElement(x).value)}${NBSP}ms`;
   });
 });
 
