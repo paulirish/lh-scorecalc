@@ -78,16 +78,17 @@ const giveElement = eventOrElem =>
 const isManuallyDispatched = eventOrElem => eventOrElem instanceof Event && !eventOrElem.isTrusted;
 
 const map = rxjs.operators.map;
-const scoreObsevers = [];
-const valueObservers = [];
 
+
+// Set weighting text
 $$('.weight-text').forEach(elem => {
   const metricId = elem.closest('tr').id;
   elem.textContent = `${weights[metricId] * 100}%`;
 });
 
+
 // Calibrate value slider scales and observe
-$$('input.metric-value').forEach(elem => {
+const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   const metricId = elem.closest('tr').id;
 
   const valueAtScore100 = VALUE_AT_QUANTILE(
@@ -114,13 +115,13 @@ $$('input.metric-value').forEach(elem => {
   const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs.fromEvent(elem, 'input').pipe(rxjs.operators.startWith(elem));
 
-  valueObservers.push(obs);
-
   obs.subscribe(x => {
     outputElem.textContent = `${numberFormatter.format(
       Math.round(giveElement(x).value / 10) * 10
     )}${NBSP}ms`;
   });
+  
+  return obs;
 });
 
 // On value slider change, set score
@@ -141,7 +142,7 @@ for (const obs of valueObservers) {
 }
 
 // Decorate score sliders
-$$('input.metric-score').forEach(elem => {
+const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   const metricId = elem.closest('tr').id;
 
   const rangeElem = $(`.metric-score.${metricId}`);
@@ -152,13 +153,20 @@ $$('input.metric-score').forEach(elem => {
 
   const obs = rxjs.fromEvent(rangeElem, 'input').pipe(rxjs.operators.startWith(rangeElem));
 
-  scoreObsevers.push(obs);
-
-  obs.subscribe(x => (outputElem.textContent = giveElement(x).value));
+  obs.subscribe(x => {
+    const score = giveElement(x).value;
+    
+    const rating = calculateRating(score);
+    giveElement(x).closest('tr').className = `lh-metric--${rating}`;
+  
+    outputElem.textContent = score;
+  });
+  
+  return obs;
 });
 
 // On score slider change, update values (backwards direction!)
-for (const obs of scoreObsevers) {
+for (const obs of scoreObservers) {
   obs.subscribe(eventOrElem => {
     if (isManuallyDispatched(eventOrElem)) return;
     const elem = giveElement(eventOrElem);
@@ -176,7 +184,7 @@ for (const obs of scoreObsevers) {
 }
 
 // Compute the perf score
-const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
+const perfScore = rxjs.combineLatest(...scoreObservers).pipe(
   map(([...elems]) => {
     const items = elems.map(eventOrElem => {
       const elem = giveElement(eventOrElem);

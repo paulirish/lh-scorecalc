@@ -118,16 +118,17 @@ form {
 
 
 
-form span {
-  font-weight: 100;
+.weight-text {
   color: hsl(226, 34%, 70%);
 }
 
 
 
 
+/* Lighthouse styles */
 
-/* Gauge */
+/* no idea which of these variables i dont need.. */
+
 :root {
    /* Palette using Material Design Colors
    * https://www.materialui.co/colors */
@@ -239,6 +240,49 @@ form span {
   --toplevel-warning-padding: 22px;
 
 }
+
+/* score icon */
+
+
+
+/* score icon */
+
+.lh-metric__score-icon {
+  width: var(--score-icon-size);
+  height: var(--score-icon-size);
+  margin: var(--score-icon-margin);
+}
+
+.lh-metric--pass .lh-metric__display-text {
+  color: var(--color-pass-secondary);
+}
+.lh-metric--pass .lh-metric__score-icon {
+  border-radius: 100%;
+  background: var(--color-pass);
+}
+
+.lh-metric--average .lh-metric__display-text {
+  color: var(--color-average-secondary);
+}
+.lh-metric--average .lh-metric__score-icon {
+  background: var(--color-average);
+  width: var(--icon-square-size);
+  height: var(--icon-square-size);
+}
+
+.lh-metric--fail .lh-metric__display-text {
+  color: var(--color-fail-secondary);
+}
+.lh-metric--fail .lh-metric__score-icon,
+.lh-metric--error .lh-metric__score-icon {
+  border-left: calc(var(--score-icon-size) / 2) solid transparent;
+  border-right: calc(var(--score-icon-size) / 2) solid transparent;
+  border-bottom: var(--score-icon-size) solid var(--color-fail);
+}
+
+
+/*  the gauge! */
+
 .lh-gauge__wrapper--pass {
   color: var(--color-pass);
   fill: var(--color-pass);
