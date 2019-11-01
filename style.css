@@ -45,17 +45,24 @@ th {
 tr:first-child td {
   border-top: 8px solid transparent;
 }
-
+/* metric value */
 tbody td:nth-child(3) {
   width: 110px;
   text-align: right;
   padding-right: 30px;
 }
 
-tbody td:nth-child(5) {
+/* weighting */
+tbody td:nth-child(4) {
   width: 40px;
   text-align: right;
 }
+/* metric score */
+tbody td:nth-child(6) {
+  width: 40px;
+  text-align: right;
+}
+
 
 meter {
   width: 20vw;
@@ -89,9 +96,7 @@ h1 {
   margin: 20px;
 }
 
-#results {
-  background-color: hsla(217, 95%, 63%, 1);
-}
+
 
 .wrapper {
   max-width: 960px;
@@ -110,178 +115,13 @@ form {
   overflow: hidden;
 }
 
-fieldset {
-  border: none;
-  overflow: hidden;
-  margin-bottom: 40px;
-  width: 45%;
-  float: left;
-  // background:url(https://cdn.hyperdev.com/43cbc4ff-8131-436e-943a-21e8bac7f71a%2Ficon_cross.svg) center 90px no-repeat;
-  background-size: 20px 20px;
-  transition: all 0.3s ease;
-}
 
-fieldset:first-of-type {
-  margin-right: 9%;
-}
 
-fieldset div {
-  width: 42%;
-  float: left;
-  position: relative;
-}
-
-fieldset div:first-of-type {
-  margin-right: 16%;
-}
-
-input[type="number"] {
-  padding: 0.3em 0 0 0;
-  color: white;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  border: none;
-  border-bottom: solid 5px hsla(227, 100%, 71%, 1);
-  background-color: transparent;
-  margin-bottom: 5px;
-  text-align: left;
-  display: inline-block;
-  width: 100%;
-  font-size: 3em;
-  position: relative;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-input[type="submit"] {
-  background-color: transparent;
-  border: solid 3px white;
-  font-size: 24px;
-  padding: 1em 2em;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-  color: white;
-  text-align: center;
-  display: block;
-  margin: 0 auto;
-  margin-top: 20px;
-  transition: all 0.3s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-input[type="submit"]:hover {
-  border: solid 3px hsla(192, 78%, 51%, 1);
-  color: hsla(192, 78%, 51%, 1);
-}
-
-input[type="submit"]:active,
-input[type="submit"]:focus {
-  top: 1px;
-}
-
-.submitted input[type="submit"] {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.submitted fieldset {
-  margin-top: 60px;
-}
-
-fieldset:first-of-type input {
-  text-align: center;
-}
-
-input[type="number"]:hover {
-  border: none;
-  border-bottom: solid 5px white;
-}
-
-input[type="number"]:active,
-input[type="number"]:focus {
-  border: none;
-  border-bottom: solid 5px hsla(189, 100%, 61%, 1);
-}
 
 form span {
   font-weight: 100;
-  font-size: 19px;
-  color: hsla(226, 35%, 40%, 1);
+  color: hsl(226, 34%, 70%);
 }
-
-label {
-  display: block;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 5px;
-  display: block;
-  font-size: 1.2em;
-  font-size: 14px;
-  font-weight: 100;
-}
-
-label em {
-  color: hsla(192, 48%, 51%, 1);
-  font-style: normal;
-}
-
-/* Results */
-
-#results span {
-  color: white;
-  display: block;
-  font-weight: 100;
-  margin-bottom: 35px;
-}
-
-#basic-summary {
-  font-size: 21px;
-}
-
-.sayings {
-  font-size: 48px;
-}
-
-#results {
-  height: 0%;
-  overflow: hidden;
-  transition: all 0.6s ease;
-  flex-direction: column;
-  align-items: baseline;
-}
-
-#results.open {
-  height: 70%;
-}
-
-strong {
-  position: relative;
-  display: inline-block;
-}
-
-#results strong::after {
-  display: block;
-  content: "";
-  height: 4px;
-  background-color: white;
-  bottom: 0px;
-  position: absolute;
-  width: 100%;
-}
-#results #calculatorResults strong::after {
-  height: 2px;
-}
-
-
 
 
 
