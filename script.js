@@ -16,9 +16,8 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function(
   });
 };
 
-const NBSP = '\xa0';
+const NBSP = "\xa0";
 const numberFormatter = new Intl.NumberFormat();
-
 
 function arithmeticMean(items) {
   // Filter down to just the items with a weight as they have no effect on score
@@ -40,6 +39,23 @@ function arithmeticMean(items) {
   );
 
   return results.sum / results.weight || 0;
+}
+
+const RATINGS = {
+  PASS: { label: "pass", minScore: 0.9 },
+  AVERAGE: { label: "average", minScore: 0.5 },
+  FAIL: { label: "fail" }
+};
+
+function calculateRating(score) {
+  // At this point, we're rating a standard binary/numeric audit
+  let rating = RATINGS.FAIL.label;
+  if (score >= RATINGS.PASS.minScore) {
+    rating = RATINGS.PASS.label;
+  } else if (score >= RATINGS.AVERAGE.minScore) {
+    rating = RATINGS.AVERAGE.label;
+  }
+  return rating;
 }
 
 /* global rxjs */
@@ -90,7 +106,6 @@ const scoring = {
   FCPUI: { median: 6500, falloff: 2900 }
 };
 
-
 // make sure weights total to 1
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
@@ -104,8 +119,6 @@ const maxWeight = Math.max(...Object.values(weights));
 const map = rxjs.operators.map;
 const scoreObsevers = [];
 const valueObservers = [];
-
-
 
 // Calibrate value slider scales
 $$("input.metric-value").forEach(elem => {
@@ -129,8 +142,7 @@ $$("input.metric-value").forEach(elem => {
   elem.min = min;
   elem.max = max;
   elem.value = Math.random() * (max - min) + min;
-  
-  
+
   const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs
     .fromEvent(elem, "input")
@@ -139,16 +151,16 @@ $$("input.metric-value").forEach(elem => {
   valueObservers.push(obs);
 
   obs.subscribe(x => {
-    outputElem.textContent = `${numberFormatter.format(giveElement(x).value)}${NBSP}ms`;
+    outputElem.textContent = `${numberFormatter.format(
+      giveElement(x).value
+    )}${NBSP}ms`;
   });
 });
-
-
 
 // Calibrate value slider scales
 $$("input.metric-score").forEach(elem => {
   const metricId = elem.closest("tr").id;
-  
+
   const rangeElem = $(`.metric-score.${metricId}`);
   const outputElem = $(`.score-output.${metricId}`);
 
@@ -160,7 +172,6 @@ $$("input.metric-score").forEach(elem => {
 
   obs.subscribe(x => (outputElem.textContent = giveElement(x).value));
 });
-
 
 // On value change, set score value
 for (const obs of valueObservers) {
@@ -190,12 +201,24 @@ const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
       return { weight: weights[metricId], score: elem.value };
     });
     const weightedMean = arithmeticMean(items);
-    return Math.round(weightedMean);
+    return weightedMean;
   })
 );
 
-perfScore.subscribe(x => ($("h3 output").textContent = x));
-perfScore.subscribe(x => ($(".perf-score").value = x));
+perfScore.subscribe(score => {
+
+
+  const wrapper = $(".lh-gauge__wrapper");
+  wrapper.className = "lh-gauge__wrapper"; // clear any other labels already set
+  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
+
+  const gaugeArc = $(".lh-gauge-arc");
+  gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
+
+  const scoreOutOf100 = Math.round(score);
+  const percentageEl = $(".lh-gauge__percentage");
+  percentageEl.textContent = scoreOutOf100.toString();
+});
 
 // for (const [metricId, weight] of Object.entries(weights)) {
 //   const meterElem = $(`meter.${metricId}`);
