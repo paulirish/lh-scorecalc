@@ -45,14 +45,13 @@ tr:first-child td {
 
 /* icon */
 tbody td:nth-child(1) {
-    width: 24px;
+    width: 16px;
 }
 
 /* metric value */
 tbody td:nth-child(4) {
-  width: 110px;
+  width: 88px;
   text-align: right;
-  padding-right: 30px;
 }
 
 /* weighting */
@@ -69,6 +68,10 @@ tbody td:nth-child(7) {
 input.metric-value {
   width: 210px;
 }
+input.metric-score {
+  opacity: 0.85;
+}
+
 
 
 
@@ -239,7 +242,6 @@ form {
 .lh-metric__score-icon {
   width: var(--score-icon-size);
   height: var(--score-icon-size);
-  margin: var(--score-icon-margin);
   display: inline-block;
 }
 

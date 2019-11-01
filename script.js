@@ -41,7 +41,7 @@ function calculateRating(score) {
 }
 
 /**
- * V6 weights 
+ * V6 weights
  */
 
 const weights = {
@@ -52,7 +52,7 @@ const weights = {
   TBT: 0.25,
 };
 
-/** 
+/**
  * V5/v6 scoring curves
  */
 const scoring = {
@@ -95,14 +95,14 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
     scoring[metricId].falloff,
     0.995
   );
-  const valueAtScoreZero = VALUE_AT_QUANTILE(
+  const valueAtScore5 = VALUE_AT_QUANTILE(
     scoring[metricId].median,
     scoring[metricId].falloff,
-    0.004
+    0.05
   );
 
   const min = Math.floor(valueAtScore100 / 1000) * 1000;
-  const max = Math.ceil(valueAtScoreZero / 1000) * 1000;
+  const max = Math.ceil(valueAtScore5 / 1000) * 1000;
   elem.min = min;
   elem.max = max;
 
