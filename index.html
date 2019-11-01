@@ -28,9 +28,19 @@ but i think he's wrong ;)
 -->
 
   <h1>Faster Than</h1>
-
+  <h2>optimum=750</h2>
+  <ul>
+    <li>value=150: <meter min="0" max="1000" low="300" high="600" optimum="750" value="250" ></meter></li>
+    <li>value=450: <meter min="0" max="1000" low="300" high="600" optimum="750" value="450" ></meter></li>
+    <li>value=750: <meter min="0" max="1000" low="300" high="600" optimum="750" value="750" ></meter></li>
+    <li>value=0: <meter min="0" max="1000" low="300" high="600" optimum="750" value="0" ></meter></li>
+    <li>value=1000: <meter min="0" max="1000" low="300" high="600" optimum="750" value="1000" ></meter></li>
+  </ul>
+  
   <section id="calculatorContainer">
     <form class="wrapper">
+      
+   
       <table>
         <thead>
           <tr>
@@ -46,7 +56,7 @@ but i think he's wrong ;)
               <input type="range" class="FCP metric-value" />
               <output></output>
             </td>
-            <td><meter class="FCP" value="0.5" /></td>
+            <td><span class="FCP meter" value="0.5"></span></td>
           </tr>
           <tr>
             <td>SI</td>
@@ -54,7 +64,7 @@ but i think he's wrong ;)
               <input type="range" class="SI metric-value" />
               <output></output>
             </td>
-            <td><meter class="SI" value="0.5" /></td>
+            <td><span class="SI meter" value="0.5"></span></td>
           </tr>
           <tr>
             <td>LCP</td>
@@ -62,7 +72,7 @@ but i think he's wrong ;)
               <input type="range" class="LCP metric-value" />
               <output></output>
             </td>
-            <td><meter class="LCP" value="0.5" /></td>
+            <td><span class="LCP meter" value="0.5"></span></td>
           </tr>
           <tr>
             <td>TTI</td>
@@ -70,7 +80,7 @@ but i think he's wrong ;)
               <input type="range" class="TTI metric-value" />
               <output></output>
             </td>
-            <td><meter class="TTI" value="0.5" /></td>
+            <td><span class="TTI meter" value="0.5"></span></td>
           </tr>
           <tr>
             <td>TBT</td>
@@ -78,7 +88,7 @@ but i think he's wrong ;)
               <input type="range" class="TBT metric-value" />
               <output></output>
             </td>
-            <td><meter class="TBT" value="0.5" /></td>
+            <td><span class="TBT meter" value="0.5"></span></td>
           </tr>
         </tbody>
       </table>
@@ -101,6 +111,8 @@ but i think he's wrong ;)
       
       <input type="submit" value="Calculate"> -->
     </form>
+    
+   
   </section>
 
   <section id="results">
@@ -131,14 +143,21 @@ but i think he's wrong ;)
       });
     };
 
-    // set meter defaults
-    $$('meter').forEach(elem => {
-      elem.min = 0;
-      elem.max = 1;
-      elem.low = .9;
-      elem.high = .5;
-    })
-
+    // // set meter defaults
+    // $$('meter table').forEach(elem => {
+    //   elem.min = 0;
+    //   elem.max = 1;
+    //   elem.low = .5;
+    //   elem.high = .9;
+    //   elem.optimum = 0.9
+    // })
+    
+    $$('span.meter').forEach(elem => {
+      const inner = document.createElement('span');
+      inner.classList.add('.meter__inner');
+      elem.append(inner);
+    });
+ 
     const weights = {
       FCP: 0.25,
       SI: 0.15,

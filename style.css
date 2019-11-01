@@ -35,8 +35,14 @@ table {
   width: 200px;
 }
 meter {
-  width: 100%;
+  width: 20vw;
 }
+span.meter, span.meter__inner { display:inline-block; }
+
+span.meter {
+  background: gray;
+}
+span.meter__inner { width: 50%; background: purple; }
 
 section {
   display:flex;
