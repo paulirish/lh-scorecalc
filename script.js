@@ -14,7 +14,7 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function(
   });
 };
 
-/* global Rx */
+/* global rxjs */
 
 // BMI Calculator
 // const weight = Rx.Observable.fromEvent(weightSliderElem, "input")
@@ -61,28 +61,33 @@ const scoreObservers = [];
 // set up observables
 for (const metricRow of $$("tbody tr")) {
   const metricId = metricRow.id;
- 
+
   for (const type of ["value", "score"]) {
     const rangeElem = $(`.metric-${type}.${metricId}`);
     const outputElem = $(`.${type}-output.${metricId}`);
 
-    const rangeValueObsr = Rx.Observable.fromEvent(rangeElem, "input")
-      .map(ev => ev.target.value)
-      .startWith(rangeElem.value);
-    
-    if (type === 'score') {
+    const rangeValueObsr = rxjs
+      .fromEvent(rangeElem, "input")
+      .pipe(rxjs.operators.map(ev => ev.target.value))
+      .pipe(rxjs.operators.startWith(rangeElem.value));
+
+    if (type === "score") {
       scoreObservers.push(rangeValueObsr);
     }
 
     rangeValueObsr.subscribe(x => (outputElem.textContent = x));
   }
-} 
+}
 
-const perfScore = weight.combineLatest(...scoreObservers, (w, h) =>
-  (w / (h * h * 0.0001)).toFixed(1)
+
+
+ 
+const perfScore = rxjs.combineLatest(...scoreObservers).pipe(
+  rxjs.operators.map((...data) => console.log(data)),
 );
-
-
+ 
+perfScore.subscribe(x => $('h3 output')
+)
 
 // for (const [metricId, weight] of Object.entries(weights)) {
 //   const meterElem = $(`meter.${metricId}`);
