@@ -1,3 +1,5 @@
+console.clear();
+
 // blingjs
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
@@ -60,9 +62,6 @@ function arithmeticMean(items) {
 //   elem.optimum = 0.9
 // })
 
-
-
-
 $$("span.meter").forEach(elem => {
   const inner = document.createElement("span");
   inner.classList.add("meter__inner");
@@ -87,67 +86,97 @@ const scoring = {
   FCPUI: { median: 6500, falloff: 2900 }
 };
 
-$$('input.metric-value').forEach(elem => {
-  elem.min = 0;
-  elem.max = 20 * 1000;
-  elem.value = Math.random() * 3000 + 5000;
-});
-
-
 
 // make sure weights total to 1
 const sum = Object.values(weights).reduce((agg, val) => (agg += val));
 console.assert(sum === 1);
 
+// The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
 const giveElement = eventOrElem =>
   eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
 
 const maxWeight = Math.max(...Object.values(weights));
 
-console.clear();
-
 const map = rxjs.operators.map;
 const scoreObsevers = [];
 const valueObservers = [];
 
-// Output slider observables
-for (const metricRow of $$("tbody tr")) {
-  const metricId = metricRow.id;  
 
-  for (const type of ["value", "score"]) {
-    const rangeElem = $(`.metric-${type}.${metricId}`);
-    const outputElem = $(`.${type}-output.${metricId}`);
 
-    const obs = rxjs
-      .fromEvent(rangeElem, "input")
-      .pipe(rxjs.operators.startWith(rangeElem));
+// Calibrate value slider scales
+$$("input.metric-value").forEach(elem => {
+  const metricId = elem.closest("tr").id;
 
-    if (type === "score") {
-      scoreObsevers.push(obs);
-    } else if (type === "value") {
-      valueObservers.push(obs);
-    }
+  const valueAtScore100 = VALUE_AT_QUANTILE(
+    scoring[metricId].median,
+    scoring[metricId].falloff,
+    0.995
+  );
+  const valueAtScoreZero = VALUE_AT_QUANTILE(
+    scoring[metricId].median,
+    scoring[metricId].falloff,
+    0.004
+  );
 
-    obs.subscribe(
-      x => (outputElem.textContent = giveElement(x).value)
-    );
-  }
-}  
+  const min = Math.floor(valueAtScore100 / 1000) * 1000;
+  const max = Math.ceil(valueAtScoreZero / 1000) * 1000;
+  console.log({ valueAtScore100, min, valueAtScoreZero, max });
+
+  elem.min = min;
+  elem.max = max;
+  elem.value = Math.random() * (max - min) + min;
+  
+  
+  const outputElem = $(`.value-output.${metricId}`);
+  const obs = rxjs
+    .fromEvent(elem, "input")
+    .pipe(rxjs.operators.startWith(elem));
+
+  valueObservers.push(obs);
+
+  obs.subscribe(x => {
+    outputElem.textContent = giveElement(x).value;
+  });
+});
+
+
+
+// Calibrate value slider scales
+$$("input.metric-score").forEach(elem => {
+  const metricId = elem.closest("tr").id;
+  
+  const rangeElem = $(`.metric-score.${metricId}`);
+  const outputElem = $(`.score-output.${metricId}`);
+
+  const obs = rxjs
+    .fromEvent(rangeElem, "input")
+    .pipe(rxjs.operators.startWith(rangeElem));
+
+  scoreObsevers.push(obs);
+
+  obs.subscribe(x => (outputElem.textContent = giveElement(x).value));
+});
+
 
 // On value change, set score value
 for (const obs of valueObservers) {
   obs.subscribe(eventOrElem => {
     const elem = giveElement(eventOrElem);
     const metricId = elem.closest("tr").id;
-    const computedScore = Math.round(QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100);
-    
-    
+    const computedScore = Math.round(
+      QUANTILE_AT_VALUE(
+        scoring[metricId].median,
+        scoring[metricId].falloff,
+        elem.value
+      ) * 100
+    );
+
     const scoreElem = $(`input.${metricId}.metric-score`);
     scoreElem.value = computedScore; // Math.random() * 100;
-    scoreElem.dispatchEvent(new Event('input'));
-  })
+    scoreElem.dispatchEvent(new Event("input"));
+  });
 }
- 
+
 // Compute the perf score
 const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
   map(([...elems]) => {
@@ -157,7 +186,7 @@ const perfScore = rxjs.combineLatest(...scoreObsevers).pipe(
       return { weight: weights[metricId], score: elem.value };
     });
     const weightedMean = arithmeticMean(items);
-    return Math.round(weightedMean); 
+    return Math.round(weightedMean);
   })
 );
 
