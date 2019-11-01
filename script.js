@@ -104,7 +104,10 @@ $$("input.metric-value").forEach(elem => {
 
   elem.min = min;
   elem.max = max;
-  elem.value = Math.random() * (max - min) + min;
+  
+  elem.value = Math.random() * (max - min) / 2 + min;  
+  
+   
 
   const outputElem = $(`.value-output.${metricId}`);
   const obs = rxjs
@@ -115,7 +118,7 @@ $$("input.metric-value").forEach(elem => {
 
   obs.subscribe(x => {
     outputElem.textContent = `${numberFormatter.format(
-      giveElement(x).value
+      Math.round(giveElement(x).value / 10) * 10
     )}${NBSP}ms`;
   });
 });
@@ -165,18 +168,19 @@ for (const obs of scoreObsevers) {
     const elem = giveElement(eventOrElem);
     
     const metricId = elem.closest("tr").id;
-    const computedValue = Math.round(
+    let computedValue = Math.round(
       VALUE_AT_QUANTILE(
         scoring[metricId].median,
         scoring[metricId].falloff,
         elem.value / 100
       )
     );
-    if (Infinity === Infinity)
-    console.log({computedValue});
 
     const valueElem = $(`input.${metricId}.metric-value`);
-    valueElem.value = computedValue; 
+    if (computedValue === Infinity)
+      valueElem.value = valueElem.max; 
+    else 
+      valueElem.value = computedValue; 
     valueElem.dispatchEvent(new Event("input"));
   });
 }
