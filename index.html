@@ -15,51 +15,11 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
 
-  <!--  
-  TODO:
 
-  * add checkbox to indicate: this is a rate not a scalar. (100mph vs 150mph)
+ 
 
--->
-
-  <h1 class="c-bmi__title [ u-textUppercase u-textCenter ]">BMI Calculator</h1>
-  <div class="c-bmi__body g-linear-grad">
-    <div class="c-bmi__row">
-      <span>Weight: <span id="weight-text"></span>kg</span>
-      <input
-        class="c-bmi__slider"
-        id="weight-slider"
-        type="range"
-        min="40"
-        max="120"
-        step="1"
-        value="71"
-      />
-    </div>
-    <div class="c-bmi__row">
-      <span>Height: <span id="height-text"></span>cm</span>
-      <input
-        class="c-bmi__slider"
-        id="height-slider"
-        type="range"
-        min="140"
-        max="210"
-        value="175"
-      />
-    </div>
-    <h2 class="c-bmi__result typo-1 [ u-textUppercase u-textCenter ]">
-      your BMI is
-      <span
-        class="typo-2 c-bmi__number g-btn-shadow [ u-block ]"
-        id="bmi-text"
-      ></span>
-    </h2>
-    <button id="jsInfoButton" class="g-buttonClean g-btn-shadow c-bmi__info">
-      <i>i</i>
-    </button>
-  </div>
-
-  <h1>Faster Than</h1>
+  <h1>Scoring Calculator</h1>
+  <!-- 
   <h2>optimum=750</h2>
   <ul>
     <li>
@@ -118,6 +78,7 @@
       ></meter>
     </li>
   </ul>
+-->
 
   <section id="calculatorContainer">
     <form class="wrapper">
@@ -130,7 +91,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr id="FCP">
             <td>FCP</td>
             <td>
               <input type="range" class="FCP metric-value" />
@@ -145,7 +106,7 @@
               <output class="FCP score-output"></output>
             </td>
           </tr>
-          <tr>
+          <tr id="SI">
             <td>SI</td>
             <td>
               <input type="range" class="SI metric-value" />
@@ -160,7 +121,7 @@
               <output class="SI score-output"></output>
             </td>
           </tr>
-          <tr>
+          <tr id="LCP">
             <td>LCP</td>
             <td>
               <input type="range" class="LCP metric-value" />
@@ -175,7 +136,7 @@
               <output class="LCP score-output"></output>
             </td>
           </tr>
-          <tr>
+          <tr id="TTI">
             <td>TTI</td>
             <td>
               <input type="range" class="TTI metric-value" />
@@ -190,7 +151,7 @@
               <output class="TTI score-output"></output>
             </td>
           </tr>
-          <tr>
+          <tr id="TBT">
             <td>TBT</td>
             <td>
               <input type="range" class="TBT metric-value" />
@@ -213,30 +174,11 @@
         <meter class="perf-score" value="0.45"></meter>
       </div>
 
-      <!-- <fieldset class="calculator" id="tileDimensions">
-        <h2>What is the new value?</h2>
-     
-        <div>
-          <input type="number" id="newvalue" value="">
-          <span>(time units)</span>
-          <label for="areaHeight">OMG, u so <em>fast</em> now.</label>
-        </div>
-        
-      </fieldset>
-      
-      <input type="submit" value="Calculate"> -->
+    
     </form>
   </section>
 
-  <section id="results">
-    <span id="basic-summary" class="wrapper"
-      >Alright!
-      <strong id="tilesPerMeterSquared" class="result">you could say</strong
-      >…</span
-    >
-    <div id="calculatorResults" class="wrapper"></div>
-  </section>
-
+ 
   <script
     defer
     src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"
