@@ -75,10 +75,10 @@ const maxWeight = Math.max(...Object.values(weights));
 const giveElement = eventOrElem =>
   eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
 
+// Gotta avoid infinite loop since we dispatchEvent ourselves
 const isManuallyDispatched = eventOrElem => eventOrElem instanceof Event && !eventOrElem.isTrusted;
 
 const map = rxjs.operators.map;
-
 
 // Set weighting text
 $$('.weight-text').forEach(elem => {
@@ -86,11 +86,11 @@ $$('.weight-text').forEach(elem => {
   elem.textContent = `${weights[metricId] * 100}%`;
 });
 
-
-// Calibrate value slider scales and observe
+// Set up value sliders
 const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   const metricId = elem.closest('tr').id;
 
+  // Calibrate min & max using scoring curve
   const valueAtScore100 = VALUE_AT_QUANTILE(
     scoring[metricId].median,
     scoring[metricId].falloff,
@@ -104,15 +104,14 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
 
   const min = Math.floor(valueAtScore100 / 1000) * 1000;
   const max = Math.ceil(valueAtScoreZero / 1000) * 1000;
-
   elem.min = min;
   elem.max = max;
-
+  
+  // Restore cached value if available, otherwise generate reasonable random stuff
   if (localStorage.metricValues) {
     const cachedValues = JSON.parse(localStorage.metricValues);
     elem.value = cachedValues[metricId];
   } else {
-    // initialize with randomish values
     elem.value = Math.max((Math.random() * (max - min)) / 2, min);
   }
 
@@ -120,14 +119,14 @@ const valueObservers = Array.from($$('input.metric-value')).map(elem => {
   const obs = rxjs.fromEvent(elem, 'input').pipe(rxjs.operators.startWith(elem));
 
   obs.subscribe(x => {
+    const milliseconds = Math.round(giveElement(x).value / 10);
     outputElem.textContent = `${numberFormatter.format(
-      Math.round(giveElement(x).value / 10) * 10
+        milliseconds * 10
     )}${NBSP}ms`;
   });
-  
+
   return obs;
 });
-
 
 // On value slider change, set score
 for (const obs of valueObservers) {
@@ -145,30 +144,28 @@ for (const obs of valueObservers) {
     scoreElem.dispatchEvent(new Event('input'));
   });
 }
- 
-const valuesToSave = rxjs.combineLatest(...valueObservers).pipe(
-  map(([...elems]) => {
-    console.log({elems});
 
-    const valuesToSave = Object.fromEntries(elems.map(elem => {
-      const metricId = elem.closest('tr').id;
-      return [metricId, elem.value]
-    }));
-    console.log({valuesToSave});
-    // const cachedValues = JSON.stringify(localStorage.metricValues);
-//     elem.value = cachedValues[metricId];
-}));
-valuesToSave.subscribe(score => {
-  console.log({score});
+// cache metric value to localStorage (debounced at 1s)
+rxjs
+  .combineLatest(...valueObservers)
+  .pipe(
+    map(([...elems]) => {
+      return Object.fromEntries(
+        elems.map(eventOrElem => {
+          const elem = giveElement(eventOrElem);
+          const metricId = elem.closest('tr').id;
+          return [metricId, elem.value];
+        })
+      );
+    })
+  )
+  .pipe(rxjs.operators.debounce(() => rxjs.interval(1000))).subscribe(values => {
+  localStorage.metricValues = JSON.stringify(values);
 });
-
-    
-
 
 // Decorate score sliders
 const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   const metricId = elem.closest('tr').id;
-
   const rangeElem = $(`.metric-score.${metricId}`);
   const outputElem = $(`.score-output.${metricId}`);
 
@@ -176,16 +173,12 @@ const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   rangeElem.style.width = `${scaledWidth * 100}%`;
 
   const obs = rxjs.fromEvent(rangeElem, 'input').pipe(rxjs.operators.startWith(rangeElem));
-
   obs.subscribe(x => {
     const score = giveElement(x).value;
-    
-    const rating = calculateRating(score / 100);
-    giveElement(x).closest('tr').className = `lh-metric--${rating}`;
-  
+
+    giveElement(x).closest('tr').className = `lh-metric--${calculateRating(score / 100)}`;
     outputElem.textContent = score;
   });
-   
   return obs;
 });
 
@@ -208,7 +201,7 @@ for (const obs of scoreObservers) {
 }
 
 // Compute the perf score
-const perfScore = rxjs.combineLatest(...scoreObservers).pipe(
+rxjs.combineLatest(...scoreObservers).pipe(
   map(([...elems]) => {
     const items = elems.map(eventOrElem => {
       const elem = giveElement(eventOrElem);
@@ -218,9 +211,7 @@ const perfScore = rxjs.combineLatest(...scoreObservers).pipe(
     const weightedMean = arithmeticMean(items);
     return weightedMean;
   })
-);
-
-perfScore.subscribe(score => {
+).subscribe(score => {
   const wrapper = $('.lh-gauge__wrapper');
   wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
   wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
