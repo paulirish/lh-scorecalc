@@ -75,6 +75,8 @@ input.metric-score {
 }
 output {
   display: block;
+  line-height: 16px;
+  margin-bottom: 8px;
 }
 
 
