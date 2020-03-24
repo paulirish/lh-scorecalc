@@ -6,20 +6,20 @@ html,
 body {
   background-color: hsla(225, 68%, 25%, 1);
   height: 100%;
-  margin: 0;
   padding: 0;
-}
 
-@font-face {
-  font-family: "Exo2";
-  src: url("./exo-2-latin-400.woff2") format("woff2");
+  /* lighthouse css */
+  font-family: var(--report-font-family);
+  font-size: var(--report-font-size);
+  margin: 0;
+  line-height: var(--report-line-height);
+  background: var(--report-background-color);
+  scroll-behavior: smooth;
+  color: var(--report-text-color);
+
 }
 
 body {
-  font-family: "Exo2", "Exo 2", Avenir, helvetica, arial, sans-serif;
-  color: white;
-
-  -webkit-font-smoothing: antialiased;
   padding: 20px;
 }
 
@@ -35,8 +35,12 @@ table {
 }
 
 th {
-  border-bottom: solid 3px hsla(227, 100%, 71%, 1);
+  font-weight: normal;
+  color: var(--color-gray-600);
+  word-break: normal;
+  border-bottom: 1px solid var(--color-gray-200);
 }
+
 tr:first-child td {
   border-top: 8px solid transparent;
 }
@@ -92,10 +96,15 @@ section {
 }
 
 h1 {
-  font-weight: bold;
-  color: pink;
-  font-size: 16px;
+  font-size: var(--gauge-label-font-size-big);
+  line-height: var(--gauge-label-line-height-big);
+  font-weight: normal;
   text-align: center;
+}
+
+h1 svg {
+  height: var(--gauge-label-font-size-big);
+  vertical-align: text-top;
 }
 
 h2 i {
@@ -126,7 +135,6 @@ footer {
 
 h2 {
   font-weight: 200;
-  color: white;
   font-size: 21px;
   margin: 0;
   text-align: center;
@@ -141,7 +149,7 @@ form {
 
 
 .weight-text {
-  color: hsl(226, 34%, 70%);
+  color: var(--color-gray-500);
 }
 
 
