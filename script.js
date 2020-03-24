@@ -35,8 +35,8 @@ const scoring = {
   TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
   FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
   TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'}, // mostly uncalibrated
-  LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'}, // these are not chosen yet
-  CLS: {median: 0.2, falloff: 0.02, name: 'Cumulative Layout Shift', units: 'unitless'},
+  LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'},
+  CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
 };
 
 function main(weights, container) {
@@ -116,6 +116,13 @@ function main(weights, container) {
     elem.min = min;
     elem.max = max;
 
+    // Special handling for CLS
+    if (scoring[metricId].units === 'unitless') {
+      elem.min = 0;
+      elem.max = Math.ceil(valueAtScore5 * 100) / 100;
+      elem.step = 0.01;
+    }
+
     // Restore cached value if available, otherwise generate reasonable random stuff
     if (localStorage.metricValues) {
       const cachedValues = JSON.parse(localStorage.metricValues);
@@ -128,10 +135,12 @@ function main(weights, container) {
 
     obs.subscribe(eventOrElem => {
       if (scoring[metricId].units === 'unitless') {
-        outputElem.textContent = giveElement(eventOrElem).value;
+        // We always want 2 fractional digits
+        outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
       } else {
-        const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
-        outputElem.textContent = `${numberFormatter.format(milliseconds * 10)}${NBSP}ms`;
+        // Rounded to nearest ten
+        const milliseconds = Math.round(giveElement(eventOrElem).valueAsNumber / 10) * 10;
+        outputElem.textContent = `${numberFormatter.format(milliseconds)}${NBSP}ms`;
       }
     });
 
