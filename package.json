@@ -4,6 +4,7 @@
   "description": "wassup ===========",
   "main": "math.js",
   "scripts": {
+    "watch": "command ls | entr yarn build",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
