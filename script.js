@@ -76,7 +76,7 @@ function main(weights, container) {
     <td></td>
 
     <td>
-      <input type="range" class="${id} metric-score" step=1 />
+      <input type="range" class="${id} metric-score"/>
       <output class="${id} score-output"></output>
     </td>
 
@@ -204,14 +204,19 @@ function main(weights, container) {
       if (isManuallyDispatched(eventOrElem)) return;
       const elem = giveElement(eventOrElem);
 
-      let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, elem.value / 100);
+      const currentScore = elem.valueAsNumber;
+      let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, currentScore / 100);
+
+      // // if the new potential value's score is the same as it already is.. don't touch, otherwise the a TTI might be tweaked a few ms.
+      // const computedScore = QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, computedValue) * 100;
+      // if (Math.round(computedScore) === currentScore) return;
+
       if (metricScoring.units !== 'unitless') {
         computedValue = (computedValue);
       }
 
       // Clamp because we can end up with Infinity
-      valueElem.value = Math.min(computedValue, valueElem.max);
-      valueElem.dispatchEvent(new Event('input'));
+      valueElem.valueAsNumber = Math.min(computedValue, valueElem.max);
     });
 
     return obs;
