@@ -97,14 +97,24 @@ h1 {
 
 .wrapper {
   max-width: 960px;
-  margin: 0 auto;
+  margin: 60px auto;
   min-width: 380px;
+
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 880px) {
+  .wrapper {
+    flex-direction: column;
+  }
 }
 
 h2 {
   font-weight: 200;
   color: white;
   font-size: 21px;
+  margin: 0;
 }
 
 form {
@@ -181,7 +191,7 @@ form {
   --env-name-min-width: 220px;
   --footer-padding-vertical: 16px;
   --gauge-circle-size-big: 112px;
-  --gauge-circle-size: 80px;
+  --gauge-circle-size: 120px;
   --gauge-label-font-size-big: 28px;
   --gauge-label-font-size: 20px;
   --gauge-label-line-height-big: 36px;
