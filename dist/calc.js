@@ -1663,12 +1663,14 @@
     );
     return results.sum / results.weight || 0;
   }
-  const RATINGS = {
-    PASS: {label: 'pass', minScore: 0.9},
-    AVERAGE: {label: 'average', minScore: 0.5},
-    FAIL: {label: 'fail'},
-  };
+
   function calculateRating(score) {
+  	const RATINGS = {
+  		PASS: {label: 'pass', minScore: 0.9},
+  		AVERAGE: {label: 'average', minScore: 0.5},
+  		FAIL: {label: 'fail'},
+  	};
+
     let rating = RATINGS.FAIL.label;
     if (score >= RATINGS.PASS.minScore) {
       rating = RATINGS.PASS.label;
