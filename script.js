@@ -37,10 +37,10 @@ const scoring = {
   LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'}, // these are not chosen yet
 };
 
-function main(weights) {
+function main(weights, container) {
   // Nake sure weights total to 1
   const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
-  console.assert(weightSum === 1);
+  console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
   const maxWeight = Math.max(...Object.values(weights));
 
   // The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
@@ -58,7 +58,7 @@ function main(weights) {
     })
     .join('');
 
-  $('tbody').innerHTML = html;
+  container.$('tbody').innerHTML = html;
 
   function createRow(id, name) {
     return `
@@ -87,16 +87,17 @@ function main(weights) {
   }
 
   // Set weighting column
-  $$('.weight-text').forEach(elem => {
+  container.$$('.weight-text').forEach(elem => {
     const metricId = elem.closest('tr').id;
-    elem.textContent = `${weights[metricId] * 100}%`;
+    const weightStr = (weights[metricId] * 100).toLocaleString(undefined, {maximumFractionDigits: 1});
+    elem.textContent = `${weightStr}%`;
   });
 
   // Set up value sliders
-  const valueObservers = Array.from($$('input.metric-value')).map(elem => {
+  const valueObservers = Array.from(container.$$('input.metric-value')).map(elem => {
     const metricId = elem.closest('tr').id;
-    const outputElem = $(`.value-output.${metricId}`);
-    const scoreElem = $(`input.${metricId}.metric-score`);
+    const outputElem = container.$(`.value-output.${metricId}`);
+    const scoreElem = container.$(`input.${metricId}.metric-score`);
 
     // Calibrate min & max using scoring curve
     const valueAtScore100 = VALUE_AT_QUANTILE(
@@ -171,11 +172,11 @@ function main(weights) {
     });
 
   // Setup the score sliders
-  const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
+  const scoreObservers = Array.from(container.$$('input.metric-score')).map(elem => {
     const metricId = elem.closest('tr').id;
-    const rangeElem = $(`.metric-score.${metricId}`);
-    const outputElem = $(`.score-output.${metricId}`);
-    const valueElem = $(`input.${metricId}.metric-value`);
+    const rangeElem = container.$(`.metric-score.${metricId}`);
+    const outputElem = container.$(`.score-output.${metricId}`);
+    const valueElem = container.$(`input.${metricId}.metric-value`);
 
     const scaledWidth = weights[metricId] / maxWeight;
     rangeElem.style.width = `${scaledWidth * 100}%`;
@@ -220,17 +221,18 @@ function main(weights) {
       })
     )
     .subscribe(score => {
-      const wrapper = $('.lh-gauge__wrapper');
+      const wrapper = container.$('.lh-gauge__wrapper');
       wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
       wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
 
-      const gaugeArc = $('.lh-gauge-arc');
+      const gaugeArc = container.$('.lh-gauge-arc');
       gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
 
       const scoreOutOf100 = Math.round(score);
-      const percentageEl = $('.lh-gauge__percentage');
+      const percentageEl = container.$('.lh-gauge__percentage');
       percentageEl.textContent = scoreOutOf100.toString();
     });
 }
 
-main(weights.v6);
+main(weights.v6, $('#v6'));
+main(weights.v5, $('#v5'));

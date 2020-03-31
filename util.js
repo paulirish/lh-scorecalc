@@ -3,6 +3,9 @@
 export const $ = document.querySelector.bind(document);
 export const $$ = document.querySelectorAll.bind(document);
 
+Element.prototype.$ = Element.prototype.querySelector;
+Element.prototype.$$ = Element.prototype.querySelectorAll;
+
 export const NBSP = '\xa0';
 export const numberFormatter = new Intl.NumberFormat();
 

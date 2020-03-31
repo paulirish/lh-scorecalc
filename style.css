@@ -18,12 +18,12 @@ body {
 body {
   font-family: "Exo2", "Exo 2", Avenir, helvetica, arial, sans-serif;
   color: white;
-  margin: 25px;
+
   display: flex;
   flex-direction: column;
   /*   justify-content: space-between; */
-  margin: 0;
   -webkit-font-smoothing: antialiased;
+  padding: 20px;
 }
 
 table {
@@ -84,7 +84,6 @@ h1 {
   font-weight: bold;
   color: pink;
   font-size: 16px;
-  margin: 20px;
 }
 
 
