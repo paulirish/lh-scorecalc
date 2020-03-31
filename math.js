@@ -32,15 +32,15 @@ function internalErf_(x) {
  * @return The complement of the quantile at value.
  * @customfunction
  */
-function QUANTILE_AT_VALUE(median, falloff, value) {  
+export function QUANTILE_AT_VALUE(median, falloff, value) {
   var location = Math.log(median);
-  
+
   // The "falloff" value specified the location of the smaller of the positive
   // roots of the third derivative of the log-normal CDF. Calculate the shape
   // parameter in terms of that value and the median.
   var logRatio = Math.log(falloff / median);
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
-  
+
   var standardizedX = (Math.log(value) - location) / (Math.SQRT2 * shape);
   return (1 - internalErf_(standardizedX)) / 2;
 }
@@ -55,7 +55,7 @@ function internalErfInv_(x) {
   // erfinv(-x) = -erfinv(x);
   var sign = x < 0 ? -1 : 1;
   var a = 0.147;
-  
+
   var log1x = Math.log(1 - x*x);
   var p1 = 2 / (Math.PI * a) + log1x / 2;
   var sqrtP1Log = Math.sqrt(p1 * p1 - (log1x / a));
@@ -73,11 +73,11 @@ function internalErfInv_(x) {
  * @return The value at this quantile.
  * @customfunction
  */
-function VALUE_AT_QUANTILE(median, falloff, quantile) {
+export function VALUE_AT_QUANTILE(median, falloff, quantile) {
   var location = Math.log(median);
   var logRatio = Math.log(falloff / median);
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
-  
+
   return Math.exp(location + shape * Math.SQRT2 * internalErfInv_(1 - 2 * quantile));
 }
 
