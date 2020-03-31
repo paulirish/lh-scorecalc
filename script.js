@@ -68,7 +68,7 @@ function main(weights, container) {
     </td>
     <td>${id} (${name})</td>
     <td>
-      <input type="range" class="${id} metric-value" />
+      <input type="range" step=10 class="${id} metric-value" />
       <output class="${id} value-output"></output>
     </td>
 
