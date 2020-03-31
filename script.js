@@ -16,11 +16,12 @@ const weights = {
     FCI: 0.133333,
   },
   v6: {
-    FCP: 0.25,
-    SI: 0.15,
-    LCP: 0.2,
+    FCP: 0.15,
+    SI:  0.15,
+    LCP: 0.25,
     TTI: 0.15,
     TBT: 0.25,
+    CLS: 0.05
   },
 };
 
@@ -35,6 +36,7 @@ const scoring = {
   FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
   TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'}, // mostly uncalibrated
   LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'}, // these are not chosen yet
+  CLS: {median: 0.2, falloff: 0.02, name: 'Cumulative Layout Shift', units: 'unitless'},
 };
 
 function main(weights, container) {
@@ -125,8 +127,12 @@ function main(weights, container) {
     const obs = fromEvent(elem, 'input').pipe(startWith(elem));
 
     obs.subscribe(eventOrElem => {
-      const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
-      outputElem.textContent = `${numberFormatter.format(milliseconds * 10)}${NBSP}ms`;
+      if (scoring[metricId].units === 'unitless') {
+        outputElem.textContent = giveElement(eventOrElem).value;
+      } else {
+        const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
+        outputElem.textContent = `${numberFormatter.format(milliseconds * 10)}${NBSP}ms`;
+      }
     });
 
     // On value slider change, set score
