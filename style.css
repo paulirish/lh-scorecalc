@@ -112,8 +112,8 @@ h2 i {
 }
 
 footer {
-  text-align: center;
   font-size: 80%;
+  display: block !important;
 }
 
 

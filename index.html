@@ -92,7 +92,7 @@
 
 
   <form class="wrapper" id="v6">
-    <h2>v6<br><i>(draft as of Mar 24)</i></h2>
+    <h2>v6<br><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0">beta.0</a></i></h2>
     <table>
       <thead>
         <tr>
@@ -128,11 +128,16 @@
     </div>
   </form>
 
-  <footer>
-    Scores under 5 are not supported by the calculator.
-    <!-- The long tails of the lognormal scoring curves really ruin the UX of using a linear-scale input type=range
-      example  scoring curve (CLS) https://www.desmos.com/calculator/lsx20sjxag -->
-
+  <footer class=wrapper>
+    See also <a href="https://web.dev/performance-scoring/">web.dev/performance-scoring</a> and <a href="https://github.com/GoogleChrome/lighthouse/blob/master/docs/scoring.md">scoring.md</a>.
+    <br>
+    <details>
+      <summary>Scores under 5 are not supported by this UI. <abbr>Why?</abbr>
+      </summary>
+      <a href="https://www.desmos.com/calculator/dufar5rf4g">Lighthouse uses log-normal curves</a>, which have extremely long tails. If this UI supported them then 50% of the "Value" slider's width would be devoted to scores under 8, which significantly reduces the usability of the slider.
+    </details>
   </footer>
+
+
   <script defer src="dist/calc.js"></script>
 </html>
