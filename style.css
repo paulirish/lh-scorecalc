@@ -115,6 +115,8 @@ h2 {
   color: white;
   font-size: 21px;
   margin: 0;
+  text-align: center;
+  width: 70px;
 }
 
 form {
