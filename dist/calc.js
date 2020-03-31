@@ -1714,7 +1714,7 @@
     SI: {median: 5800, falloff: 2900, name: 'Speed Index'},
     TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
     FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
-    TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'}, // mostly uncalibrated
+    TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'},
     LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'},
     CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
   };
