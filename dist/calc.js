@@ -1817,12 +1817,6 @@
           QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100
         );
 
-        // const hmm =  (weights[metricId] * 100) - (weights[metricId] * computedScore)
-        // console.log(metricId, computedScore, 'points costed', hmm);
-        // const soutputElem = $(`.score-output.${metricId}`);
-        // setTimeout(_ => {
-        //   soutputElem.textContent += ` oportunity: ${hmm.toLocaleString()} pts`
-        // })
         scoreElem.value = computedScore;
         scoreElem.dispatchEvent(new Event('input'));
       });
