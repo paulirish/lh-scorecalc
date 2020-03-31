@@ -71,14 +71,15 @@ function main(weights, container) {
       <input type="range" step=10 class="${id} metric-value" />
       <output class="${id} value-output"></output>
     </td>
-
-    <td>
-      <span class="${id} weight-text"></span>
-    </td>
+    <td></td>
 
     <td>
       <input type="range" class="${id} metric-score" />
       <output class="${id} score-output"></output>
+    </td>
+
+    <td>
+      <span class="${id} weight-text"></span>
     </td>
   </tr>`;
   }
