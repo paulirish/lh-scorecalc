@@ -7,7 +7,8 @@ export default {
   output: {
     file: 'dist/calc.js',
     format: 'iife',
-    name: 'ScoreCalc'
+    name: 'ScoreCalc',
+    sourcemap: true,
   },
   plugins: [
     resolve(),

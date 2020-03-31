@@ -76,7 +76,7 @@ function main(weights, container) {
     <td></td>
 
     <td>
-      <input type="range" class="${id} metric-score" />
+      <input type="range" class="${id} metric-score" step=1 />
       <output class="${id} score-output"></output>
     </td>
 
@@ -125,22 +125,22 @@ function main(weights, container) {
     }
 
     // Restore cached value if available, otherwise generate reasonable random stuff
-    if (localStorage.metricValues) {
+    if (localStorage[`metricValues.${container.id}`]) {
       const cachedValues = JSON.parse(localStorage[`metricValues.${container.id}`]);
       elem.value = cachedValues[metricId];
     } else {
-      elem.value = Math.max((Math.random() * (max - min)) / 2, min);
+      elem.value = Math.max((Math.random() * (elem.max - elem.min)) / 2, min);
     }
 
     const obs = fromEvent(elem, 'input').pipe(startWith(elem));
-
+    // On value slider change, set text
     obs.subscribe(eventOrElem => {
       if (metricScoring.units === 'unitless') {
         // We always want 2 fractional digits
         outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
       } else {
         // Rounded to nearest ten
-        const milliseconds = Math.round(giveElement(eventOrElem).valueAsNumber / 10) * 10;
+        const milliseconds = giveElement(eventOrElem).valueAsNumber;
         outputElem.textContent = `${numberFormatter.format(milliseconds)}${NBSP}ms`;
       }
     });
@@ -150,7 +150,7 @@ function main(weights, container) {
       if (isManuallyDispatched(eventOrElem)) return;
       const elem = giveElement(eventOrElem);
 
-      const computedScore = Math.round(
+      const computedScore = (
         QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, elem.value) * 100
       );
 
@@ -174,7 +174,7 @@ function main(weights, container) {
         );
       })
     )
-    .pipe(debounce(() => interval(500)))
+    .pipe(debounce(() => interval(200)))
     .subscribe(values => {
       localStorage[`metricValues.${container.id}`] = JSON.stringify(values);
     });
@@ -182,6 +182,7 @@ function main(weights, container) {
   // Setup the score sliders
   const scoreObservers = Array.from(container.$$('input.metric-score')).map(elem => {
     const metricId = elem.closest('tr').id;
+    const metricScoring = scoring[metricId];
     const rangeElem = container.$(`.metric-score.${metricId}`);
     const outputElem = container.$(`.score-output.${metricId}`);
     const valueElem = container.$(`input.${metricId}.metric-value`);
@@ -203,9 +204,10 @@ function main(weights, container) {
       if (isManuallyDispatched(eventOrElem)) return;
       const elem = giveElement(eventOrElem);
 
-      let computedValue = Math.round(
-        VALUE_AT_QUANTILE(scoring[metricId].median, scoring[metricId].falloff, elem.value / 100)
-      );
+      let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, elem.value / 100);
+      if (metricScoring.units !== 'unitless') {
+        computedValue = (computedValue);
+      }
 
       // Clamp because we can end up with Infinity
       valueElem.value = Math.min(computedValue, valueElem.max);
