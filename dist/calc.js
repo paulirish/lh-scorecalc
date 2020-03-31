@@ -1776,18 +1776,19 @@
     // Set up value sliders
     const valueObservers = Array.from(container.$$('input.metric-value')).map(elem => {
       const metricId = elem.closest('tr').id;
+      const metricScoring = scoring[metricId];
       const outputElem = container.$(`.value-output.${metricId}`);
       const scoreElem = container.$(`input.${metricId}.metric-score`);
 
       // Calibrate min & max using scoring curve
       const valueAtScore100 = VALUE_AT_QUANTILE(
-        scoring[metricId].median,
-        scoring[metricId].falloff,
+        metricScoring.median,
+        metricScoring.falloff,
         0.995
       );
       const valueAtScore5 = VALUE_AT_QUANTILE(
-        scoring[metricId].median,
-        scoring[metricId].falloff,
+        metricScoring.median,
+        metricScoring.falloff,
         0.05
       );
 
@@ -1797,7 +1798,7 @@
       elem.max = max;
 
       // Special handling for CLS
-      if (scoring[metricId].units === 'unitless') {
+      if (metricScoring.units === 'unitless') {
         elem.min = 0;
         elem.max = Math.ceil(valueAtScore5 * 100) / 100;
         elem.step = 0.01;
@@ -1814,7 +1815,7 @@
       const obs = fromEvent(elem, 'input').pipe(startWith(elem));
 
       obs.subscribe(eventOrElem => {
-        if (scoring[metricId].units === 'unitless') {
+        if (metricScoring.units === 'unitless') {
           // We always want 2 fractional digits
           outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         } else {
@@ -1830,7 +1831,7 @@
         const elem = giveElement(eventOrElem);
 
         const computedScore = Math.round(
-          QUANTILE_AT_VALUE(scoring[metricId].median, scoring[metricId].falloff, elem.value) * 100
+          QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, elem.value) * 100
         );
 
         scoreElem.value = computedScore;
