@@ -8,30 +8,41 @@ import {$, $$, calculateRating, arithmeticMean, NBSP, numberFormatter} from './u
  */
 
 const weights = {
-  FCP: 0.25,
-  SI: 0.15,
-  LCP: 0.2,
-  TTI: 0.15,
-  TBT: 0.25,
+  v5: {
+    FCP: 0.20,
+    SI: 0.26666,
+    FMP: 0.066666,
+    TTI: 0.33333,
+    FCI: 0.133333,
+  },
+  v6: {
+    FCP: 0.25,
+    SI: 0.15,
+    LCP: 0.2,
+    TTI: 0.15,
+    TBT: 0.25,
+  }
 };
 
 /**
  * V5/v6 scoring curves
  */
 const scoring = {
-  FCP: {median: 4000, falloff: 2000},
-  FMP: {median: 4000, falloff: 2000},
-  SI: {median: 5800, falloff: 2900},
-  TTI: {median: 7300, falloff: 2900},
-  TBT: {median: 600, falloff: 200}, // mostly uncalibrated
-  LCP: {median: 4000, falloff: 2000}, // these are not chosen yet
-  FCPUI: {median: 6500, falloff: 2900},
+  FCP: {median: 4000, falloff: 2000, name: 'First Contentful Paint'},
+  FMP: {median: 4000, falloff: 2000, name: 'First Meaningful Paint'},
+  SI:  {median: 5800, falloff: 2900, name: 'Speed Index'},
+  TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
+  FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
+  TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'}, // mostly uncalibrated
+  LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'}, // these are not chosen yet
 };
 
+
+
 // Nake sure weights total to 1
-const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
+const weightSum = Object.values(weights.v6).reduce((agg, val) => (agg += val));
 console.assert(weightSum === 1);
-const maxWeight = Math.max(...Object.values(weights));
+const maxWeight = Math.max(...Object.values(weights.v6));
 
 // The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
 const giveElement = eventOrElem =>
@@ -40,10 +51,47 @@ const giveElement = eventOrElem =>
 // Gotta avoid infinite loop since we dispatchEvent ourselves
 const isManuallyDispatched = eventOrElem => eventOrElem instanceof Event && !eventOrElem.isTrusted;
 
+
+
+const html = Object.keys(weights.v6).map(id => {
+  const name = scoring[id].name;
+  return createRow(id, name);
+}).join('');
+
+$('tbody').innerHTML = html;
+
+function createRow(id, name) {
+  return `
+<tr id="${id}">
+  <td>
+    <span class="lh-metric__score-icon"></span>
+  </td>
+  <td>${id} (${name})</td>
+  <td>
+    <input type="range" class="${id} metric-value" />
+  </td>
+  <td>
+    <output class="${id} value-output"></output>
+  </td>
+  <td>
+    <span class="${id} weight-text"></span>
+  </td>
+
+  <td>
+    <input type="range" class="${id} metric-score" />
+  </td>
+  <td>
+    <output class="${id} score-output"></output>
+  </td>
+</tr>`;
+}
+
+
+
 // Set weighting column
 $$('.weight-text').forEach(elem => {
   const metricId = elem.closest('tr').id;
-  elem.textContent = `${weights[metricId] * 100}%`;
+  elem.textContent = `${weights.v6[metricId] * 100}%`;
 });
 
 // Set up value sliders
@@ -131,7 +179,7 @@ const scoreObservers = Array.from($$('input.metric-score')).map(elem => {
   const outputElem = $(`.score-output.${metricId}`);
   const valueElem = $(`input.${metricId}.metric-value`);
 
-  const scaledWidth = weights[metricId] / maxWeight;
+  const scaledWidth = weights.v6[metricId] / maxWeight;
   rangeElem.style.width = `${scaledWidth * 100}%`;
 
   const obs = fromEvent(rangeElem, 'input').pipe(startWith(rangeElem));
@@ -167,7 +215,7 @@ combineLatest(...scoreObservers)
       const items = elems.map(eventOrElem => {
         const elem = giveElement(eventOrElem);
         const metricId = elem.closest('tr').id;
-        return {weight: weights[metricId], score: elem.value};
+        return {weight: weights.v6[metricId], score: elem.value};
       });
       const weightedMean = arithmeticMean(items);
       return weightedMean;
