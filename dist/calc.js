@@ -1749,18 +1749,15 @@
     <td>${id} (${name})</td>
     <td>
       <input type="range" class="${id} metric-value" />
-    </td>
-    <td>
       <output class="${id} value-output"></output>
     </td>
+
     <td>
       <span class="${id} weight-text"></span>
     </td>
 
     <td>
       <input type="range" class="${id} metric-score" />
-    </td>
-    <td>
       <output class="${id} score-output"></output>
     </td>
   </tr>`;
