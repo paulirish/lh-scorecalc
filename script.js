@@ -126,7 +126,7 @@ function main(weights, container) {
 
     // Restore cached value if available, otherwise generate reasonable random stuff
     if (localStorage.metricValues) {
-      const cachedValues = JSON.parse(localStorage.metricValues);
+      const cachedValues = JSON.parse(localStorage[`metricValues.${container.id}`]);
       elem.value = cachedValues[metricId];
     } else {
       elem.value = Math.max((Math.random() * (max - min)) / 2, min);
@@ -176,7 +176,7 @@ function main(weights, container) {
     )
     .pipe(debounce(() => interval(500)))
     .subscribe(values => {
-      localStorage.metricValues = JSON.stringify(values);
+      localStorage[`metricValues.${container.id}`] = JSON.stringify(values);
     });
 
   // Setup the score sliders
