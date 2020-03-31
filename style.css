@@ -95,6 +95,16 @@ h1 {
   font-weight: bold;
   color: pink;
   font-size: 16px;
+  text-align: center;
+}
+
+h2 i {
+  font-size: 60%;
+}
+
+footer {
+  text-align: center;
+  font-size: 80%;
 }
 
 

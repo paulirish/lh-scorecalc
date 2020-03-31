@@ -1696,11 +1696,12 @@
       FCI: 0.133333,
     },
     v6: {
-      FCP: 0.25,
-      SI: 0.15,
-      LCP: 0.2,
+      FCP: 0.15,
+      SI:  0.15,
+      LCP: 0.25,
       TTI: 0.15,
       TBT: 0.25,
+      CLS: 0.05
     },
   };
 
@@ -1714,7 +1715,8 @@
     TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
     FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
     TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'}, // mostly uncalibrated
-    LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'}, // these are not chosen yet
+    LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'},
+    CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
   };
 
   function main(weights, container) {
@@ -1751,14 +1753,15 @@
       <input type="range" step=10 class="${id} metric-value" />
       <output class="${id} value-output"></output>
     </td>
-
-    <td>
-      <span class="${id} weight-text"></span>
-    </td>
+    <td></td>
 
     <td>
       <input type="range" class="${id} metric-score" />
       <output class="${id} score-output"></output>
+    </td>
+
+    <td>
+      <span class="${id} weight-text"></span>
     </td>
   </tr>`;
     }
@@ -1793,6 +1796,13 @@
       elem.min = min;
       elem.max = max;
 
+      // Special handling for CLS
+      if (scoring[metricId].units === 'unitless') {
+        elem.min = 0;
+        elem.max = Math.ceil(valueAtScore5 * 100) / 100;
+        elem.step = 0.01;
+      }
+
       // Restore cached value if available, otherwise generate reasonable random stuff
       if (localStorage.metricValues) {
         const cachedValues = JSON.parse(localStorage.metricValues);
@@ -1804,8 +1814,14 @@
       const obs = fromEvent(elem, 'input').pipe(startWith(elem));
 
       obs.subscribe(eventOrElem => {
-        const milliseconds = Math.round(giveElement(eventOrElem).value / 10);
-        outputElem.textContent = `${numberFormatter.format(milliseconds * 10)}${NBSP}ms`;
+        if (scoring[metricId].units === 'unitless') {
+          // We always want 2 fractional digits
+          outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        } else {
+          // Rounded to nearest ten
+          const milliseconds = Math.round(giveElement(eventOrElem).valueAsNumber / 10) * 10;
+          outputElem.textContent = `${numberFormatter.format(milliseconds)}${NBSP}ms`;
+        }
       });
 
       // On value slider change, set score
