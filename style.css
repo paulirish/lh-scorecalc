@@ -35,7 +35,7 @@ table {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
 }
-
+ 
 th {
   border-bottom: solid 3px hsla(227, 100%, 71%, 1);
 }
