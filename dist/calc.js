@@ -1929,6 +1929,17 @@
       });
   }
 
+  if (new URLSearchParams(location.search).has('v6')) {
+    $('#v5').hidden = true;
+    $('footer').hidden = true;
+    $('h1').hidden = true;
+  }
+  else if (new URLSearchParams(location.search).has('v5')) {
+    $('#v6').hidden = true;
+    $('footer').hidden = true;
+    $('h1').hidden = true;
+  }
+
   main(weights.v6, $('#v6'));
   main(weights.v5, $('#v5'));
 
