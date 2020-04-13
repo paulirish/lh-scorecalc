@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 
 export default {
-  input: 'script/script.js',
+  input: 'script/main.js',
   output: {
     file: 'dist/calc.js',
     format: 'iife',
