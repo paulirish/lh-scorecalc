@@ -172,7 +172,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     angleAdder += weightingPct * 2 * Math.PI;
   });
 
-  addEventListener('mouseover', (e) => {
+  wrapper.addEventListener('mouseover', (e) => {
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
       wrapper.classList.remove('state--expanded');
 
