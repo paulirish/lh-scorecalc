@@ -2,7 +2,6 @@
 
 import {calculateRating} from './util.js';
 
-
 export function updateGauge(container, category) {
   const wrapper = container.$('.lh-gauge__wrapper');
   wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
@@ -96,14 +95,6 @@ function _setPerfGaugeBasic(wrapper, score) {
     let offsetAdder = .25 * circumferenceOuter - endDiffOuter - .5 * strokeGap;
     let angleAdder = -.5 * Math.PI;
 
-    const aliases = {
-      "first-contentful-paint": 'FCP',
-      "first-meaningful-paint": 'FMP',
-      "speed-index": 'SI',
-      "interactive": 'TTI',
-      "first-cpu-idle": 'FCPUI' };
-
-
     metrics.forEach((metric, i) => {
       const metricGroup = document.createElementNS(NS_URI, 'g');
       const metricArcMax = document.createElementNS(NS_URI, 'circle');
@@ -111,7 +102,8 @@ function _setPerfGaugeBasic(wrapper, score) {
       const metricLabel = document.createElementNS(NS_URI, 'text');
       const metricValue = document.createElementNS(NS_URI, 'text');
 
-      const alias = aliases[metric.id];
+      // TODO: in scorecalc we dont use the real audit ID just the acronym.
+      const alias = metric.id;
 
       metricGroup.classList.add('metric', `metric--${alias}`);
       metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
