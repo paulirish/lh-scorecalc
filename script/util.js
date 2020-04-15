@@ -14,7 +14,7 @@ export function arithmeticMean(items) {
   items = items.filter(item => item.weight > 0);
   const results = items.reduce(
     (result, item) => {
-      const score = item.score;
+      const score = item.result.score;
       const weight = item.weight;
       return {
         weight: result.weight + weight,

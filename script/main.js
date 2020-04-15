@@ -54,7 +54,7 @@ function main(weights, container) {
   }
 
   // stamp out perf gauge
-  const tmpl = document.querySelector('#tmpl-lh-perf-gauge');
+  const tmpl = document.querySelector('#tmpl-lh-perf-gauge-explodey');
   const tmplElem = document.importNode(tmpl.content, true);
   container.$('.perfscore').append(tmplElem);
 
@@ -198,17 +198,31 @@ function main(weights, container) {
   combineLatest(...scoreObservers)
     .pipe(
       map(([...elems]) => {
-        const items = elems.map(eventOrElem => {
+        const auditRefs = elems.map(eventOrElem => {
           const elem = giveElement(eventOrElem);
           const metricId = elem.closest('tr').id;
-          return {weight: weights[metricId], score: elem.value};
+          return {
+            id: metricId,
+            weight: weights[metricId],
+            group: 'metrics',
+            result: {
+              score: elem.value,
+            },
+          };
         });
-        const weightedMean = arithmeticMean(items);
-        return weightedMean;
+
+        // return a LHR ReportResult category
+        const category = {
+          "title": "Performance",
+          "auditRefs": auditRefs,
+          id: 'performance',
+          score: arithmeticMean(auditRefs)
+        };
+        return category;
       })
     )
-    .subscribe(score => {
-      updateGauge(container, score);
+    .subscribe(category => {
+      updateGauge(container, category);
     });
 }
 
