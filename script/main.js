@@ -53,6 +53,11 @@ function main(weights, container) {
   </tr>`;
   }
 
+  // stamp out perf gauge
+  const tmpl = document.querySelector('#tmpl-lh-perf-gauge');
+  const tmplElem = document.importNode(tmpl.content, true);
+  container.$('.perfscore').append(tmplElem);
+
   // Set weighting column
   container.$$('.weight-text').forEach(elem => {
     const metricId = elem.closest('tr').id;
