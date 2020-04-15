@@ -172,47 +172,43 @@ function _setPerfGaugeExplodey(wrapper, category) {
     angleAdder += weightingPct * 2 * Math.PI;
   });
 
-  addEventListener(
-    'mouseover',
-    (e) => {
-      if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
-        wrapper.classList.remove('state--expanded');
+  addEventListener('mouseover', (e) => {
+    if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
+      wrapper.classList.remove('state--expanded');
 
-        if (wrapper.classList.contains('state--highlight')) {
-          wrapper.classList.remove('state--highlight');
-          wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
-        }
-
-        return;
+      if (wrapper.classList.contains('state--highlight')) {
+        wrapper.classList.remove('state--highlight');
+        wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
 
-      const parent = e.target.parentNode;
+      return;
+    }
 
-      if (parent && parent === groupInner) {
-        if (!wrapper.classList.contains('state--expanded')) wrapper.classList.add('state--expanded');
-        else if (wrapper.classList.contains('state--highlight')) {
-          wrapper.classList.remove('state--highlight');
-          wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
-        }
-        return;
+    const parent = e.target.parentNode;
+
+    if (parent && parent === groupInner) {
+      if (!wrapper.classList.contains('state--expanded')) wrapper.classList.add('state--expanded');
+      else if (wrapper.classList.contains('state--highlight')) {
+        wrapper.classList.remove('state--highlight');
+        wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
+      return;
+    }
 
-      if (parent && parent.classList && parent.classList.contains('metric')) {
-        wrapper.style.setProperty('--color-highlight', `var(--palette-${parent.style.getPropertyValue('--i')})`);
+    if (parent && parent.classList && parent.classList.contains('metric')) {
+      wrapper.style.setProperty('--color-highlight', `var(--palette-${parent.style.getPropertyValue('--i')})`);
 
-        if (!wrapper.classList.contains('state--highlight')) {
-          wrapper.classList.add('state--highlight');
+      if (!wrapper.classList.contains('state--highlight')) {
+        wrapper.classList.add('state--highlight');
+        parent.classList.add('metric--highlight');
+      } else {
+        const highlighted = SVG.querySelector('.metric--highlight');
+
+        if (parent !== highlighted) {
+          highlighted.classList.remove('metric--highlight');
           parent.classList.add('metric--highlight');
-        } else {
-          const highlighted = wrapper.querySelector('.metric--highlight');
-
-          if (parent !== highlighted) {
-            highlighted.classList.remove('metric--highlight');
-            parent.classList.add('metric--highlight');
-          }
         }
       }
-    },
-    false
-  );
+    }
+  });
 }
