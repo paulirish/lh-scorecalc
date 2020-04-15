@@ -98,6 +98,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const metricGroup = document.createElementNS(NS_URI, 'g');
     const metricArcMax = document.createElementNS(NS_URI, 'circle');
     const metricArc = document.createElementNS(NS_URI, 'circle');
+    const metricArcHoverTarget = document.createElementNS(NS_URI, 'circle');
     const metricLabel = document.createElementNS(NS_URI, 'text');
     const metricValue = document.createElementNS(NS_URI, 'text');
 
@@ -107,12 +108,14 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
     metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric');
+    metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge-hover');
 
     const weightingPct = metric.weight / totalWeight;
     const metricLengthMax = Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
     const metricPercent = metric.result.score * weightingPct;
     const metricLength = Math.max(0, +(metricPercent * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
     const metricOffset = weightingPct * circumferenceOuter;
+    const metricHoverLength = Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
 
     metricGroup.style.setProperty('--metric-color', `var(--palette-${i})`);
     metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
@@ -120,6 +123,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
+    metricArcHoverTarget.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');
@@ -162,6 +166,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
+    metricGroup.appendChild(metricArcHoverTarget);
     metricGroup.appendChild(metricArcMax);
     metricGroup.appendChild(metricArc);
     metricGroup.appendChild(metricLabel);
