@@ -206,7 +206,7 @@ function main(weights, container) {
             weight: weights[metricId],
             group: 'metrics',
             result: {
-              score: elem.value,
+              score: elem.value / 100,
             },
           };
         });

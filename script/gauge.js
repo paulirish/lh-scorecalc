@@ -3,14 +3,15 @@
 import {calculateRating} from './util.js';
 
 
-export function updateGauge(container, score) {
+export function updateGauge(container, category) {
   const wrapper = container.$('.lh-gauge__wrapper');
   wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
+  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(category.score)}`);
 
-  _setPerfGaugeExplodey(container, score);
+  _setPerfGaugeExplodey(container, category);
 }
 
+/* NOTE IT consumes the basic score (which is 0-100) snot the category */
 function _setPerfGaugeBasic(wrapper, score) {
   const gaugeArc = wrapper.$('.lh-gauge-arc');
   gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
