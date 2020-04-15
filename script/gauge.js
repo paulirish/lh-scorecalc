@@ -7,7 +7,7 @@ export function updateGauge(container, category) {
   wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
   wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(category.score)}`);
 
-  _setPerfGaugeExplodey(container, category);
+  _setPerfGaugeExplodey(wrapper, category);
 }
 
 /* NOTE IT consumes the basic score (which is 0-100) snot the category */
@@ -172,20 +172,29 @@ function _setPerfGaugeExplodey(wrapper, category) {
     angleAdder += weightingPct * 2 * Math.PI;
   });
 
+  /*
+    wrapper.state-expanded: gauge is exploded
+    wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
+    metric.metric-highlight: highlight this particular metric
+
+  */
   wrapper.addEventListener('mouseover', (e) => {
+
+    // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
+      // paul: not sure why we want to remove this.. seems like we want to keep it expanded...
       wrapper.classList.remove('state--expanded');
 
       if (wrapper.classList.contains('state--highlight')) {
         wrapper.classList.remove('state--highlight');
         wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
-
       return;
     }
 
     const parent = e.target.parentNode;
 
+    // if hovering on the primary (inner) part, then explode it but dont highlight
     if (parent && parent === groupInner) {
       if (!wrapper.classList.contains('state--expanded')) wrapper.classList.add('state--expanded');
       else if (wrapper.classList.contains('state--highlight')) {
@@ -195,7 +204,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
       return;
     }
 
+    // if hovering on a metric, highlight that one.
+    // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
+      // match the bg color of the gauge during a metric highlight
       wrapper.style.setProperty('--color-highlight', `var(--palette-${parent.style.getPropertyValue('--i')})`);
 
       if (!wrapper.classList.contains('state--highlight')) {
