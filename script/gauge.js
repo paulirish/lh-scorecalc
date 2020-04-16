@@ -45,7 +45,10 @@ function determineTrig(sizeSVG, percent, strokeWidth) {
     circumferenceInner,
     circumferenceOuter,
     getArcLength:  _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
-    getMetricArcLength: weightingPct => Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4)),
+    getMetricArcLength: (weightingPct, isButt) => {
+      const linecapFactor = isButt ? 0 : (2 * endDiffOuter - strokeGap);
+      return Math.max(0, +(weightingPct * circumferenceOuter - linecapFactor).toFixed(4))
+    },
     endDiffInner,
     endDiffOuter,
     strokeWidth,
@@ -147,8 +150,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const metricLength = getMetricArcLength(metricPercent);
     const metricOffset = weightingPct * circumferenceOuter;
 
-    const hoverTrig = determineTrig(sizeSVG, percent, 10);
-    const metricHoverLength = hoverTrig.getMetricArcLength(weightingPct);
+    const metricHoverLength = getMetricArcLength(weightingPct, true);
 
     metricGroup.style.setProperty('--metric-color', `var(--palette-${i})`);
     metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
@@ -157,10 +159,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
     metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength}`);
-
-    metricArcHoverTarget.style.setProperty('stroke-width', 10);
-    metricArcHoverTarget.style.setProperty('color', 'currentcolor');
-    metricArcHoverTarget.style.setProperty('opacity', 0.1);
+    metricArcHoverTarget.style.setProperty('stroke-width', 40);
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');

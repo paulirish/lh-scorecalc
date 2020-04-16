@@ -395,6 +395,11 @@ text {
   color: var(--metric-color);
   stroke-dashoffset: var(--metric-offset);
 }
+.lh-gauge-hover {
+  color: currentcolor;
+  opacity: 0.0;
+  stroke-linecap: butt;
+}
 .lh-gauge__arc--metric:not(.lh-gauge--faded) {
   opacity: 0;
   stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
