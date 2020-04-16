@@ -24,7 +24,7 @@ function _setPerfGaugeBasic(wrapper, score) {
 function determineTrig(sizeSVG, percent, strokeWidth) {
   strokeWidth = strokeWidth || (sizeSVG / 32);
 
-  const radiusInner = 0.25 * sizeSVG;
+  const radiusInner = sizeSVG / strokeWidth;
   const strokeGap = 0.5 * strokeWidth;
   const radiusOuter = radiusInner + strokeGap + strokeWidth;
 
@@ -44,9 +44,8 @@ function determineTrig(sizeSVG, percent, strokeWidth) {
     radiusOuter,
     circumferenceInner,
     circumferenceOuter,
-    getGaugeArcLength:  _ => {
-      return Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4));
-    },
+    getArcLength:  _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
+    getMetricArcLength: weightingPct => Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4)),
     endDiffInner,
     endDiffOuter,
     strokeWidth,
@@ -68,7 +67,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
     radiusOuter,
     circumferenceInner,
     circumferenceOuter,
-    getGaugeArcLength,
+    getArcLength,
+    getMetricArcLength,
     endDiffInner,
     endDiffOuter,
     strokeWidth,
@@ -112,7 +112,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   cover.setAttribute('stroke-width', strokeGap);
   SVG.style.setProperty('--radius', radiusInner);
 
-  gaugeArc.setAttribute('stroke-dasharray', `${getGaugeArcLength()} ${(circumferenceInner - getGaugeArcLength()).toFixed(4)}`);
+  gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
 
   gaugePerc.textContent = Math.round(percent * 100);
@@ -139,14 +139,16 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
     metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric');
-    metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge-hover');
+    metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded', 'lh-gauge-hover');
 
     const weightingPct = metric.weight / totalWeight;
-    const metricLengthMax = Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
+    const metricLengthMax = getMetricArcLength(weightingPct);
     const metricPercent = metric.result.score * weightingPct;
-    const metricLength = Math.max(0, +(metricPercent * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
+    const metricLength = getMetricArcLength(metricPercent);
     const metricOffset = weightingPct * circumferenceOuter;
-    const metricHoverLength = Math.max(0, +(weightingPct * circumferenceOuter - 2 * endDiffOuter - strokeGap).toFixed(4));
+
+    const hoverTrig = determineTrig(sizeSVG, percent, 10);
+    const metricHoverLength = hoverTrig.getMetricArcLength(weightingPct);
 
     metricGroup.style.setProperty('--metric-color', `var(--palette-${i})`);
     metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
@@ -154,7 +156,11 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
-    metricArcHoverTarget.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
+    metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength}`);
+
+    metricArcHoverTarget.style.setProperty('stroke-width', 10);
+    metricArcHoverTarget.style.setProperty('color', 'currentcolor');
+    metricArcHoverTarget.style.setProperty('opacity', 0.1);
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');
@@ -197,9 +203,9 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
-    metricGroup.appendChild(metricArcHoverTarget);
     metricGroup.appendChild(metricArcMax);
     metricGroup.appendChild(metricArc);
+    metricGroup.appendChild(metricArcHoverTarget);
     metricGroup.appendChild(metricLabel);
     metricGroup.appendChild(metricValue);
     groupOuter.appendChild(metricGroup);
