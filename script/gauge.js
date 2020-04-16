@@ -13,6 +13,7 @@ export function updateGauge(container, category) {
 }
 
 /* NOTE IT consumes the basic score (which is 0-100) snot the category */
+// This is called to both setup it the first time and to update it subsequently. this doubleduty requires a few hacks.
 function _setPerfGaugeBasic(wrapper, score) {
   const gaugeArc = wrapper.$('.lh-gauge-arc');
   gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
@@ -129,12 +130,13 @@ function _setPerfGaugeExplodey(wrapper, category) {
   let angleAdder = -0.5 * Math.PI;
 
   metrics.forEach((metric, i) => {
-    // TODO: in scorecalc we dont use the real audit ID just the acronym.
+    // TODO(porting to real LHR..): in scorecalc we dont use the real audit ID just the acronym.
     const alias = metric.id;
 
-    const domNeedsToBeBuilt = !groupOuter.querySelector(`.metric--${alias}`);
+    // Hack
+    const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
 
-    // This isn't ideal but it was quick. Handles both initialization and updates
+    // HACK:This isn't ideal but it was quick. Handles both initialization and updates
     const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
     const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
     const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
@@ -204,7 +206,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
-    if (domNeedsToBeBuilt){
+    if (needsDomPopulation){
       metricGroup.appendChild(metricArcMax);
       metricGroup.appendChild(metricArc);
       metricGroup.appendChild(metricArcHoverTarget);
@@ -217,13 +219,15 @@ function _setPerfGaugeExplodey(wrapper, category) {
     angleAdder += weightingPct * 2 * Math.PI;
   });
 
+  // Hack. Not ideal.
+  if (SVG.dataset.evtsAreSetup) return;
+  SVG.dataset.evtsAreSetup = true;
   /*
     wrapper.state-expanded: gauge is exploded
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
     metric.metric-highlight: highlight this particular metric
-
   */
- domNeedsToBeBuilt && SVG.addEventListener('mouseover', (e) => {
+ SVG.addEventListener('mouseover', (e) => {
 
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
@@ -270,7 +274,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // clear on mouselave even if mousemove didn't catch it.
-  domNeedsToBeBuilt && SVG.addEventListener('mouseleave', e => {
+  SVG.addEventListener('mouseleave', e => {
     console.log('mouseleave');
     SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
