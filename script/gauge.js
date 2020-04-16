@@ -90,8 +90,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
   SVG.style.setProperty('--stroke-width', strokeWidth);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
 
-  // build the mask
-  const mask = wrapper.querySelector('#lh-gauge__mask');
+  // build the mask. Note this mask isn't within the wrapper, it's global.
+  const mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
   const maskVisible = mask.querySelector('path');
   const maskHidden = mask.querySelector('circle');
 

@@ -10,7 +10,6 @@ features:
 
 bugs:
 - when values are set in beginning (random or localstorage restored), the metric value can shift a little bit thanks to the observer on the score values. it only happens in this case. why? we dont know. but its dumb.
-- there is some CRAZY dependency between the TWO svgs. especially when it comes to metric__value. try display:none the first. now vis:hidden it. if the first has visible metric_value then the second will, otherwise the second's metriv_values wont show. wtfffff
 - set a fixed explodey palette per each metric'
 -->
     <meta name="viewport" content="width=device-width, initial-scale=0.6">
@@ -134,10 +133,6 @@ bugs:
     <div class='lh-gauge__wrapper'>
       <div class='lh-gauge__svg-wrapper'>
         <svg class='lh-gauge'>
-          <mask id='lh-gauge__mask' color='#000'>
-            <path></path>
-            <circle class='lh-gauge__cutout'></circle>
-          </mask>
           <g class='lh-gauge__inner'>
             <circle class='lh-gauge__base lh-gauge--faded' />
             <circle class='lh-gauge__arc' />
@@ -149,4 +144,9 @@ bugs:
         </svg>
       </div>
     </div>
+  </template>
+  <mask id='lh-gauge__mask' color='#000'>
+    <path></path>
+    <circle class='lh-gauge__cutout'></circle>
+  </mask>
 </html>
