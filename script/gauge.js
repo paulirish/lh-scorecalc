@@ -89,8 +89,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
   // build the mask
   const mask = wrapper.querySelector('#lh-gauge__mask');
-  const maskVisible = document.createElementNS(NS_URI, 'path');
-  const maskHidden = document.createElementNS(NS_URI, 'circle');
+  const maskVisible = mask.querySelector('path');
+  const maskHidden = mask.querySelector('circle');
 
   // a path is the most compact way to cover the SVG area with a rectangle
   maskVisible.setAttribute('d', `M${offsetSVG}${offsetSVG}H${-offsetSVG}V${-offsetSVG}H${offsetSVG}`);
@@ -99,10 +99,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
   // default fill is black, no need to set it exlicitly on circle
   // any strok applied doesn't matter
   maskHidden.setAttribute('r', radiusInner + 0.5 * strokeWidth);
-  maskHidden.classList.add('lh-gauge__cutout');
-
-  mask.appendChild(maskVisible);
-  mask.appendChild(maskHidden);
 
   const groupOuter = wrapper.querySelector('.lh-gauge__outer');
   const groupInner = wrapper.querySelector('.lh-gauge__inner');
@@ -131,19 +127,22 @@ function _setPerfGaugeExplodey(wrapper, category) {
   let angleAdder = -0.5 * Math.PI;
 
   metrics.forEach((metric, i) => {
-    const metricGroup = document.createElementNS(NS_URI, 'g');
-    const metricArcMax = document.createElementNS(NS_URI, 'circle');
-    const metricArc = document.createElementNS(NS_URI, 'circle');
-    const metricArcHoverTarget = document.createElementNS(NS_URI, 'circle');
-    const metricLabel = document.createElementNS(NS_URI, 'text');
-    const metricValue = document.createElementNS(NS_URI, 'text');
-
     // TODO: in scorecalc we dont use the real audit ID just the acronym.
     const alias = metric.id;
 
+    const domNeedsToBeBuilt = !groupOuter.querySelector(`.metric--${alias}`);
+
+    // This isn't ideal but it was quick. Handles both initialization and updates
+    const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
+    const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
+    const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
+    const metricArcHoverTarget = groupOuter.querySelector(`.metric--${alias} .lh-gauge-hover`) || document.createElementNS(NS_URI, 'circle');
+    const metricLabel = groupOuter.querySelector(`.metric--${alias} .metric__label`) || document.createElementNS(NS_URI, 'text');
+    const metricValue = groupOuter.querySelector(`.metric--${alias} .metric__value`) || document.createElementNS(NS_URI, 'text');
+
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
-    metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric');
+    metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--miniarc');
     metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded', 'lh-gauge-hover');
 
     const weightingPct = metric.weight / totalWeight;
@@ -151,7 +150,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const metricPercent = metric.result.score * weightingPct;
     const metricLength = getMetricArcLength(metricPercent);
     const metricOffset = weightingPct * circumferenceOuter;
-
     const metricHoverLength = getMetricArcLength(weightingPct, true);
 
     metricGroup.style.setProperty('--metric-color', `var(--palette-${i})`);
@@ -204,12 +202,14 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
-    metricGroup.appendChild(metricArcMax);
-    metricGroup.appendChild(metricArc);
-    metricGroup.appendChild(metricArcHoverTarget);
-    metricGroup.appendChild(metricLabel);
-    metricGroup.appendChild(metricValue);
-    groupOuter.appendChild(metricGroup);
+    if (domNeedsToBeBuilt){
+      metricGroup.appendChild(metricArcMax);
+      metricGroup.appendChild(metricArc);
+      metricGroup.appendChild(metricArcHoverTarget);
+      metricGroup.appendChild(metricLabel);
+      metricGroup.appendChild(metricValue);
+      groupOuter.appendChild(metricGroup);
+    }
 
     offsetAdder -= metricOffset;
     angleAdder += weightingPct * 2 * Math.PI;

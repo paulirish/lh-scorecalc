@@ -406,12 +406,12 @@ text {
   opacity: 0.001;
   stroke-linecap: butt;
 }
-.lh-gauge__arc--metric:not(.lh-gauge--faded) {
+.lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: 0;
   stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
   transition: 0s .005s;
 }
-.state--expanded .lh-gauge__arc--metric:not(.lh-gauge--faded) {
+.state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: .999;
   stroke-dasharray: var(--metric-array);
   transition: 0.3s calc(.005s + var(--i)*.05s);
