@@ -143,6 +143,9 @@ footer {
     margin-left: 0;
     margin-top: -20px;
   }
+  tbody td:nth-child(4) {
+    width: 3px
+  }
 }
 
 h2 {
