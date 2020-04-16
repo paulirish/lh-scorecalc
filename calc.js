@@ -1834,7 +1834,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // TODO: in scorecalc we dont use the real audit ID just the acronym.
     const alias = metric.id;
 
-    const domNeedsToBeBuilt = !groupOuter.querySelector(`.metric--${alias}`);
+    const metricDomNeedsToBeBuilt = !groupOuter.querySelector(`.metric--${alias}`);
 
     // This isn't ideal but it was quick. Handles both initialization and updates
     const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
@@ -1906,7 +1906,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
-    if (domNeedsToBeBuilt){
+    if (metricDomNeedsToBeBuilt){
       metricGroup.appendChild(metricArcMax);
       metricGroup.appendChild(metricArc);
       metricGroup.appendChild(metricArcHoverTarget);
@@ -1925,7 +1925,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metric.metric-highlight: highlight this particular metric
 
   */
- domNeedsToBeBuilt && SVG.addEventListener('mouseover', (e) => {
+ SVG.addEventListener('mouseover', (e) => {
 
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
@@ -1972,7 +1972,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // clear on mouselave even if mousemove didn't catch it.
-  domNeedsToBeBuilt && SVG.addEventListener('mouseleave', e => {
+  SVG.addEventListener('mouseleave', e => {
     console.log('mouseleave');
     SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
