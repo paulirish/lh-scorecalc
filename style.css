@@ -397,7 +397,7 @@ text {
 }
 .lh-gauge-hover {
   color: currentcolor;
-  opacity: 0.0;
+  opacity: 0.001;
   stroke-linecap: butt;
 }
 .lh-gauge__arc--metric:not(.lh-gauge--faded) {

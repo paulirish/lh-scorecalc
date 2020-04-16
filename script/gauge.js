@@ -45,9 +45,11 @@ function determineTrig(sizeSVG, percent, strokeWidth) {
     circumferenceInner,
     circumferenceOuter,
     getArcLength:  _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
+    // isButt case is for metricArcHoverTarget
     getMetricArcLength: (weightingPct, isButt) => {
-      const linecapFactor = isButt ? 0 : (2 * endDiffOuter - strokeGap);
-      return Math.max(0, +(weightingPct * circumferenceOuter - linecapFactor).toFixed(4))
+      // TODO: this math isn't perfect butt it's very close.
+      const linecapFactor = isButt ? 0 : (2 * endDiffOuter);
+      return Math.max(0, +(weightingPct * circumferenceOuter - strokeGap - linecapFactor).toFixed(4))
     },
     endDiffInner,
     endDiffOuter,
@@ -158,8 +160,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
-    metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength}`);
-    metricArcHoverTarget.style.setProperty('stroke-width', 40);
+    metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength - endDiffOuter}`);
+    metricArcHoverTarget.style.setProperty('stroke-width', 30);
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');
