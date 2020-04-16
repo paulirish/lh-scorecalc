@@ -3,6 +3,7 @@ import {fromEvent, combineLatest, interval} from 'rxjs';
 import {map, startWith, debounce} from 'rxjs/operators';
 import {$, $$, calculateRating, arithmeticMean, NBSP, numberFormatter} from './util.js';
 import {weights, scoring} from './metrics.js';
+import { updateGauge } from './gauge.js';
 
 
 function main(weights, container) {
@@ -51,6 +52,11 @@ function main(weights, container) {
     </td>
   </tr>`;
   }
+
+  // stamp out perf gauge
+  const tmpl = document.querySelector('#tmpl-lh-perf-gauge-explodey');
+  const tmplElem = document.importNode(tmpl.content, true);
+  container.$('.perfscore').append(tmplElem);
 
   // Set weighting column
   container.$$('.weight-text').forEach(elem => {
@@ -192,26 +198,31 @@ function main(weights, container) {
   combineLatest(...scoreObservers)
     .pipe(
       map(([...elems]) => {
-        const items = elems.map(eventOrElem => {
+        const auditRefs = elems.map(eventOrElem => {
           const elem = giveElement(eventOrElem);
           const metricId = elem.closest('tr').id;
-          return {weight: weights[metricId], score: elem.value};
+          return {
+            id: metricId,
+            weight: weights[metricId],
+            group: 'metrics',
+            result: {
+              score: elem.value / 100,
+            },
+          };
         });
-        const weightedMean = arithmeticMean(items);
-        return weightedMean;
+
+        // return a LHR ReportResult category
+        const category = {
+          "title": "Performance",
+          "auditRefs": auditRefs,
+          id: 'performance',
+          score: arithmeticMean(auditRefs)
+        };
+        return category;
       })
     )
-    .subscribe(score => {
-      const wrapper = container.$('.lh-gauge__wrapper');
-      wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-      wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(score / 100)}`);
-
-      const gaugeArc = container.$('.lh-gauge-arc');
-      gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
-
-      const scoreOutOf100 = Math.round(score);
-      const percentageEl = container.$('.lh-gauge__percentage');
-      percentageEl.textContent = scoreOutOf100.toString();
+    .subscribe(category => {
+      updateGauge(container, category);
     });
 }
 

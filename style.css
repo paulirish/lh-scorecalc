@@ -24,7 +24,7 @@ body {
 }
 
 body {
-  padding: 20px;
+  padding: 20px 0;
 }
 
 table {
@@ -123,7 +123,7 @@ footer {
 
 
 .wrapper {
-  max-width: 960px;
+  max-width: 1020px;
   margin: 60px auto;
   min-width: 380px;
 
@@ -131,9 +131,17 @@ footer {
   align-items: center;
 }
 
+.perfscore {
+  margin-left: -20px;
+}
+
 @media screen and (max-width: 890px) {
   .wrapper {
     flex-direction: column;
+  }
+  .perfscore {
+    margin-left: 0;
+    margin-top: -20px;
   }
 }
 
@@ -164,6 +172,15 @@ form {
 /* no idea which of these variables i dont need.. */
 
 :root {
+
+  --palette-0: #1de9b6;
+  --palette-1: #7c4dff;
+  --palette-2: #ffb200;
+  --palette-3: #00affe;
+  --palette-4: #ff4181;
+  --palette-5: #a1a1a1;
+
+
    /* Palette using Material Design Colors
    * https://www.materialui.co/colors */
   --color-amber-50: #FFF8E1;
@@ -275,9 +292,6 @@ form {
 
 }
 
-/* score icon */
-
-
 
 /* score icon */
 
@@ -317,120 +331,149 @@ form {
 
 /*  the gauge! */
 
-.lh-gauge__wrapper--pass {
-  color: var(--color-pass);
-  fill: var(--color-pass);
-  stroke: var(--color-pass);
+
+circle {
+  stroke: currentcolor;
+  r: var(--radius);
 }
 
-.lh-gauge__wrapper--average {
-  color: var(--color-average);
-  fill: var(--color-average);
-  stroke: var(--color-average);
+text {
+  font-size: calc(var(--radius)*.2px);
 }
 
-.lh-gauge__wrapper--fail {
-  color: var(--color-fail);
-  fill: var(--color-fail);
-  stroke: var(--color-fail);
-}
 
 .lh-gauge {
+  margin: 0 auto;
+  width: 225px;
+  stroke-width: var(--stroke-width);
   stroke-linecap: round;
-  width: var(--gauge-circle-size);
-  height: var(--gauge-circle-size);
 }
-
-.lh-category .lh-gauge {
-  --gauge-circle-size: var(--gauge-circle-size-big);
+.lh-gauge--faded {
+  opacity: 0.1;
 }
-
-.lh-gauge-base {
-    opacity: 0.1;
-    stroke: var(--circle-background);
-    stroke-width: var(--circle-border-width);
+.lh-gauge__wrapper {
+  font-family: var(--report-font-family-monospace);
+  text-align: center;
+  text-decoration: none;
+  transition: .3s;
 }
-
-.lh-gauge-arc {
-    fill: none;
-    stroke: var(--circle-color);
-    stroke-width: var(--circle-border-width);
-    animation: load-gauge var(--transition-length) ease forwards;
-    animation-delay: 250ms;
+.lh-gauge__wrapper--pass {
+  color: var(--color-pass);
 }
-
+.lh-gauge__wrapper--average {
+  color: var(--color-average);
+}
+.lh-gauge__wrapper--fail {
+  color: var(--color-fail);
+}
+.state--expanded {
+  color: var(--color-gray-600);
+}
+.state--highlight {
+  color: var(--color-highlight);
+}
 .lh-gauge__svg-wrapper {
-  position: relative;
-  height: var(--gauge-circle-size);
-}
-.lh-category .lh-gauge__svg-wrapper {
-  --gauge-circle-size: var(--gauge-circle-size-big);
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-/* The plugin badge overlay */
-.lh-gauge__wrapper--plugin .lh-gauge__svg-wrapper::before {
-  width: var(--plugin-badge-size);
-  height: var(--plugin-badge-size);
-  background-color: var(--plugin-badge-background-color);
-  background-image: var(--plugin-icon-url);
-  background-repeat: no-repeat;
-  background-size: var(--plugin-icon-size);
-  background-position: 58% 50%;
-  content: "";
-  position: absolute;
-  right: -6px;
-  bottom: 0px;
-  display: block;
-  z-index: 100;
-  box-shadow: 0 0 4px rgba(0,0,0,.2);
-  border-radius: 25%;
+.lh-gauge__cutout {
+  opacity: .999;
+  transition: opacity .3s;
 }
-.lh-category .lh-gauge__wrapper--plugin .lh-gauge__svg-wrapper::before {
-  width: var(--plugin-badge-size-big);
-  height: var(--plugin-badge-size-big);
+.state--highlight .lh-gauge__cutout {
+  opacity: 0;
+}
+.lh-gauge__outer {
+  mask: url(#lh-gauge__mask);
+}
+.lh-gauge__inner {
+  color: inherit;
+}
+.lh-gauge__base {
+  fill: currentcolor;
+}
+.lh-gauge__arc {
+  fill: none;
+  transition: opacity .3s;
+}
+.lh-gauge__arc--metric {
+  color: var(--metric-color);
+  stroke-dashoffset: var(--metric-offset);
+}
+.lh-gauge-hover {
+  color: currentcolor;
+  opacity: 0.001;
+  stroke-linecap: butt;
+}
+.lh-gauge__arc--metric.lh-gauge--miniarc {
+  opacity: 0;
+  stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
+  transition: 0s .005s;
+}
+.state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
+  opacity: .999;
+  stroke-dasharray: var(--metric-array);
+  transition: 0.3s calc(.005s + var(--i)*.05s);
+}
+.state--expanded .lh-gauge__inner .lh-gauge__arc {
+  opacity: 0;
+}
+.lh-gauge__percentage {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentcolor;
+  opacity: .999;
+  font-size: calc(var(--radius)*.625px);
+  transition: opacity .3s ease-in;
+}
+.state--highlight .lh-gauge__percentage {
+  opacity: 0;
 }
 
+.cover {
+  fill: none;
+  opacity: .001;
+  pointer-events: none;
+}
+.state--expanded .cover {
+  pointer-events: auto;
+}
+
+.metric {
+  transform: scale(var(--scale-initial));
+  opacity: 0;
+  transition: transform .1s .2s ease-out,  opacity .3s ease-out;
+  pointer-events: none;
+}
+.metric text {
+  pointer-events: none;
+}
+.metric__value {
+  fill: currentcolor;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.state--expanded .metric {
+  transform: scale(1);
+  opacity: .999;
+  transition: transform .3s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
+  transition-delay: calc(var(--i)*.05s);
+  pointer-events: auto;
+}
+.state--highlight .metric {
+  opacity: .3;
+}
+.state--highlight .metric--highlight {
+  opacity: .999;
+  stroke-width: calc(1.5*var(--stroke-width));
+}
+.state--highlight .metric--highlight .metric__value {
+  opacity: 0.999;
+}
+
+
+/* TODO: delete??? */
 @keyframes load-gauge {
   from { stroke-dasharray: 0 352; }
-}
-
-.lh-gauge__percentage {
-  width: 100%;
-  height: var(--gauge-circle-size);
-  position: absolute;
-  font-family: var(--report-font-family-monospace);
-  font-size: calc(var(--gauge-circle-size) * 0.34 + 1.3px);
-  line-height: 0;
-  text-align: center;
-  top: calc(var(--score-container-padding) + var(--gauge-circle-size) / 2);
-}
-
-.lh-category .lh-gauge__percentage {
-  --gauge-circle-size: var(--gauge-circle-size-big);
-  --gauge-percentage-font-size: var(--gauge-percentage-font-size-big);
-}
-
-.lh-gauge__wrapper {
-  margin-top: 5px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  text-decoration: none;
-  padding: var(--score-container-padding);
-
-  --circle-border-width: 8;
-  --transition-length: 1s;
-
-  /* Contain the layout style paint & layers during animation*/
-  contain: content;
-  will-change: opacity; /* Only using for layer promotion */
-}
-
-.lh-gauge__label {
-  font-size: var(--gauge-label-font-size);
-  line-height: var(--gauge-label-line-height);
-  margin-top: 10px;
-  text-align: center;
-  color: var(--report-text-color);
 }

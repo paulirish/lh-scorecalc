@@ -7,11 +7,16 @@
     <!--     <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 <!--     ToDO
--  maybe instead of showing the metric score out of 100 it could show how many perf category points each metric is docking you for
-- allow user to try out scores < 5
+features:
 - set v5 and v6 values at the same time?  also store values together in localStorage?
+
+bugs:
 - when values are set in beginning (random or localstorage restored), the metric value can shift a little bit thanks to the observer on the score values. it only happens in this case. why? we dont know. but its dumb.
+- there is some CRAZY dependency between the TWO svgs. especially when it comes to metric__value. try display:none the first. now vis:hidden it. if the first has visible metric_value then the second will, otherwise the second's metriv_values wont show. wtfffff
+- set a fixed explodey palette per each metric'
+- currently make a shitton of SVG elements on every change. gotta just update them in place.
 -->
+    <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="./style.css">
   </head>
 
@@ -70,23 +75,7 @@
     </table>
 
     <div class="perfscore">
-      <div class="lh-gauge__wrapper">
-        <div class="lh-gauge__svg-wrapper">
-          <svg viewBox="0 0 120 120" class="lh-gauge">
-            <circle class="lh-gauge-base" r="56" cx="60" cy="60"></circle>
-            <circle
-              class="lh-gauge-arc"
-              transform="rotate(-90 60 60)"
-              r="56"
-              cx="60"
-              cy="60"
-            ></circle>
-          </svg>
-        </div>
-        <div class="lh-gauge__percentage"></div>
-        <!-- TODO: should likely be an h2  -->
-        <div class="lh-gauge__label"></div>
-      </div>
+
     </div>
   </form>
 
@@ -108,23 +97,7 @@
     </table>
 
     <div class="perfscore">
-      <div class="lh-gauge__wrapper">
-        <div class="lh-gauge__svg-wrapper">
-          <svg viewBox="0 0 120 120" class="lh-gauge">
-            <circle class="lh-gauge-base" r="56" cx="60" cy="60"></circle>
-            <circle
-              class="lh-gauge-arc"
-              transform="rotate(-90 60 60)"
-              r="56"
-              cx="60"
-              cy="60"
-            ></circle>
-          </svg>
-        </div>
-        <div class="lh-gauge__percentage"></div>
-        <!-- TODO: should likely be an h2  -->
-        <div class="lh-gauge__label"></div>
-      </div>
+
     </div>
   </form>
 
@@ -140,4 +113,42 @@
 
 
   <script defer src="dist/calc.js"></script>
+  <template id='tmpl-lh-perf-gauge'>
+    <div class="lh-gauge__wrapper">
+      <div class="lh-gauge__svg-wrapper">
+        <svg viewBox="0 0 120 120" class="lh-gauge">
+          <circle class="lh-gauge-base" r="56" cx="60" cy="60"></circle>
+          <circle
+            class="lh-gauge-arc"
+            transform="rotate(-90 60 60)"
+            r="56"
+            cx="60"
+            cy="60"
+          ></circle>
+        </svg>
+      </div>
+      <div class="lh-gauge__percentage"></div>
+      <!-- TODO: should likely be an h2  -->
+      <div class="lh-gauge__label"></div>
+    </div>
+  </template>
+  <template id='tmpl-lh-perf-gauge-explodey'>
+    <div class='lh-gauge__wrapper'>
+      <div class='lh-gauge__svg-wrapper'>
+        <svg class='lh-gauge'>
+          <mask id='lh-gauge__mask' color='#000'>
+            <path></path>
+            <circle class='lh-gauge__cutout'></circle>
+          </mask>
+          <g class='lh-gauge__inner'>
+            <circle class='lh-gauge__base lh-gauge--faded' />
+            <circle class='lh-gauge__arc' />
+            <text class='lh-gauge__percentage'></text>
+          </g>
+          <g class='lh-gauge__outer'>
+            <circle class='cover' />
+          </g>
+        </svg>
+      </div>
+    </div>
 </html>
