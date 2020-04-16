@@ -1,5 +1,7 @@
 'use strict';
 
+/* Most of the impressive code here authored by Ana Tudor, Nov 2019 */
+
 import {calculateRating} from './util.js';
 
 export function updateGauge(container, category) {
