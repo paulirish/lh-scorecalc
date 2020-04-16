@@ -223,7 +223,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metric.metric-highlight: highlight this particular metric
 
   */
-  SVG.addEventListener('mouseover', (e) => {
+ domNeedsToBeBuilt && SVG.addEventListener('mouseover', (e) => {
 
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
@@ -270,7 +270,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // clear on mouselave even if mousemove didn't catch it.
-  SVG.addEventListener('mouseleave', e => {
+  domNeedsToBeBuilt && SVG.addEventListener('mouseleave', e => {
     console.log('mouseleave');
     SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
