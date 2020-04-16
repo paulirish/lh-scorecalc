@@ -5,9 +5,8 @@ import commonjs from 'rollup-plugin-commonjs';
 export default {
   input: 'script/main.js',
   output: {
-    file: 'dist/calc.js',
-    format: 'iife',
-    name: 'ScoreCalc',
+    file: 'calc.js',
+    format: 'es',
     sourcemap: true,
   },
   plugins: [
