@@ -20,6 +20,40 @@ function _setPerfGaugeBasic(wrapper, score) {
   percentageEl.textContent = scoreOutOf100.toString();
 }
 
+
+function determineTrig(sizeSVG, percent, strokeWidth) {
+  strokeWidth = strokeWidth || (sizeSVG / 32);
+
+  const radiusInner = 0.25 * sizeSVG;
+  const strokeGap = 0.5 * strokeWidth;
+  const radiusOuter = radiusInner + strokeGap + strokeWidth;
+
+
+  const circumferenceInner = 2 * Math.PI * radiusInner;
+  // arc length we need to subtract
+  // for very small strokeWidth:radius ratios this is ≈ strokeWidth
+  // angle = acute angle of isosceles △ with 2 edges equal to radius & 3rd equal to strokeWidth
+  // angle formula given by law of cosines
+  const endDiffInner = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusInner, 2)) * radiusInner;
+
+  const circumferenceOuter = 2 * Math.PI * radiusOuter;
+  const endDiffOuter = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusOuter, 2)) * radiusOuter;
+
+  return {
+    radiusInner,
+    radiusOuter,
+    circumferenceInner,
+    circumferenceOuter,
+    getGaugeArcLength:  _ => {
+      return Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4));
+    },
+    endDiffInner,
+    endDiffOuter,
+    strokeWidth,
+    strokeGap,
+  }
+}
+
 /**
  * @param {HTMLAnchorElement} wrapper
  * @param {LH.ReportResult.Category} category
@@ -27,10 +61,19 @@ function _setPerfGaugeBasic(wrapper, score) {
 function _setPerfGaugeExplodey(wrapper, category) {
   const sizeSVG = 128;
   const offsetSVG = -0.5 * sizeSVG;
-  const radiusInner = 0.25 * sizeSVG;
-  const strokeWidth = sizeSVG / 32;
-  const strokeGap = 0.5 * strokeWidth;
-  const radiusOuter = radiusInner + strokeGap + strokeWidth;
+
+  const percent = Number(category.score);
+  const {
+    radiusInner,
+    radiusOuter,
+    circumferenceInner,
+    circumferenceOuter,
+    getGaugeArcLength,
+    endDiffInner,
+    endDiffOuter,
+    strokeWidth,
+    strokeGap,
+  } = determineTrig(sizeSVG, percent);
 
   const SVG = wrapper.querySelector('.lh-gauge');
   const NS_URI = 'http://www.w3.org/2000/svg';
@@ -62,18 +105,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const gaugeArc = groupInner.querySelector('.lh-gauge__arc');
   const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
-  const circumferenceInner = 2 * Math.PI * radiusInner;
-  // arc length we need to subtract
-  // for very small strokeWidth:radius ratios this is ≈ strokeWidth
-  // angle = acute angle of isosceles △ with 2 edges equal to radius & 3rd equal to strokeWidth
-  // angle formula given by law of cosines
-  const endDiffInner = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusInner, 2)) * radiusInner;
-
-  const circumferenceOuter = 2 * Math.PI * radiusOuter;
-  const endDiffOuter = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusOuter, 2)) * radiusOuter;
-
-  const percent = Number(category.score);
-  const gaugeArcLength = Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4));
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
   groupOuter.style.setProperty('--radius', radiusOuter);
@@ -81,7 +112,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   cover.setAttribute('stroke-width', strokeGap);
   SVG.style.setProperty('--radius', radiusInner);
 
-  gaugeArc.setAttribute('stroke-dasharray', `${gaugeArcLength} ${(circumferenceInner - gaugeArcLength).toFixed(4)}`);
+  gaugeArc.setAttribute('stroke-dasharray', `${getGaugeArcLength()} ${(circumferenceInner - getGaugeArcLength()).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
 
   gaugePerc.textContent = Math.round(percent * 100);
