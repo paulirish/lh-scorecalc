@@ -1,0 +1,479 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: hsla(225, 68%, 25%, 1);
+  height: 100%;
+  padding: 0;
+
+  /* lighthouse css */
+  font-family: var(--report-font-family);
+  font-size: var(--report-font-size);
+  margin: 0;
+  line-height: var(--report-line-height);
+  background: var(--report-background-color);
+  scroll-behavior: smooth;
+  color: var(--report-text-color);
+
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  padding: 20px 0;
+}
+
+table {
+  table-layout: fixed;
+
+  /* this is some amazing shit. https://kennethormandy.com/journal/flipping-on-tabular-numbers/ */
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+
+  margin: 0 auto;
+}
+
+th {
+  font-weight: normal;
+  color: var(--color-gray-600);
+  word-break: normal;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+tr:first-child td {
+  border-top: 8px solid transparent;
+}
+
+td {
+  vertical-align: top;
+}
+
+/* icon */
+tbody td:nth-child(1) {
+    width: 16px;
+}
+
+/* metric value */
+tbody td:nth-child(3) {
+  width: 210px;
+  text-align: right;
+}
+
+tbody td:nth-child(4) {
+  width: 30px;
+}
+
+/* metric score */
+tbody td:nth-child(5) {
+  text-align: right;
+  font-size: 11px;
+}
+/* weighting */
+tbody td:nth-child(6) {
+  width: 40px;
+  text-align: right;
+}
+
+input.metric-value {
+  width: 210px;
+}
+input.metric-score {
+  opacity: 0.85;
+}
+output {
+  display: block;
+  line-height: 16px;
+  margin-bottom: 8px;
+}
+
+
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: var(--gauge-label-font-size-big);
+  line-height: var(--gauge-label-line-height-big);
+  font-weight: normal;
+  text-align: center;
+}
+
+h1 svg {
+  height: var(--gauge-label-font-size-big);
+  vertical-align: text-top;
+}
+
+h2 i {
+  font-size: 60%;
+}
+
+footer {
+  font-size: 80%;
+  display: block !important;
+}
+
+
+
+.wrapper {
+  max-width: 1020px;
+  margin: 60px auto;
+  min-width: 380px;
+
+  display: flex;
+  align-items: center;
+}
+
+.perfscore {
+  margin-left: -20px;
+}
+
+@media screen and (max-width: 890px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  .perfscore {
+    margin-left: 0;
+    margin-top: -20px;
+  }
+}
+
+h2 {
+  font-weight: 200;
+  font-size: 21px;
+  margin: 0;
+  text-align: center;
+  width: 70px;
+}
+
+form {
+  overflow: hidden;
+}
+
+
+
+
+.weight-text {
+  color: var(--color-gray-500);
+}
+
+
+
+
+/* Lighthouse styles */
+
+/* no idea which of these variables i dont need.. */
+
+:root {
+
+  --palette-0: #1de9b6;
+  --palette-1: #7c4dff;
+  --palette-2: #ffb200;
+  --palette-3: #00affe;
+  --palette-4: #ff4181;
+  --palette-5: #a1a1a1;
+
+
+   /* Palette using Material Design Colors
+   * https://www.materialui.co/colors */
+  --color-amber-50: #FFF8E1;
+  --color-blue-200: #90CAF9;
+  --color-blue-900: #0D47A1;
+  --color-blue-A700: #2962FF;
+  --color-cyan-500: #00BCD4;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #E0E0E0;
+  --color-gray-400: #BDBDBD;
+  --color-gray-50: #FAFAFA;
+  --color-gray-500: #9E9E9E;
+  --color-gray-600: #757575;
+  --color-gray-700: #616161;
+  --color-gray-800: #424242;
+  --color-gray-900: #212121;
+  --color-gray: #000000;
+  --color-green-700: #018642;
+  --color-green: #0CCE6B;
+  --color-orange-700: #D04900;
+  --color-orange: #FFA400;
+  --color-red-700: #EB0F00;
+  --color-red: #FF4E42;
+  --color-teal-600: #00897B;
+  --color-white: #FFFFFF;
+
+  /* Context-specific colors */
+  --color-average-secondary: var(--color-orange-700);
+  --color-average: var(--color-orange);
+  --color-fail-secondary: var(--color-red-700);
+  --color-fail: var(--color-red);
+  --color-informative: var(--color-blue-900);
+  --color-pass-secondary: var(--color-green-700);
+  --color-pass: var(--color-green);
+  --color-hover: var(--color-gray-50);
+
+  /* Component variables */
+  --audit-description-padding-left: calc(var(--score-icon-size) + var(--score-icon-margin-left) + var(--score-icon-margin-right));
+  --audit-explanation-line-height: 16px;
+  --audit-group-margin-bottom: 40px;
+  --audit-group-padding-vertical: 8px;
+  --audit-margin-horizontal: 5px;
+  --audit-padding-vertical: 8px;
+  --category-header-font-size: 20px;
+  --category-padding: 40px;
+  --chevron-line-stroke: var(--color-gray-600);
+  --chevron-size: 12px;
+  --default-padding: 12px;
+  --env-item-background-color: var(--color-gray-100);
+  --env-item-font-size: 28px;
+  --env-item-line-height: 36px;
+  --env-item-padding: 10px 0px;
+  --env-name-min-width: 220px;
+  --footer-padding-vertical: 16px;
+  --gauge-circle-size-big: 112px;
+  --gauge-circle-size: 120px;
+  --gauge-label-font-size-big: 28px;
+  --gauge-label-font-size: 20px;
+  --gauge-label-line-height-big: 36px;
+  --gauge-label-line-height: 26px;
+  --gauge-percentage-font-size-big: 38px;
+  --gauge-percentage-font-size: 28px;
+  --gauge-wrapper-width: 148px;
+  --header-line-height: 24px;
+  --highlighter-background-color: var(--report-text-color);
+  --icon-square-size: calc(var(--score-icon-size) * 0.88);
+  --image-preview-size: 48px;
+  --metric-toggle-lines-fill: #7F7F7F;
+  --metrics-toggle-background-color: var(--color-gray-200);
+  --plugin-badge-background-color: var(--color-white);
+  --plugin-badge-size-big: calc(var(--gauge-circle-size-big) / 2.7);
+  --plugin-badge-size: calc(var(--gauge-circle-size) / 2.7);
+  --plugin-icon-size: 65%;
+  --pwa-icon-margin: 0 6px 0 -2px;
+  --pwa-icon-size: var(--topbar-logo-size);
+  --report-background-color: #fff;
+  --report-border-color-secondary: #ebebeb;
+  --report-font-family-monospace: 'Roboto Mono', 'Menlo', 'dejavu sans mono', 'Consolas', 'Lucida Console', monospace;
+  --report-font-family: Roboto, Helvetica, Arial, sans-serif;
+  --report-font-size: 16px;
+  --report-line-height: 24px;
+  --report-min-width: 400px;
+  --report-text-color-secondary: var(--color-gray-800);
+  --report-text-color: var(--color-gray-900);
+  --report-width: calc(60 * var(--report-font-size));
+  --score-container-padding: 8px;
+  --score-icon-background-size: 24px;
+  --score-icon-margin-left: 4px;
+  --score-icon-margin-right: 12px;
+  --score-icon-margin: 0 var(--score-icon-margin-right) 0 var(--score-icon-margin-left);
+  --score-icon-size: 12px;
+  --scores-container-padding: 20px 0 20px 0;
+  --scorescale-height: 6px;
+  --scorescale-width: 18px;
+  --section-padding-vertical: 12px;
+  --snippet-background-color: var(--color-gray-50);
+  --snippet-color: var(--color-gray-800);
+  --sparkline-height: 5px;
+  --stackpack-padding-horizontal: 10px;
+  --sticky-header-background-color: var(--report-background-color);
+  --table-higlight-background-color: hsla(0, 0%, 75%, 0.1);
+  --tools-icon-color: var(--color-gray-600);
+  --tools-icon-size: var(--score-icon-background-size);
+  --topbar-background-color: var(--color-gray-100);
+  --topbar-height: 32px;
+  --topbar-logo-size: 24px;
+  --topbar-padding: 0 8px;
+  --toplevel-warning-padding: 22px;
+
+}
+
+
+/* score icon */
+
+.lh-metric__score-icon {
+  width: var(--score-icon-size);
+  height: var(--score-icon-size);
+  display: inline-block;
+}
+
+.lh-metric--pass .lh-metric__display-text {
+  color: var(--color-pass-secondary);
+}
+.lh-metric--pass .lh-metric__score-icon {
+  border-radius: 100%;
+  background: var(--color-pass);
+}
+
+.lh-metric--average .lh-metric__display-text {
+  color: var(--color-average-secondary);
+}
+.lh-metric--average .lh-metric__score-icon {
+  background: var(--color-average);
+  width: var(--icon-square-size);
+  height: var(--icon-square-size);
+}
+
+.lh-metric--fail .lh-metric__display-text {
+  color: var(--color-fail-secondary);
+}
+.lh-metric--fail .lh-metric__score-icon,
+.lh-metric--error .lh-metric__score-icon {
+  border-left: calc(var(--score-icon-size) / 2) solid transparent;
+  border-right: calc(var(--score-icon-size) / 2) solid transparent;
+  border-bottom: var(--score-icon-size) solid var(--color-fail);
+}
+
+
+/*  the gauge! */
+
+
+circle {
+  stroke: currentcolor;
+  r: var(--radius);
+}
+
+text {
+  font-size: calc(var(--radius)*.2px);
+}
+
+
+.lh-gauge {
+  margin: 0 auto;
+  width: 225px;
+  stroke-width: var(--stroke-width);
+  stroke-linecap: round;
+}
+.lh-gauge--faded {
+  opacity: 0.1;
+}
+.lh-gauge__wrapper {
+  font-family: var(--report-font-family-monospace);
+  text-align: center;
+  text-decoration: none;
+  transition: .3s;
+}
+.lh-gauge__wrapper--pass {
+  color: var(--color-pass);
+}
+.lh-gauge__wrapper--average {
+  color: var(--color-average);
+}
+.lh-gauge__wrapper--fail {
+  color: var(--color-fail);
+}
+.state--expanded {
+  color: var(--color-gray-600);
+}
+.state--highlight {
+  color: var(--color-highlight);
+}
+.lh-gauge__svg-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.lh-gauge__cutout {
+  opacity: .999;
+  transition: opacity .3s;
+}
+.state--highlight .lh-gauge__cutout {
+  opacity: 0;
+}
+.lh-gauge__outer {
+  mask: url(#lh-gauge__mask);
+}
+.lh-gauge__inner {
+  color: inherit;
+}
+.lh-gauge__base {
+  fill: currentcolor;
+}
+.lh-gauge__arc {
+  fill: none;
+  transition: opacity .3s;
+}
+.lh-gauge__arc--metric {
+  color: var(--metric-color);
+  stroke-dashoffset: var(--metric-offset);
+}
+.lh-gauge-hover {
+  color: currentcolor;
+  opacity: 0.001;
+  stroke-linecap: butt;
+}
+.lh-gauge__arc--metric.lh-gauge--miniarc {
+  opacity: 0;
+  stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
+  transition: 0s .005s;
+}
+.state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
+  opacity: .999;
+  stroke-dasharray: var(--metric-array);
+  transition: 0.3s calc(.005s + var(--i)*.05s);
+}
+.state--expanded .lh-gauge__inner .lh-gauge__arc {
+  opacity: 0;
+}
+.lh-gauge__percentage {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentcolor;
+  opacity: .999;
+  font-size: calc(var(--radius)*.625px);
+  transition: opacity .3s ease-in;
+}
+.state--highlight .lh-gauge__percentage {
+  opacity: 0;
+}
+
+.cover {
+  fill: none;
+  opacity: .001;
+  pointer-events: none;
+}
+.state--expanded .cover {
+  pointer-events: auto;
+}
+
+.metric {
+  transform: scale(var(--scale-initial));
+  opacity: 0;
+  transition: transform .1s .2s ease-out,  opacity .3s ease-out;
+  pointer-events: none;
+}
+.metric text {
+  pointer-events: none;
+}
+.metric__value {
+  fill: currentcolor;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.state--expanded .metric {
+  transform: scale(1);
+  opacity: .999;
+  transition: transform .3s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
+  transition-delay: calc(var(--i)*.05s);
+  pointer-events: auto;
+}
+.state--highlight .metric {
+  opacity: .3;
+}
+.state--highlight .metric--highlight {
+  opacity: .999;
+  stroke-width: calc(1.5*var(--stroke-width));
+}
+.state--highlight .metric--highlight .metric__value {
+  opacity: 0.999;
+}
+
+
+/* TODO: delete??? */
+@keyframes load-gauge {
+  from { stroke-dasharray: 0 352; }
+}
