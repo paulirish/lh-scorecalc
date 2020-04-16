@@ -1,5 +1,5 @@
 node_modules
 
-
-# todo: publish to ghpages like a hugman
 dist
+
+calc.js*

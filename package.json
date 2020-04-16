@@ -6,6 +6,10 @@
   "scripts": {
     "watch": "find . script -depth 1 -type f | entr yarn build",
     "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "deploy:ghpages": "yarn gh-pages --dist dist",
+    "deploy:copy": "mkdir -p dist && cp -r index.html *.css calc.* dist",
+    "deploy": "yarn clean && yarn deploy:copy && yarn deploy:ghpages",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
