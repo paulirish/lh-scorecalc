@@ -178,6 +178,7 @@ form {
   --palette-2: #ffb200;
   --palette-3: #00affe;
   --palette-4: #ff4181;
+  --palette-5: #a1a1a1;
 
 
    /* Palette using Material Design Colors
@@ -365,20 +366,17 @@ text {
 .lh-gauge__wrapper--fail {
   color: var(--color-fail);
 }
-.lh-gauge__wrapper.state--expanded {
+.state--expanded {
   color: var(--color-gray-600);
 }
-.lh-gauge__wrapper.state--highlight {
+.state--highlight {
   color: var(--color-highlight);
 }
 .lh-gauge__svg-wrapper {
   display: flex;
   flex-direction: column-reverse;
 }
-.lh-gauge__label {
-  color: #000;
-  font-weight: 400;
-}
+
 .lh-gauge__cutout {
   opacity: .999;
   transition: opacity .3s;

@@ -226,11 +226,11 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
       // paul: not sure why we want to remove this.. seems like we want to keep it expanded...
-      wrapper.classList.remove('state--expanded');
+      SVG.classList.remove('state--expanded');
 
-      if (wrapper.classList.contains('state--highlight')) {
-        wrapper.classList.remove('state--highlight');
-        wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
+      if (SVG.classList.contains('state--highlight')) {
+        SVG.classList.remove('state--highlight');
+        SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
       return;
     }
@@ -239,10 +239,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     // if hovering on the primary (inner) part, then explode it but dont highlight
     if (parent && parent === groupInner) {
-      if (!wrapper.classList.contains('state--expanded')) wrapper.classList.add('state--expanded');
-      else if (wrapper.classList.contains('state--highlight')) {
-        wrapper.classList.remove('state--highlight');
-        wrapper.querySelector('.metric--highlight').classList.remove('metric--highlight');
+      if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
+      else if (SVG.classList.contains('state--highlight')) {
+        SVG.classList.remove('state--highlight');
+        SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
       return;
     }
@@ -253,8 +253,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
       // match the bg color of the gauge during a metric highlight
       wrapper.style.setProperty('--color-highlight', `var(--palette-${parent.style.getPropertyValue('--i')})`);
 
-      if (!wrapper.classList.contains('state--highlight')) {
-        wrapper.classList.add('state--highlight');
+      if (!SVG.classList.contains('state--highlight')) {
+        SVG.classList.add('state--highlight');
         parent.classList.add('metric--highlight');
       } else {
         const highlighted = SVG.querySelector('.metric--highlight');
