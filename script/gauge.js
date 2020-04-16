@@ -220,8 +220,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // Hack. Not ideal.
-  if (SVG.dataset.evtsAreSetup) return;
-  SVG.dataset.evtsAreSetup = true;
+  if (SVG.dataset.listenersSetup) return;
+  SVG.dataset.listenersSetup = true;
+
+  peekGauge(SVG);
   /*
     wrapper.state-expanded: gauge is exploded
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
@@ -281,4 +283,24 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const mh = SVG.querySelector('.metric--highlight');
     mh && mh.classList.remove('metric--highlight');
   });
+
+  // On the first run, tease with a little peek reveal
+  function peekGauge(SVG) {
+    const inner = SVG.querySelector('.lh-gauge__inner');
+    let id = `uniq-${Date.now()}`;
+    inner.setAttribute('id', id);
+
+    const useElem = document.createElementNS(NS_URI, 'use');
+    useElem.setAttribute( 'href', `#${id}`);
+    SVG.appendChild(useElem); // for paint order this must come _after_ the outer.
+
+    SVG.classList.add('state--peek');
+    setTimeout(_ => SVG.classList.add('state--expanded', 'state--expanded--peeking'), 500);
+    setTimeout(_ => SVG.classList.remove('state--expanded', 'state--expanded--peeking'), 1500);
+    // TODO use keyframe anims instead
+    setTimeout(_ => {
+      SVG.classList.remove('state--peek');
+      useElem.remove();
+    }, 2000);
+  }
 }

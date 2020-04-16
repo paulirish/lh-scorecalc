@@ -422,6 +422,8 @@ text {
 .state--expanded .lh-gauge__inner .lh-gauge__arc {
   opacity: 0;
 }
+
+
 .lh-gauge__percentage {
   text-anchor: middle;
   dominant-baseline: middle;
@@ -475,8 +477,33 @@ text {
   opacity: 0.999;
 }
 
-
-/* TODO: delete??? */
-@keyframes load-gauge {
-  from { stroke-dasharray: 0 352; }
+/* the initial first load peek */
+.state--peek .metric__label {
+  display: none;
 }
+.state--peek .metric {
+  transition: transform .5s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
+  transition-delay: 0ms;
+}
+.state--expanded--peeking .metric {
+  transform: scale(calc((var(--scale-initial) + 1) / 2));
+}
+.state--peek .lh-gauge__arc--metric.lh-gauge--miniarc {
+  transition: opacity 0.3s;
+}
+.state--peek .lh-gauge__inner .lh-gauge__arc {
+  opacity: 1;
+}
+.state--peek {
+  color: unset;
+}
+
+
+/*
+lh-gauge state--expanded state--expanded--peeking state--peek
+ */
+
+ @keyframes peek {
+   0% {   }
+   100% {   }
+ }
