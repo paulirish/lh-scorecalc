@@ -4,7 +4,7 @@
 
 import {calculateRating} from './util.js';
 
-const delay = (delay) => new Promise(resolve => setTimeout(resolve, delay));
+const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
 
 export function updateGauge(container, category) {
   const wrapper = container.$('.lh-gauge__wrapper');
@@ -15,12 +15,11 @@ export function updateGauge(container, category) {
 }
 
 function _determineTrig(sizeSVG, percent, strokeWidth) {
-  strokeWidth = strokeWidth || (sizeSVG / 32);
+  strokeWidth = strokeWidth || sizeSVG / 32;
 
   const radiusInner = sizeSVG / strokeWidth;
   const strokeGap = 0.5 * strokeWidth;
   const radiusOuter = radiusInner + strokeGap + strokeWidth;
-
 
   const circumferenceInner = 2 * Math.PI * radiusInner;
   // arc length we need to subtract
@@ -37,18 +36,18 @@ function _determineTrig(sizeSVG, percent, strokeWidth) {
     radiusOuter,
     circumferenceInner,
     circumferenceOuter,
-    getArcLength:  _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
+    getArcLength: _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
     // isButt case is for metricArcHoverTarget
     getMetricArcLength: (weightingPct, isButt) => {
       // TODO: this math isn't perfect butt it's very close.
-      const linecapFactor = isButt ? 0 : (2 * endDiffOuter);
-      return Math.max(0, +(weightingPct * circumferenceOuter - strokeGap - linecapFactor).toFixed(4))
+      const linecapFactor = isButt ? 0 : 2 * endDiffOuter;
+      return Math.max(0, +(weightingPct * circumferenceOuter - strokeGap - linecapFactor).toFixed(4));
     },
     endDiffInner,
     endDiffOuter,
     strokeWidth,
     strokeGap,
-  }
+  };
 }
 
 /**
@@ -99,7 +98,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const gaugeArc = groupInner.querySelector('.lh-gauge__arc');
   const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
-
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
   groupOuter.style.setProperty('--radius', radiusOuter);
   cover.style.setProperty('--radius', 0.5 * (radiusInner + radiusOuter));
@@ -114,7 +112,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const radiusTextOuter = radiusOuter + strokeWidth;
   const radiusTextInner = radiusOuter - strokeWidth;
 
-  const metrics = category.auditRefs.filter((r) => r.group === 'metrics' && r.weight);
+  const metrics = category.auditRefs.filter(r => r.group === 'metrics' && r.weight);
   const totalWeight = metrics.reduce((sum, each) => (sum += each.weight), 0);
   let offsetAdder = 0.25 * circumferenceOuter - endDiffOuter - 0.5 * strokeGap;
   let angleAdder = -0.5 * Math.PI;
@@ -195,7 +193,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricValue.setAttribute('x', (radiusTextInner * cos).toFixed(2));
     metricValue.setAttribute('y', (radiusTextInner * sin).toFixed(2));
 
-    if (needsDomPopulation){
+    if (needsDomPopulation) {
       metricGroup.appendChild(metricArcMax);
       metricGroup.appendChild(metricArc);
       metricGroup.appendChild(metricArcHoverTarget);
@@ -219,8 +217,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
     metric.metric-highlight: highlight this particular metric
   */
- SVG.addEventListener('mouseover', (e) => {
-
+  SVG.addEventListener('mouseover', e => {
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
       // paul: not sure why we want to remove this.. seems like we want to keep it expanded...
@@ -283,7 +280,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     let id = `uniq-${Date.now()}`;
     inner.setAttribute('id', id);
     const useElem = document.createElementNS(NS_URI, 'use');
-    useElem.setAttribute( 'href', `#${id}`);
+    useElem.setAttribute('href', `#${id}`);
     // for paint order this must come _after_ the outer.
     SVG.appendChild(useElem);
 
