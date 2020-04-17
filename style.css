@@ -396,6 +396,8 @@ text {
 .lh-gauge__base {
   fill: currentcolor;
 }
+
+
 .lh-gauge__arc {
   fill: none;
   transition: opacity .3s;
@@ -477,33 +479,40 @@ text {
   opacity: 0.999;
 }
 
-/* the initial first load peek */
-.state--peek .metric__label {
-  display: none;
+
+/*
+ the initial first load peek
+*/
+.lh-gauge__bg {  /* needed for the use zindex stacking w/ transparency */
+  fill: var(--report-background-color);
+  stroke: var(--report-background-color);
 }
 .state--peek .metric {
-  transition: transform .5s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
   transition-delay: 0ms;
-}
-.state--expanded--peeking .metric {
-  transform: scale(calc((var(--scale-initial) + 1) / 2));
-}
-.state--peek .lh-gauge__arc--metric.lh-gauge--miniarc {
-  transition: opacity 0.3s;
+  animation: peek var(--peek-dur) ease;
+  animation-fill-mode: forwards;
 }
 .state--peek .lh-gauge__inner .lh-gauge__arc {
   opacity: 1;
 }
+.state--peek .lh-gauge__arc.lh-gauge--faded:not(.lh-gauge-hover) {
+  opacity: 0.3; /* just a tad stronger cuz its fighting with a big solid arg */
+}
+/* do i need to set expanded and override this? */
+.state--peek .lh-gauge__arc--metric.lh-gauge--miniarc {
+  transition: opacity 0.3s;
+}
 .state--peek {
   color: unset;
 }
+.state--peek .metric__label {
+  display: none;
+}
 
 
-/*
-lh-gauge state--expanded state--expanded--peeking state--peek
- */
-
- @keyframes peek {
-   0% {   }
-   100% {   }
+@keyframes peek {
+  /* biggest it should go is 0.92. smallest is 0.8 */
+   0% { transform: scale(0.8); opacity: 0.8; }
+   50% {  transform: scale(0.92); opacity: 1; }
+   100% { transform: scale(0.8); opacity: 0.8; }
  }

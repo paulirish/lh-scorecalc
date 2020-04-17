@@ -277,7 +277,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
   // clear on mouselave even if mousemove didn't catch it.
   SVG.addEventListener('mouseleave', e => {
-    console.log('mouseleave');
     SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
     const mh = SVG.querySelector('.metric--highlight');
@@ -289,18 +288,18 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const inner = SVG.querySelector('.lh-gauge__inner');
     let id = `uniq-${Date.now()}`;
     inner.setAttribute('id', id);
-
     const useElem = document.createElementNS(NS_URI, 'use');
     useElem.setAttribute( 'href', `#${id}`);
     SVG.appendChild(useElem); // for paint order this must come _after_ the outer.
+    // inner.style.setProperty('visibility', 'hidden')
 
-    SVG.classList.add('state--peek');
-    setTimeout(_ => SVG.classList.add('state--expanded', 'state--expanded--peeking'), 500);
-    setTimeout(_ => SVG.classList.remove('state--expanded', 'state--expanded--peeking'), 1500);
-    // TODO use keyframe anims instead
+    // SVG.classList.add();
+    const peekDurationSec = 3;
+    SVG.style.setProperty('--peek-dur', `${peekDurationSec}s`);
+    SVG.classList.add('state--peek', 'state--expanded');
     setTimeout(_ => {
-      SVG.classList.remove('state--peek');
+      SVG.classList.remove('state--peek', 'state--expanded');
       useElem.remove();
-    }, 2000);
+    }, peekDurationSec * 1000 * 1.5); // lil extra time just cuz
   }
 }
