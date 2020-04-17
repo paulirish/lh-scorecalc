@@ -3,6 +3,7 @@
 /* Most of the impressive code here authored by Ana Tudor, Nov 2019 */
 
 import {calculateRating} from './util.js';
+
 const delay = (delay) => new Promise(resolve => setTimeout(resolve, delay));
 
 export function updateGauge(container, category) {
@@ -13,19 +14,7 @@ export function updateGauge(container, category) {
   _setPerfGaugeExplodey(wrapper, category);
 }
 
-/* NOTE IT consumes the basic score (which is 0-100) snot the category */
-// This is called to both setup it the first time and to update it subsequently. this doubleduty requires a few hacks.
-function _setPerfGaugeBasic(wrapper, score) {
-  const gaugeArc = wrapper.$('.lh-gauge-arc');
-  gaugeArc.style.strokeDasharray = `${(score / 100) * 352} 352`;
-
-  const scoreOutOf100 = Math.round(score);
-  const percentageEl = wrapper.$('.lh-gauge__percentage');
-  percentageEl.textContent = scoreOutOf100.toString();
-}
-
-
-function determineTrig(sizeSVG, percent, strokeWidth) {
+function _determineTrig(sizeSVG, percent, strokeWidth) {
   strokeWidth = strokeWidth || (sizeSVG / 32);
 
   const radiusInner = sizeSVG / strokeWidth;
@@ -82,7 +71,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     endDiffOuter,
     strokeWidth,
     strokeGap,
-  } = determineTrig(sizeSVG, percent);
+  } = _determineTrig(sizeSVG, percent);
 
   const SVG = wrapper.querySelector('.lh-gauge');
   const NS_URI = 'http://www.w3.org/2000/svg';
