@@ -277,7 +277,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     // To visually get the outer ring to peek on the edge, we need the inner ring on top. This is SVG's equivalent to `innerElem.zIndex = 100`
     const inner = SVG.querySelector('.lh-gauge__inner');
-    let id = `uniq-${Date.now()}`;
+    let id = `uniq-${Math.random()}`;
     inner.setAttribute('id', id);
     const useElem = document.createElementNS(NS_URI, 'use');
     useElem.setAttribute('href', `#${id}`);
@@ -286,11 +286,18 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     const peekDurationSec = 2.5;
     SVG.style.setProperty('--peek-dur', `${peekDurationSec}s`);
-
     SVG.classList.add('state--peek', 'state--expanded');
-    setTimeout(_ => {
-      SVG.classList.remove('state--peek', 'state--expanded');
-      useElem.remove();
+
+    // Fancy double cleanup
+    const cleanup = _ => SVG.classList.remove('state--peek', 'state--expanded') || useElem.remove();
+    const tId = setTimeout(_ => {
+      SVG.removeEventListener('mouseenter', handleEarlyInteraction);
+      cleanup();
     }, peekDurationSec * 1000 * 1.5); // lil extra time just cuz
+    function handleEarlyInteraction() {
+      clearTimeout(tId);
+      cleanup();
+    }
+    SVG.addEventListener('mouseenter', handleEarlyInteraction, {once: true});
   }
 }
