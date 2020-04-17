@@ -131,8 +131,14 @@ footer {
   align-items: center;
 }
 
+/* the SVG pretty big so we'll subtract some of its whitespace */
 .perfscore {
   margin-left: -20px;
+}
+/* keep the table on top tho. */
+table {
+  position: relative;
+  z-index: 10;
 }
 
 @media screen and (max-width: 890px) {
@@ -359,6 +365,7 @@ text {
   text-align: center;
   text-decoration: none;
   transition: .3s;
+  cursor:default;
 }
 .lh-gauge__wrapper--pass {
   color: var(--color-pass);
@@ -371,6 +378,7 @@ text {
 }
 .state--expanded {
   color: var(--color-gray-600);
+  transition: color .3s;
 }
 .state--highlight {
   color: var(--color-highlight);
@@ -410,6 +418,11 @@ text {
   color: currentcolor;
   opacity: 0.001;
   stroke-linecap: butt;
+  stroke-width: 24;
+  /* hack. move the hover target out of the center. ideally i tweak the r instead but that rquires considerably more math. */
+  transform: scale(1.15);
+  /* I'll remove it when someone goes 'eh' */
+  cursor: help;
 }
 .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: 0;
@@ -489,7 +502,7 @@ text {
 }
 .state--peek .metric {
   transition-delay: 0ms;
-  animation: peek var(--peek-dur) ease;
+  animation: peek var(--peek-dur) cubic-bezier(0.46, 0.03, 0.52, 0.96);
   animation-fill-mode: forwards;
 }
 .state--peek .lh-gauge__inner .lh-gauge__arc {

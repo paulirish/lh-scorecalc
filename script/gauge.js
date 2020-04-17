@@ -3,6 +3,7 @@
 /* Most of the impressive code here authored by Ana Tudor, Nov 2019 */
 
 import {calculateRating} from './util.js';
+const delay = (delay) => new Promise(resolve => setTimeout(resolve, delay));
 
 export function updateGauge(container, category) {
   const wrapper = container.$('.lh-gauge__wrapper');
@@ -163,7 +164,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
     metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength - endDiffOuter}`);
-    metricArcHoverTarget.style.setProperty('stroke-width', 30);
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');
@@ -224,6 +224,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   SVG.dataset.listenersSetup = true;
 
   peekGauge(SVG);
+
   /*
     wrapper.state-expanded: gauge is exploded
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
@@ -284,18 +285,22 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // On the first run, tease with a little peek reveal
-  function peekGauge(SVG) {
+  async function peekGauge(SVG) {
+    // Delay just a tad to let the user aclimatize beforehand.
+    await delay(1000);
+
+    // To visually get the outer ring to peek on the edge, we need the inner ring on top. This is SVG's equivalent to `innerElem.zIndex = 100`
     const inner = SVG.querySelector('.lh-gauge__inner');
     let id = `uniq-${Date.now()}`;
     inner.setAttribute('id', id);
     const useElem = document.createElementNS(NS_URI, 'use');
     useElem.setAttribute( 'href', `#${id}`);
-    SVG.appendChild(useElem); // for paint order this must come _after_ the outer.
-    // inner.style.setProperty('visibility', 'hidden')
+    // for paint order this must come _after_ the outer.
+    SVG.appendChild(useElem);
 
-    // SVG.classList.add();
-    const peekDurationSec = 3;
+    const peekDurationSec = 2.5;
     SVG.style.setProperty('--peek-dur', `${peekDurationSec}s`);
+
     SVG.classList.add('state--peek', 'state--expanded');
     setTimeout(_ => {
       SVG.classList.remove('state--peek', 'state--expanded');
