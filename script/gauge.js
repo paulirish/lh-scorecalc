@@ -6,11 +6,7 @@ import {calculateRating} from './util.js';
 
 const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
 
-export function updateGauge(container, category) {
-  const wrapper = container.$('.lh-gauge__wrapper');
-  wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(category.score)}`);
-
+export function updateGauge(wrapper, category) {
   _setPerfGaugeExplodey(wrapper, category);
 }
 
@@ -236,7 +232,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
     if (parent && parent === groupInner) {
       if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
       else if (SVG.classList.contains('state--highlight')) {
-        SVG.classList.remove('state--highlight');
         SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
       return;
@@ -264,7 +259,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
   // clear on mouselave even if mousemove didn't catch it.
   SVG.addEventListener('mouseleave', e => {
-    SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
     const mh = SVG.querySelector('.metric--highlight');
     mh && mh.classList.remove('metric--highlight');
