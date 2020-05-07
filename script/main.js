@@ -190,6 +190,12 @@ class ScoringGuide extends Component {
   }
 }
 
+const debounce = (callback, time = 250, interval) =>
+  ((...args) => {
+    clearTimeout(interval);
+    interval = setTimeout(() => callback(...args), time);
+  });
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -197,16 +203,15 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    const url = new URL(location.href);
 
-    const params = new URLSearchParams();
-    for (const [id, value] of Object.entries(this.state)) {
-      const metric = scoring[id];
-      params.set(metric.auditId, value);
-    }
-    url.hash = params.toString();
-
-    history.replaceState(this.state, '', url.toString());
+    // debounce just a tad, as its noisy
+    debounce(_ => {
+      const url = new URL(location.href);
+      const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => [scoring[id].auditId,value]);
+      const params = new URLSearchParams(auditIdValuePairs);
+      url.hash = params.toString();
+      history.replaceState(this.state, '', url.toString());
+    })();
   }
 
   render() {
