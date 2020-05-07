@@ -228,15 +228,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     const parent = e.target.parentNode;
 
-    // if hovering on the primary (inner) part, then explode it but dont highlight
-    if (parent && parent === groupInner) {
-      if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
-      else if (SVG.classList.contains('state--highlight')) {
-        SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
-      }
-      return;
-    }
-
     // if hovering on a metric, highlight that one.
     // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
