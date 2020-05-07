@@ -1,3 +1,5 @@
+var n,u,i,t,r,o,f,e={},c=[],s=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord/i;function a(n,l){for(var u in l){ n[u]=l[u]; }return n}function v(n){var l=n.parentNode;l&&l.removeChild(n);}function h(n,l,u){var i,t=arguments,r={};for(i in l){ "key"!==i&&"ref"!==i&&(r[i]=l[i]); }if(arguments.length>3){ for(u=[u],i=3;i<arguments.length;i++){ u.push(t[i]); } }if(null!=u&&(r.children=u),"function"==typeof n&&null!=n.defaultProps){ for(i in n.defaultProps){ void 0===r[i]&&(r[i]=n.defaultProps[i]); } }return p(n,r,l&&l.key,l&&l.ref,null)}function p(l,u,i,t,r){var o={type:l,props:u,key:i,ref:t,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,constructor:void 0,__v:r};return null==r&&(o.__v=o),n.vnode&&n.vnode(o),o}function y(){return {}}function d(n){return n.children}function m(n,l){this.props=n,this.context=l;}function w(n,l){if(null==l){ return n.__?w(n.__,n.__.__k.indexOf(n)+1):null; }for(var u;l<n.__k.length;l++){ if(null!=(u=n.__k[l])&&null!=u.__e){ return u.__e; } }return "function"==typeof n.type?w(n):null}function k(n){var l,u;if(null!=(n=n.__)&&null!=n.__c){for(n.__e=n.__c.base=null,l=0;l<n.__k.length;l++){ if(null!=(u=n.__k[l])&&null!=u.__e){n.__e=n.__c.base=u.__e;break} }return k(n)}}function g(l){(!l.__d&&(l.__d=!0)&&u.push(l)&&!i++||r!==n.debounceRendering)&&((r=n.debounceRendering)||t)(_);}function _(){for(var n;i=u.length;){ n=u.sort(function(n,l){return n.__v.__b-l.__v.__b}),u=[],n.some(function(n){var l,u,i,t,r,o,f;n.__d&&(o=(r=(l=n).__v).__e,(f=l.__P)&&(u=[],(i=a({},r)).__v=i,t=A(f,r,i,l.__n,void 0!==f.ownerSVGElement,null,u,null==o?w(r):o),T(u,r),t!=o&&k(r)));}); }}function b(n,l,u,i,t,r,o,f,s){var a,h,p,y,d,m,k,g=u&&u.__k||c,_=g.length;if(f==e&&(f=null!=r?r[0]:_?w(u,0):null),a=0,l.__k=x(l.__k,function(u){if(null!=u){if(u.__=l,u.__b=l.__b+1,null===(p=g[a])||p&&u.key==p.key&&u.type===p.type){ g[a]=void 0; }else { for(h=0;h<_;h++){if((p=g[h])&&u.key==p.key&&u.type===p.type){g[h]=void 0;break}p=null;} }if(y=A(n,u,p=p||e,i,t,r,o,f,s),(h=u.ref)&&p.ref!=h&&(k||(k=[]),p.ref&&k.push(p.ref,null,u),k.push(h,u.__c||y,u)),null!=y){var c;if(null==m&&(m=y),void 0!==u.__d){ c=u.__d,u.__d=void 0; }else if(r==p||y!=f||null==y.parentNode){n:if(null==f||f.parentNode!==n){ n.appendChild(y),c=null; }else {for(d=f,h=0;(d=d.nextSibling)&&h<_;h+=2){ if(d==y){ break n; } }n.insertBefore(y,f),c=f;}"option"==l.type&&(n.value="");}f=void 0!==c?c:y.nextSibling,"function"==typeof l.type&&(l.__d=f);}else { f&&p.__e==f&&f.parentNode!=n&&(f=w(p)); }}return a++,u}),l.__e=m,null!=r&&"function"!=typeof l.type){ for(a=r.length;a--;){ null!=r[a]&&v(r[a]); } }for(a=_;a--;){ null!=g[a]&&D(g[a],g[a]); }if(k){ for(a=0;a<k.length;a++){ j(k[a],k[++a],k[++a]); } }}function x(n,l,u){if(null==u&&(u=[]),null==n||"boolean"==typeof n){ l&&u.push(l(null)); }else if(Array.isArray(n)){ for(var i=0;i<n.length;i++){ x(n[i],l,u); } }else { u.push(l?l("string"==typeof n||"number"==typeof n?p(null,n,null,null,n):null!=n.__e||null!=n.__c?p(n.type,n.props,n.key,null,n.__v):n):n); }return u}function P(n,l,u,i,t){var r;for(r in u){ "children"===r||"key"===r||r in l||N(n,r,null,u[r],i); }for(r in l){ t&&"function"!=typeof l[r]||"children"===r||"key"===r||"value"===r||"checked"===r||u[r]===l[r]||N(n,r,l[r],u[r],i); }}function C(n,l,u){"-"===l[0]?n.setProperty(l,u):n[l]="number"==typeof u&&!1===s.test(l)?u+"px":null==u?"":u;}function N(n,l,u,i,t){var r,o,f,e,c;if(t?"className"===l&&(l="class"):"class"===l&&(l="className"),"style"===l){ if(r=n.style,"string"==typeof u){ r.cssText=u; }else {if("string"==typeof i&&(r.cssText="",i=null),i){ for(e in i){ u&&e in u||C(r,e,""); } }if(u){ for(c in u){ i&&u[c]===i[c]||C(r,c,u[c]); } }} }else { "o"===l[0]&&"n"===l[1]?(o=l!==(l=l.replace(/Capture$/,"")),f=l.toLowerCase(),l=(f in n?f:l).slice(2),u?(i||n.addEventListener(l,z,o),(n.l||(n.l={}))[l]=u):n.removeEventListener(l,z,o)):"list"!==l&&"tagName"!==l&&"form"!==l&&"type"!==l&&"size"!==l&&!t&&l in n?n[l]=null==u?"":u:"function"!=typeof u&&"dangerouslySetInnerHTML"!==l&&(l!==(l=l.replace(/^xlink:?/,""))?null==u||!1===u?n.removeAttributeNS("http://www.w3.org/1999/xlink",l.toLowerCase()):n.setAttributeNS("http://www.w3.org/1999/xlink",l.toLowerCase(),u):null==u||!1===u&&!/^ar/.test(l)?n.removeAttribute(l):n.setAttribute(l,u)); }}function z(l){this.l[l.type](n.event?n.event(l):l);}function A(l,u,i,t,r,o,f,e,c){var s,v,h,p,y,w,k,g,_,x,P=u.type;if(void 0!==u.constructor){ return null; }(s=n.__b)&&s(u);try{n:if("function"==typeof P){if(g=u.props,_=(s=P.contextType)&&t[s.__c],x=s?_?_.props.value:s.__:t,i.__c?k=(v=u.__c=i.__c).__=v.__E:("prototype"in P&&P.prototype.render?u.__c=v=new P(g,x):(u.__c=v=new m(g,x),v.constructor=P,v.render=E),_&&_.sub(v),v.props=g,v.state||(v.state={}),v.context=x,v.__n=t,h=v.__d=!0,v.__h=[]),null==v.__s&&(v.__s=v.state),null!=P.getDerivedStateFromProps&&(v.__s==v.state&&(v.__s=a({},v.__s)),a(v.__s,P.getDerivedStateFromProps(g,v.__s))),p=v.props,y=v.state,h){ null==P.getDerivedStateFromProps&&null!=v.componentWillMount&&v.componentWillMount(),null!=v.componentDidMount&&v.__h.push(v.componentDidMount); }else {if(null==P.getDerivedStateFromProps&&g!==p&&null!=v.componentWillReceiveProps&&v.componentWillReceiveProps(g,x),!v.__e&&null!=v.shouldComponentUpdate&&!1===v.shouldComponentUpdate(g,v.__s,x)||u.__v===i.__v&&!v.__){for(v.props=g,v.state=v.__s,u.__v!==i.__v&&(v.__d=!1),v.__v=u,u.__e=i.__e,u.__k=i.__k,v.__h.length&&f.push(v),s=0;s<u.__k.length;s++){ u.__k[s]&&(u.__k[s].__=u); }break n}null!=v.componentWillUpdate&&v.componentWillUpdate(g,v.__s,x),null!=v.componentDidUpdate&&v.__h.push(function(){v.componentDidUpdate(p,y,w);});}v.context=x,v.props=g,v.state=v.__s,(s=n.__r)&&s(u),v.__d=!1,v.__v=u,v.__P=l,s=v.render(v.props,v.state,v.context),u.__k=null!=s&&s.type==d&&null==s.key?s.props.children:Array.isArray(s)?s:[s],null!=v.getChildContext&&(t=a(a({},t),v.getChildContext())),h||null==v.getSnapshotBeforeUpdate||(w=v.getSnapshotBeforeUpdate(p,y)),b(l,u,i,t,r,o,f,e,c),v.base=u.__e,v.__h.length&&f.push(v),k&&(v.__E=v.__=null),v.__e=!1;}else { null==o&&u.__v===i.__v?(u.__k=i.__k,u.__e=i.__e):u.__e=$(i.__e,u,i,t,r,o,f,c); }(s=n.diffed)&&s(u);}catch(l$1){u.__v=null,n.__e(l$1,u,i);}return u.__e}function T(l,u){n.__c&&n.__c(u,l),l.some(function(u){try{l=u.__h,u.__h=[],l.some(function(n){n.call(u);});}catch(l$1){n.__e(l$1,u.__v);}});}function $(n,l,u,i,t,r,o,f){var s,a,v,h,p,y=u.props,d=l.props;if(t="svg"===l.type||t,null!=r){ for(s=0;s<r.length;s++){ if(null!=(a=r[s])&&((null===l.type?3===a.nodeType:a.localName===l.type)||n==a)){n=a,r[s]=null;break} } }if(null==n){if(null===l.type){ return document.createTextNode(d); }n=t?document.createElementNS("http://www.w3.org/2000/svg",l.type):document.createElement(l.type,d.is&&{is:d.is}),r=null,f=!1;}if(null===l.type){ y!==d&&n.data!=d&&(n.data=d); }else {if(null!=r&&(r=c.slice.call(n.childNodes)),v=(y=u.props||e).dangerouslySetInnerHTML,h=d.dangerouslySetInnerHTML,!f){if(y===e){ for(y={},p=0;p<n.attributes.length;p++){ y[n.attributes[p].name]=n.attributes[p].value; } }(h||v)&&(h&&v&&h.__html==v.__html||(n.innerHTML=h&&h.__html||""));}P(n,d,y,t,f),h?l.__k=[]:(l.__k=l.props.children,b(n,l,u,i,"foreignObject"!==l.type&&t,r,o,e,f)),f||("value"in d&&void 0!==(s=d.value)&&s!==n.value&&N(n,"value",s,y.value,!1),"checked"in d&&void 0!==(s=d.checked)&&s!==n.checked&&N(n,"checked",s,y.checked,!1));}return n}function j(l,u,i){try{"function"==typeof l?l(u):l.current=u;}catch(l$1){n.__e(l$1,i);}}function D(l,u,i){var t,r,o;if(n.unmount&&n.unmount(l),(t=l.ref)&&(t.current&&t.current!==l.__e||j(t,null,u)),i||"function"==typeof l.type||(i=null!=(r=l.__e)),l.__e=l.__d=void 0,null!=(t=l.__c)){if(t.componentWillUnmount){ try{t.componentWillUnmount();}catch(l$1){n.__e(l$1,u);} }t.base=t.__P=null;}if(t=l.__k){ for(o=0;o<t.length;o++){ t[o]&&D(t[o],u,i); } }null!=r&&v(r);}function E(n,l,u){return this.constructor(n,u)}function H(l,u,i){var t,r,f;n.__&&n.__(l,u),r=(t=i===o)?null:i&&i.__k||u.__k,l=h(d,null,[l]),f=[],A(u,(t?u:i||u).__k=l,r||e,e,void 0!==u.ownerSVGElement,i&&!t?[i]:r?null:c.slice.call(u.childNodes),f,i||e,t),T(f,l);}n={__e:function(n,l){for(var u,i;l=l.__;){ if((u=l.__c)&&!u.__){ try{if(u.constructor&&null!=u.constructor.getDerivedStateFromError&&(i=!0,u.setState(u.constructor.getDerivedStateFromError(n))),null!=u.componentDidCatch&&(i=!0,u.componentDidCatch(n)),i){ return g(u.__E=u) }}catch(l$1){n=l$1;} } }throw n}},m.prototype.setState=function(n,l){var u;u=this.__s!==this.state?this.__s:this.__s=a({},this.state),"function"==typeof n&&(n=n(u,this.props)),n&&a(u,n),null!=n&&this.__v&&(l&&this.__h.push(l),g(this));},m.prototype.forceUpdate=function(n){this.__v&&(this.__e=!0,n&&this.__h.push(n),g(this));},m.prototype.render=d,u=[],i=0,t="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,o=e,f=0;
+
 /**
  * Approximates the Gauss error function, the probability that a random variable
  * from the standard normal distribution lies within [-x, x]. Moved from
@@ -81,1579 +83,20 @@ function VALUE_AT_QUANTILE(median, falloff, quantile) {
   return Math.exp(location + shape * Math.SQRT2 * internalErfInv_(1 - 2 * quantile));
 }
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function isFunction(x) {
-    return typeof x === 'function';
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var _enable_super_gross_mode_that_will_cause_bad_things = false;
-var config = {
-    Promise: undefined,
-    set useDeprecatedSynchronousErrorHandling(value) {
-        if (value) {
-            var error = /*@__PURE__*/ new Error();
-            /*@__PURE__*/ console.warn('DEPRECATED! RxJS was set to use deprecated synchronous error handling behavior by code at: \n' + error.stack);
-        }
-        _enable_super_gross_mode_that_will_cause_bad_things = value;
-    },
-    get useDeprecatedSynchronousErrorHandling() {
-        return _enable_super_gross_mode_that_will_cause_bad_things;
-    },
-};
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function hostReportError(err) {
-    setTimeout(function () { throw err; }, 0);
-}
-
-/** PURE_IMPORTS_START _config,_util_hostReportError PURE_IMPORTS_END */
-var empty = {
-    closed: true,
-    next: function (value) { },
-    error: function (err) {
-        if (config.useDeprecatedSynchronousErrorHandling) {
-            throw err;
-        }
-        else {
-            hostReportError(err);
-        }
-    },
-    complete: function () { }
-};
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var isArray = /*@__PURE__*/ (function () { return Array.isArray || (function (x) { return x && typeof x.length === 'number'; }); })();
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function isObject(x) {
-    return x !== null && typeof x === 'object';
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var UnsubscriptionErrorImpl = /*@__PURE__*/ (function () {
-    function UnsubscriptionErrorImpl(errors) {
-        Error.call(this);
-        this.message = errors ?
-            errors.length + " errors occurred during unsubscription:\n" + errors.map(function (err, i) { return i + 1 + ") " + err.toString(); }).join('\n  ') : '';
-        this.name = 'UnsubscriptionError';
-        this.errors = errors;
-        return this;
-    }
-    UnsubscriptionErrorImpl.prototype = /*@__PURE__*/ Object.create(Error.prototype);
-    return UnsubscriptionErrorImpl;
-})();
-var UnsubscriptionError = UnsubscriptionErrorImpl;
-
-/** PURE_IMPORTS_START _util_isArray,_util_isObject,_util_isFunction,_util_UnsubscriptionError PURE_IMPORTS_END */
-var Subscription = /*@__PURE__*/ (function () {
-    function Subscription(unsubscribe) {
-        this.closed = false;
-        this._parentOrParents = null;
-        this._subscriptions = null;
-        if (unsubscribe) {
-            this._unsubscribe = unsubscribe;
-        }
-    }
-    Subscription.prototype.unsubscribe = function () {
-        var errors;
-        if (this.closed) {
-            return;
-        }
-        var _a = this, _parentOrParents = _a._parentOrParents, _unsubscribe = _a._unsubscribe, _subscriptions = _a._subscriptions;
-        this.closed = true;
-        this._parentOrParents = null;
-        this._subscriptions = null;
-        if (_parentOrParents instanceof Subscription) {
-            _parentOrParents.remove(this);
-        }
-        else if (_parentOrParents !== null) {
-            for (var index = 0; index < _parentOrParents.length; ++index) {
-                var parent_1 = _parentOrParents[index];
-                parent_1.remove(this);
-            }
-        }
-        if (isFunction(_unsubscribe)) {
-            try {
-                _unsubscribe.call(this);
-            }
-            catch (e) {
-                errors = e instanceof UnsubscriptionError ? flattenUnsubscriptionErrors(e.errors) : [e];
-            }
-        }
-        if (isArray(_subscriptions)) {
-            var index = -1;
-            var len = _subscriptions.length;
-            while (++index < len) {
-                var sub = _subscriptions[index];
-                if (isObject(sub)) {
-                    try {
-                        sub.unsubscribe();
-                    }
-                    catch (e) {
-                        errors = errors || [];
-                        if (e instanceof UnsubscriptionError) {
-                            errors = errors.concat(flattenUnsubscriptionErrors(e.errors));
-                        }
-                        else {
-                            errors.push(e);
-                        }
-                    }
-                }
-            }
-        }
-        if (errors) {
-            throw new UnsubscriptionError(errors);
-        }
-    };
-    Subscription.prototype.add = function (teardown) {
-        var subscription = teardown;
-        if (!teardown) {
-            return Subscription.EMPTY;
-        }
-        switch (typeof teardown) {
-            case 'function':
-                subscription = new Subscription(teardown);
-            case 'object':
-                if (subscription === this || subscription.closed || typeof subscription.unsubscribe !== 'function') {
-                    return subscription;
-                }
-                else if (this.closed) {
-                    subscription.unsubscribe();
-                    return subscription;
-                }
-                else if (!(subscription instanceof Subscription)) {
-                    var tmp = subscription;
-                    subscription = new Subscription();
-                    subscription._subscriptions = [tmp];
-                }
-                break;
-            default: {
-                throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
-            }
-        }
-        var _parentOrParents = subscription._parentOrParents;
-        if (_parentOrParents === null) {
-            subscription._parentOrParents = this;
-        }
-        else if (_parentOrParents instanceof Subscription) {
-            if (_parentOrParents === this) {
-                return subscription;
-            }
-            subscription._parentOrParents = [_parentOrParents, this];
-        }
-        else if (_parentOrParents.indexOf(this) === -1) {
-            _parentOrParents.push(this);
-        }
-        else {
-            return subscription;
-        }
-        var subscriptions = this._subscriptions;
-        if (subscriptions === null) {
-            this._subscriptions = [subscription];
-        }
-        else {
-            subscriptions.push(subscription);
-        }
-        return subscription;
-    };
-    Subscription.prototype.remove = function (subscription) {
-        var subscriptions = this._subscriptions;
-        if (subscriptions) {
-            var subscriptionIndex = subscriptions.indexOf(subscription);
-            if (subscriptionIndex !== -1) {
-                subscriptions.splice(subscriptionIndex, 1);
-            }
-        }
-    };
-    Subscription.EMPTY = (function (empty) {
-        empty.closed = true;
-        return empty;
-    }(new Subscription()));
-    return Subscription;
-}());
-function flattenUnsubscriptionErrors(errors) {
-    return errors.reduce(function (errs, err) { return errs.concat((err instanceof UnsubscriptionError) ? err.errors : err); }, []);
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var rxSubscriber = /*@__PURE__*/ (function () {
-    return typeof Symbol === 'function'
-        ? /*@__PURE__*/ Symbol('rxSubscriber')
-        : '@@rxSubscriber_' + /*@__PURE__*/ Math.random();
-})();
-
-/** PURE_IMPORTS_START tslib,_util_isFunction,_Observer,_Subscription,_internal_symbol_rxSubscriber,_config,_util_hostReportError PURE_IMPORTS_END */
-var Subscriber = /*@__PURE__*/ (function (_super) {
-    __extends(Subscriber, _super);
-    function Subscriber(destinationOrNext, error, complete) {
-        var _this = _super.call(this) || this;
-        _this.syncErrorValue = null;
-        _this.syncErrorThrown = false;
-        _this.syncErrorThrowable = false;
-        _this.isStopped = false;
-        switch (arguments.length) {
-            case 0:
-                _this.destination = empty;
-                break;
-            case 1:
-                if (!destinationOrNext) {
-                    _this.destination = empty;
-                    break;
-                }
-                if (typeof destinationOrNext === 'object') {
-                    if (destinationOrNext instanceof Subscriber) {
-                        _this.syncErrorThrowable = destinationOrNext.syncErrorThrowable;
-                        _this.destination = destinationOrNext;
-                        destinationOrNext.add(_this);
-                    }
-                    else {
-                        _this.syncErrorThrowable = true;
-                        _this.destination = new SafeSubscriber(_this, destinationOrNext);
-                    }
-                    break;
-                }
-            default:
-                _this.syncErrorThrowable = true;
-                _this.destination = new SafeSubscriber(_this, destinationOrNext, error, complete);
-                break;
-        }
-        return _this;
-    }
-    Subscriber.prototype[rxSubscriber] = function () { return this; };
-    Subscriber.create = function (next, error, complete) {
-        var subscriber = new Subscriber(next, error, complete);
-        subscriber.syncErrorThrowable = false;
-        return subscriber;
-    };
-    Subscriber.prototype.next = function (value) {
-        if (!this.isStopped) {
-            this._next(value);
-        }
-    };
-    Subscriber.prototype.error = function (err) {
-        if (!this.isStopped) {
-            this.isStopped = true;
-            this._error(err);
-        }
-    };
-    Subscriber.prototype.complete = function () {
-        if (!this.isStopped) {
-            this.isStopped = true;
-            this._complete();
-        }
-    };
-    Subscriber.prototype.unsubscribe = function () {
-        if (this.closed) {
-            return;
-        }
-        this.isStopped = true;
-        _super.prototype.unsubscribe.call(this);
-    };
-    Subscriber.prototype._next = function (value) {
-        this.destination.next(value);
-    };
-    Subscriber.prototype._error = function (err) {
-        this.destination.error(err);
-        this.unsubscribe();
-    };
-    Subscriber.prototype._complete = function () {
-        this.destination.complete();
-        this.unsubscribe();
-    };
-    Subscriber.prototype._unsubscribeAndRecycle = function () {
-        var _parentOrParents = this._parentOrParents;
-        this._parentOrParents = null;
-        this.unsubscribe();
-        this.closed = false;
-        this.isStopped = false;
-        this._parentOrParents = _parentOrParents;
-        return this;
-    };
-    return Subscriber;
-}(Subscription));
-var SafeSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(SafeSubscriber, _super);
-    function SafeSubscriber(_parentSubscriber, observerOrNext, error, complete) {
-        var _this = _super.call(this) || this;
-        _this._parentSubscriber = _parentSubscriber;
-        var next;
-        var context = _this;
-        if (isFunction(observerOrNext)) {
-            next = observerOrNext;
-        }
-        else if (observerOrNext) {
-            next = observerOrNext.next;
-            error = observerOrNext.error;
-            complete = observerOrNext.complete;
-            if (observerOrNext !== empty) {
-                context = Object.create(observerOrNext);
-                if (isFunction(context.unsubscribe)) {
-                    _this.add(context.unsubscribe.bind(context));
-                }
-                context.unsubscribe = _this.unsubscribe.bind(_this);
-            }
-        }
-        _this._context = context;
-        _this._next = next;
-        _this._error = error;
-        _this._complete = complete;
-        return _this;
-    }
-    SafeSubscriber.prototype.next = function (value) {
-        if (!this.isStopped && this._next) {
-            var _parentSubscriber = this._parentSubscriber;
-            if (!config.useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
-                this.__tryOrUnsub(this._next, value);
-            }
-            else if (this.__tryOrSetError(_parentSubscriber, this._next, value)) {
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.error = function (err) {
-        if (!this.isStopped) {
-            var _parentSubscriber = this._parentSubscriber;
-            var useDeprecatedSynchronousErrorHandling = config.useDeprecatedSynchronousErrorHandling;
-            if (this._error) {
-                if (!useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
-                    this.__tryOrUnsub(this._error, err);
-                    this.unsubscribe();
-                }
-                else {
-                    this.__tryOrSetError(_parentSubscriber, this._error, err);
-                    this.unsubscribe();
-                }
-            }
-            else if (!_parentSubscriber.syncErrorThrowable) {
-                this.unsubscribe();
-                if (useDeprecatedSynchronousErrorHandling) {
-                    throw err;
-                }
-                hostReportError(err);
-            }
-            else {
-                if (useDeprecatedSynchronousErrorHandling) {
-                    _parentSubscriber.syncErrorValue = err;
-                    _parentSubscriber.syncErrorThrown = true;
-                }
-                else {
-                    hostReportError(err);
-                }
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.complete = function () {
-        var _this = this;
-        if (!this.isStopped) {
-            var _parentSubscriber = this._parentSubscriber;
-            if (this._complete) {
-                var wrappedComplete = function () { return _this._complete.call(_this._context); };
-                if (!config.useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
-                    this.__tryOrUnsub(wrappedComplete);
-                    this.unsubscribe();
-                }
-                else {
-                    this.__tryOrSetError(_parentSubscriber, wrappedComplete);
-                    this.unsubscribe();
-                }
-            }
-            else {
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
-        try {
-            fn.call(this._context, value);
-        }
-        catch (err) {
-            this.unsubscribe();
-            if (config.useDeprecatedSynchronousErrorHandling) {
-                throw err;
-            }
-            else {
-                hostReportError(err);
-            }
-        }
-    };
-    SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
-        if (!config.useDeprecatedSynchronousErrorHandling) {
-            throw new Error('bad call');
-        }
-        try {
-            fn.call(this._context, value);
-        }
-        catch (err) {
-            if (config.useDeprecatedSynchronousErrorHandling) {
-                parent.syncErrorValue = err;
-                parent.syncErrorThrown = true;
-                return true;
-            }
-            else {
-                hostReportError(err);
-                return true;
-            }
-        }
-        return false;
-    };
-    SafeSubscriber.prototype._unsubscribe = function () {
-        var _parentSubscriber = this._parentSubscriber;
-        this._context = null;
-        this._parentSubscriber = null;
-        _parentSubscriber.unsubscribe();
-    };
-    return SafeSubscriber;
-}(Subscriber));
-
-/** PURE_IMPORTS_START _Subscriber PURE_IMPORTS_END */
-function canReportError(observer) {
-    while (observer) {
-        var _a = observer, closed_1 = _a.closed, destination = _a.destination, isStopped = _a.isStopped;
-        if (closed_1 || isStopped) {
-            return false;
-        }
-        else if (destination && destination instanceof Subscriber) {
-            observer = destination;
-        }
-        else {
-            observer = null;
-        }
-    }
-    return true;
-}
-
-/** PURE_IMPORTS_START _Subscriber,_symbol_rxSubscriber,_Observer PURE_IMPORTS_END */
-function toSubscriber(nextOrObserver, error, complete) {
-    if (nextOrObserver) {
-        if (nextOrObserver instanceof Subscriber) {
-            return nextOrObserver;
-        }
-        if (nextOrObserver[rxSubscriber]) {
-            return nextOrObserver[rxSubscriber]();
-        }
-    }
-    if (!nextOrObserver && !error && !complete) {
-        return new Subscriber(empty);
-    }
-    return new Subscriber(nextOrObserver, error, complete);
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var observable = /*@__PURE__*/ (function () { return typeof Symbol === 'function' && Symbol.observable || '@@observable'; })();
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function noop() { }
-
-/** PURE_IMPORTS_START _noop PURE_IMPORTS_END */
-function pipeFromArray(fns) {
-    if (!fns) {
-        return noop;
-    }
-    if (fns.length === 1) {
-        return fns[0];
-    }
-    return function piped(input) {
-        return fns.reduce(function (prev, fn) { return fn(prev); }, input);
-    };
-}
-
-/** PURE_IMPORTS_START _util_canReportError,_util_toSubscriber,_symbol_observable,_util_pipe,_config PURE_IMPORTS_END */
-var Observable = /*@__PURE__*/ (function () {
-    function Observable(subscribe) {
-        this._isScalar = false;
-        if (subscribe) {
-            this._subscribe = subscribe;
-        }
-    }
-    Observable.prototype.lift = function (operator) {
-        var observable = new Observable();
-        observable.source = this;
-        observable.operator = operator;
-        return observable;
-    };
-    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
-        var operator = this.operator;
-        var sink = toSubscriber(observerOrNext, error, complete);
-        if (operator) {
-            sink.add(operator.call(sink, this.source));
-        }
-        else {
-            sink.add(this.source || (config.useDeprecatedSynchronousErrorHandling && !sink.syncErrorThrowable) ?
-                this._subscribe(sink) :
-                this._trySubscribe(sink));
-        }
-        if (config.useDeprecatedSynchronousErrorHandling) {
-            if (sink.syncErrorThrowable) {
-                sink.syncErrorThrowable = false;
-                if (sink.syncErrorThrown) {
-                    throw sink.syncErrorValue;
-                }
-            }
-        }
-        return sink;
-    };
-    Observable.prototype._trySubscribe = function (sink) {
-        try {
-            return this._subscribe(sink);
-        }
-        catch (err) {
-            if (config.useDeprecatedSynchronousErrorHandling) {
-                sink.syncErrorThrown = true;
-                sink.syncErrorValue = err;
-            }
-            if (canReportError(sink)) {
-                sink.error(err);
-            }
-            else {
-                console.warn(err);
-            }
-        }
-    };
-    Observable.prototype.forEach = function (next, promiseCtor) {
-        var _this = this;
-        promiseCtor = getPromiseCtor(promiseCtor);
-        return new promiseCtor(function (resolve, reject) {
-            var subscription;
-            subscription = _this.subscribe(function (value) {
-                try {
-                    next(value);
-                }
-                catch (err) {
-                    reject(err);
-                    if (subscription) {
-                        subscription.unsubscribe();
-                    }
-                }
-            }, reject, resolve);
-        });
-    };
-    Observable.prototype._subscribe = function (subscriber) {
-        var source = this.source;
-        return source && source.subscribe(subscriber);
-    };
-    Observable.prototype[observable] = function () {
-        return this;
-    };
-    Observable.prototype.pipe = function () {
-        var operations = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            operations[_i] = arguments[_i];
-        }
-        if (operations.length === 0) {
-            return this;
-        }
-        return pipeFromArray(operations)(this);
-    };
-    Observable.prototype.toPromise = function (promiseCtor) {
-        var _this = this;
-        promiseCtor = getPromiseCtor(promiseCtor);
-        return new promiseCtor(function (resolve, reject) {
-            var value;
-            _this.subscribe(function (x) { return value = x; }, function (err) { return reject(err); }, function () { return resolve(value); });
-        });
-    };
-    Observable.create = function (subscribe) {
-        return new Observable(subscribe);
-    };
-    return Observable;
-}());
-function getPromiseCtor(promiseCtor) {
-    if (!promiseCtor) {
-        promiseCtor =  Promise;
-    }
-    if (!promiseCtor) {
-        throw new Error('no Promise impl found');
-    }
-    return promiseCtor;
-}
-
-/** PURE_IMPORTS_START tslib,_Subscription PURE_IMPORTS_END */
-var Action = /*@__PURE__*/ (function (_super) {
-    __extends(Action, _super);
-    function Action(scheduler, work) {
-        return _super.call(this) || this;
-    }
-    Action.prototype.schedule = function (state, delay) {
-        return this;
-    };
-    return Action;
-}(Subscription));
-
-/** PURE_IMPORTS_START tslib,_Action PURE_IMPORTS_END */
-var AsyncAction = /*@__PURE__*/ (function (_super) {
-    __extends(AsyncAction, _super);
-    function AsyncAction(scheduler, work) {
-        var _this = _super.call(this, scheduler, work) || this;
-        _this.scheduler = scheduler;
-        _this.work = work;
-        _this.pending = false;
-        return _this;
-    }
-    AsyncAction.prototype.schedule = function (state, delay) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        if (this.closed) {
-            return this;
-        }
-        this.state = state;
-        var id = this.id;
-        var scheduler = this.scheduler;
-        if (id != null) {
-            this.id = this.recycleAsyncId(scheduler, id, delay);
-        }
-        this.pending = true;
-        this.delay = delay;
-        this.id = this.id || this.requestAsyncId(scheduler, this.id, delay);
-        return this;
-    };
-    AsyncAction.prototype.requestAsyncId = function (scheduler, id, delay) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        return setInterval(scheduler.flush.bind(scheduler, this), delay);
-    };
-    AsyncAction.prototype.recycleAsyncId = function (scheduler, id, delay) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        if (delay !== null && this.delay === delay && this.pending === false) {
-            return id;
-        }
-        clearInterval(id);
-        return undefined;
-    };
-    AsyncAction.prototype.execute = function (state, delay) {
-        if (this.closed) {
-            return new Error('executing a cancelled action');
-        }
-        this.pending = false;
-        var error = this._execute(state, delay);
-        if (error) {
-            return error;
-        }
-        else if (this.pending === false && this.id != null) {
-            this.id = this.recycleAsyncId(this.scheduler, this.id, null);
-        }
-    };
-    AsyncAction.prototype._execute = function (state, delay) {
-        var errored = false;
-        var errorValue = undefined;
-        try {
-            this.work(state);
-        }
-        catch (e) {
-            errored = true;
-            errorValue = !!e && e || new Error(e);
-        }
-        if (errored) {
-            this.unsubscribe();
-            return errorValue;
-        }
-    };
-    AsyncAction.prototype._unsubscribe = function () {
-        var id = this.id;
-        var scheduler = this.scheduler;
-        var actions = scheduler.actions;
-        var index = actions.indexOf(this);
-        this.work = null;
-        this.state = null;
-        this.pending = false;
-        this.scheduler = null;
-        if (index !== -1) {
-            actions.splice(index, 1);
-        }
-        if (id != null) {
-            this.id = this.recycleAsyncId(scheduler, id, null);
-        }
-        this.delay = null;
-    };
-    return AsyncAction;
-}(Action));
-
-var Scheduler = /*@__PURE__*/ (function () {
-    function Scheduler(SchedulerAction, now) {
-        if (now === void 0) {
-            now = Scheduler.now;
-        }
-        this.SchedulerAction = SchedulerAction;
-        this.now = now;
-    }
-    Scheduler.prototype.schedule = function (work, delay, state) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        return new this.SchedulerAction(this, work).schedule(state, delay);
-    };
-    Scheduler.now = function () { return Date.now(); };
-    return Scheduler;
-}());
-
-/** PURE_IMPORTS_START tslib,_Scheduler PURE_IMPORTS_END */
-var AsyncScheduler = /*@__PURE__*/ (function (_super) {
-    __extends(AsyncScheduler, _super);
-    function AsyncScheduler(SchedulerAction, now) {
-        if (now === void 0) {
-            now = Scheduler.now;
-        }
-        var _this = _super.call(this, SchedulerAction, function () {
-            if (AsyncScheduler.delegate && AsyncScheduler.delegate !== _this) {
-                return AsyncScheduler.delegate.now();
-            }
-            else {
-                return now();
-            }
-        }) || this;
-        _this.actions = [];
-        _this.active = false;
-        _this.scheduled = undefined;
-        return _this;
-    }
-    AsyncScheduler.prototype.schedule = function (work, delay, state) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        if (AsyncScheduler.delegate && AsyncScheduler.delegate !== this) {
-            return AsyncScheduler.delegate.schedule(work, delay, state);
-        }
-        else {
-            return _super.prototype.schedule.call(this, work, delay, state);
-        }
-    };
-    AsyncScheduler.prototype.flush = function (action) {
-        var actions = this.actions;
-        if (this.active) {
-            actions.push(action);
-            return;
-        }
-        var error;
-        this.active = true;
-        do {
-            if (error = action.execute(action.state, action.delay)) {
-                break;
-            }
-        } while (action = actions.shift());
-        this.active = false;
-        if (error) {
-            while (action = actions.shift()) {
-                action.unsubscribe();
-            }
-            throw error;
-        }
-    };
-    return AsyncScheduler;
-}(Scheduler));
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function isScheduler(value) {
-    return value && typeof value.schedule === 'function';
-}
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var subscribeToArray = function (array) {
-    return function (subscriber) {
-        for (var i = 0, len = array.length; i < len && !subscriber.closed; i++) {
-            subscriber.next(array[i]);
-        }
-        subscriber.complete();
-    };
-};
-
-/** PURE_IMPORTS_START _Observable,_Subscription PURE_IMPORTS_END */
-function scheduleArray(input, scheduler) {
-    return new Observable(function (subscriber) {
-        var sub = new Subscription();
-        var i = 0;
-        sub.add(scheduler.schedule(function () {
-            if (i === input.length) {
-                subscriber.complete();
-                return;
-            }
-            subscriber.next(input[i++]);
-            if (!subscriber.closed) {
-                sub.add(this.schedule());
-            }
-        }));
-        return sub;
-    });
-}
-
-/** PURE_IMPORTS_START _Observable,_util_subscribeToArray,_scheduled_scheduleArray PURE_IMPORTS_END */
-function fromArray(input, scheduler) {
-    if (!scheduler) {
-        return new Observable(subscribeToArray(input));
-    }
-    else {
-        return scheduleArray(input, scheduler);
-    }
-}
-
-/** PURE_IMPORTS_START _util_isScheduler,_fromArray,_scheduled_scheduleArray PURE_IMPORTS_END */
-function of() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var scheduler = args[args.length - 1];
-    if (isScheduler(scheduler)) {
-        args.pop();
-        return scheduleArray(args, scheduler);
-    }
-    else {
-        return fromArray(args);
-    }
-}
-
-/** PURE_IMPORTS_START _AsyncAction,_AsyncScheduler PURE_IMPORTS_END */
-var async = /*@__PURE__*/ new AsyncScheduler(AsyncAction);
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function identity(x) {
-    return x;
-}
-
-/** PURE_IMPORTS_START tslib,_Subscriber PURE_IMPORTS_END */
-function map(project, thisArg) {
-    return function mapOperation(source) {
-        if (typeof project !== 'function') {
-            throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
-        }
-        return source.lift(new MapOperator(project, thisArg));
-    };
-}
-var MapOperator = /*@__PURE__*/ (function () {
-    function MapOperator(project, thisArg) {
-        this.project = project;
-        this.thisArg = thisArg;
-    }
-    MapOperator.prototype.call = function (subscriber, source) {
-        return source.subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
-    };
-    return MapOperator;
-}());
-var MapSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(MapSubscriber, _super);
-    function MapSubscriber(destination, project, thisArg) {
-        var _this = _super.call(this, destination) || this;
-        _this.project = project;
-        _this.count = 0;
-        _this.thisArg = thisArg || _this;
-        return _this;
-    }
-    MapSubscriber.prototype._next = function (value) {
-        var result;
-        try {
-            result = this.project.call(this.thisArg, value, this.count++);
-        }
-        catch (err) {
-            this.destination.error(err);
-            return;
-        }
-        this.destination.next(result);
-    };
-    return MapSubscriber;
-}(Subscriber));
-
-/** PURE_IMPORTS_START tslib,_Subscriber PURE_IMPORTS_END */
-var OuterSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(OuterSubscriber, _super);
-    function OuterSubscriber() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    OuterSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-        this.destination.next(innerValue);
-    };
-    OuterSubscriber.prototype.notifyError = function (error, innerSub) {
-        this.destination.error(error);
-    };
-    OuterSubscriber.prototype.notifyComplete = function (innerSub) {
-        this.destination.complete();
-    };
-    return OuterSubscriber;
-}(Subscriber));
-
-/** PURE_IMPORTS_START tslib,_Subscriber PURE_IMPORTS_END */
-var InnerSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(InnerSubscriber, _super);
-    function InnerSubscriber(parent, outerValue, outerIndex) {
-        var _this = _super.call(this) || this;
-        _this.parent = parent;
-        _this.outerValue = outerValue;
-        _this.outerIndex = outerIndex;
-        _this.index = 0;
-        return _this;
-    }
-    InnerSubscriber.prototype._next = function (value) {
-        this.parent.notifyNext(this.outerValue, value, this.outerIndex, this.index++, this);
-    };
-    InnerSubscriber.prototype._error = function (error) {
-        this.parent.notifyError(error, this);
-        this.unsubscribe();
-    };
-    InnerSubscriber.prototype._complete = function () {
-        this.parent.notifyComplete(this);
-        this.unsubscribe();
-    };
-    return InnerSubscriber;
-}(Subscriber));
-
-/** PURE_IMPORTS_START _hostReportError PURE_IMPORTS_END */
-var subscribeToPromise = function (promise) {
-    return function (subscriber) {
-        promise.then(function (value) {
-            if (!subscriber.closed) {
-                subscriber.next(value);
-                subscriber.complete();
-            }
-        }, function (err) { return subscriber.error(err); })
-            .then(null, hostReportError);
-        return subscriber;
-    };
-};
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function getSymbolIterator() {
-    if (typeof Symbol !== 'function' || !Symbol.iterator) {
-        return '@@iterator';
-    }
-    return Symbol.iterator;
-}
-var iterator = /*@__PURE__*/ getSymbolIterator();
-
-/** PURE_IMPORTS_START _symbol_iterator PURE_IMPORTS_END */
-var subscribeToIterable = function (iterable) {
-    return function (subscriber) {
-        var iterator$1 = iterable[iterator]();
-        do {
-            var item = iterator$1.next();
-            if (item.done) {
-                subscriber.complete();
-                break;
-            }
-            subscriber.next(item.value);
-            if (subscriber.closed) {
-                break;
-            }
-        } while (true);
-        if (typeof iterator$1.return === 'function') {
-            subscriber.add(function () {
-                if (iterator$1.return) {
-                    iterator$1.return();
-                }
-            });
-        }
-        return subscriber;
-    };
-};
-
-/** PURE_IMPORTS_START _symbol_observable PURE_IMPORTS_END */
-var subscribeToObservable = function (obj) {
-    return function (subscriber) {
-        var obs = obj[observable]();
-        if (typeof obs.subscribe !== 'function') {
-            throw new TypeError('Provided object does not correctly implement Symbol.observable');
-        }
-        else {
-            return obs.subscribe(subscriber);
-        }
-    };
-};
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-var isArrayLike = (function (x) { return x && typeof x.length === 'number' && typeof x !== 'function'; });
-
-/** PURE_IMPORTS_START  PURE_IMPORTS_END */
-function isPromise(value) {
-    return !!value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
-}
-
-/** PURE_IMPORTS_START _subscribeToArray,_subscribeToPromise,_subscribeToIterable,_subscribeToObservable,_isArrayLike,_isPromise,_isObject,_symbol_iterator,_symbol_observable PURE_IMPORTS_END */
-var subscribeTo = function (result) {
-    if (!!result && typeof result[observable] === 'function') {
-        return subscribeToObservable(result);
-    }
-    else if (isArrayLike(result)) {
-        return subscribeToArray(result);
-    }
-    else if (isPromise(result)) {
-        return subscribeToPromise(result);
-    }
-    else if (!!result && typeof result[iterator] === 'function') {
-        return subscribeToIterable(result);
-    }
-    else {
-        var value = isObject(result) ? 'an invalid object' : "'" + result + "'";
-        var msg = "You provided " + value + " where a stream was expected."
-            + ' You can provide an Observable, Promise, Array, or Iterable.';
-        throw new TypeError(msg);
-    }
-};
-
-/** PURE_IMPORTS_START _InnerSubscriber,_subscribeTo,_Observable PURE_IMPORTS_END */
-function subscribeToResult(outerSubscriber, result, outerValue, outerIndex, destination) {
-    if (destination === void 0) {
-        destination = new InnerSubscriber(outerSubscriber, outerValue, outerIndex);
-    }
-    if (destination.closed) {
-        return undefined;
-    }
-    if (result instanceof Observable) {
-        return result.subscribe(destination);
-    }
-    return subscribeTo(result)(destination);
-}
-
-/** PURE_IMPORTS_START tslib,_util_isScheduler,_util_isArray,_OuterSubscriber,_util_subscribeToResult,_fromArray PURE_IMPORTS_END */
-var NONE = {};
-function combineLatest() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i] = arguments[_i];
-    }
-    var resultSelector = null;
-    var scheduler = null;
-    if (isScheduler(observables[observables.length - 1])) {
-        scheduler = observables.pop();
-    }
-    if (typeof observables[observables.length - 1] === 'function') {
-        resultSelector = observables.pop();
-    }
-    if (observables.length === 1 && isArray(observables[0])) {
-        observables = observables[0];
-    }
-    return fromArray(observables, scheduler).lift(new CombineLatestOperator(resultSelector));
-}
-var CombineLatestOperator = /*@__PURE__*/ (function () {
-    function CombineLatestOperator(resultSelector) {
-        this.resultSelector = resultSelector;
-    }
-    CombineLatestOperator.prototype.call = function (subscriber, source) {
-        return source.subscribe(new CombineLatestSubscriber(subscriber, this.resultSelector));
-    };
-    return CombineLatestOperator;
-}());
-var CombineLatestSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(CombineLatestSubscriber, _super);
-    function CombineLatestSubscriber(destination, resultSelector) {
-        var _this = _super.call(this, destination) || this;
-        _this.resultSelector = resultSelector;
-        _this.active = 0;
-        _this.values = [];
-        _this.observables = [];
-        return _this;
-    }
-    CombineLatestSubscriber.prototype._next = function (observable) {
-        this.values.push(NONE);
-        this.observables.push(observable);
-    };
-    CombineLatestSubscriber.prototype._complete = function () {
-        var observables = this.observables;
-        var len = observables.length;
-        if (len === 0) {
-            this.destination.complete();
-        }
-        else {
-            this.active = len;
-            this.toRespond = len;
-            for (var i = 0; i < len; i++) {
-                var observable = observables[i];
-                this.add(subscribeToResult(this, observable, observable, i));
-            }
-        }
-    };
-    CombineLatestSubscriber.prototype.notifyComplete = function (unused) {
-        if ((this.active -= 1) === 0) {
-            this.destination.complete();
-        }
-    };
-    CombineLatestSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-        var values = this.values;
-        var oldVal = values[outerIndex];
-        var toRespond = !this.toRespond
-            ? 0
-            : oldVal === NONE ? --this.toRespond : this.toRespond;
-        values[outerIndex] = innerValue;
-        if (toRespond === 0) {
-            if (this.resultSelector) {
-                this._tryResultSelector(values);
-            }
-            else {
-                this.destination.next(values.slice());
-            }
-        }
-    };
-    CombineLatestSubscriber.prototype._tryResultSelector = function (values) {
-        var result;
-        try {
-            result = this.resultSelector.apply(this, values);
-        }
-        catch (err) {
-            this.destination.error(err);
-            return;
-        }
-        this.destination.next(result);
-    };
-    return CombineLatestSubscriber;
-}(OuterSubscriber));
-
-/** PURE_IMPORTS_START _Observable,_Subscription,_symbol_observable PURE_IMPORTS_END */
-function scheduleObservable(input, scheduler) {
-    return new Observable(function (subscriber) {
-        var sub = new Subscription();
-        sub.add(scheduler.schedule(function () {
-            var observable$1 = input[observable]();
-            sub.add(observable$1.subscribe({
-                next: function (value) { sub.add(scheduler.schedule(function () { return subscriber.next(value); })); },
-                error: function (err) { sub.add(scheduler.schedule(function () { return subscriber.error(err); })); },
-                complete: function () { sub.add(scheduler.schedule(function () { return subscriber.complete(); })); },
-            }));
-        }));
-        return sub;
-    });
-}
-
-/** PURE_IMPORTS_START _Observable,_Subscription PURE_IMPORTS_END */
-function schedulePromise(input, scheduler) {
-    return new Observable(function (subscriber) {
-        var sub = new Subscription();
-        sub.add(scheduler.schedule(function () {
-            return input.then(function (value) {
-                sub.add(scheduler.schedule(function () {
-                    subscriber.next(value);
-                    sub.add(scheduler.schedule(function () { return subscriber.complete(); }));
-                }));
-            }, function (err) {
-                sub.add(scheduler.schedule(function () { return subscriber.error(err); }));
-            });
-        }));
-        return sub;
-    });
-}
-
-/** PURE_IMPORTS_START _Observable,_Subscription,_symbol_iterator PURE_IMPORTS_END */
-function scheduleIterable(input, scheduler) {
-    if (!input) {
-        throw new Error('Iterable cannot be null');
-    }
-    return new Observable(function (subscriber) {
-        var sub = new Subscription();
-        var iterator$1;
-        sub.add(function () {
-            if (iterator$1 && typeof iterator$1.return === 'function') {
-                iterator$1.return();
-            }
-        });
-        sub.add(scheduler.schedule(function () {
-            iterator$1 = input[iterator]();
-            sub.add(scheduler.schedule(function () {
-                if (subscriber.closed) {
-                    return;
-                }
-                var value;
-                var done;
-                try {
-                    var result = iterator$1.next();
-                    value = result.value;
-                    done = result.done;
-                }
-                catch (err) {
-                    subscriber.error(err);
-                    return;
-                }
-                if (done) {
-                    subscriber.complete();
-                }
-                else {
-                    subscriber.next(value);
-                    this.schedule();
-                }
-            }));
-        }));
-        return sub;
-    });
-}
-
-/** PURE_IMPORTS_START _symbol_observable PURE_IMPORTS_END */
-function isInteropObservable(input) {
-    return input && typeof input[observable] === 'function';
-}
-
-/** PURE_IMPORTS_START _symbol_iterator PURE_IMPORTS_END */
-function isIterable(input) {
-    return input && typeof input[iterator] === 'function';
-}
-
-/** PURE_IMPORTS_START _scheduleObservable,_schedulePromise,_scheduleArray,_scheduleIterable,_util_isInteropObservable,_util_isPromise,_util_isArrayLike,_util_isIterable PURE_IMPORTS_END */
-function scheduled(input, scheduler) {
-    if (input != null) {
-        if (isInteropObservable(input)) {
-            return scheduleObservable(input, scheduler);
-        }
-        else if (isPromise(input)) {
-            return schedulePromise(input, scheduler);
-        }
-        else if (isArrayLike(input)) {
-            return scheduleArray(input, scheduler);
-        }
-        else if (isIterable(input) || typeof input === 'string') {
-            return scheduleIterable(input, scheduler);
-        }
-    }
-    throw new TypeError((input !== null && typeof input || input) + ' is not observable');
-}
-
-/** PURE_IMPORTS_START _Observable,_util_subscribeTo,_scheduled_scheduled PURE_IMPORTS_END */
-function from(input, scheduler) {
-    if (!scheduler) {
-        if (input instanceof Observable) {
-            return input;
-        }
-        return new Observable(subscribeTo(input));
-    }
-    else {
-        return scheduled(input, scheduler);
-    }
-}
-
-/** PURE_IMPORTS_START tslib,_util_subscribeToResult,_OuterSubscriber,_InnerSubscriber,_map,_observable_from PURE_IMPORTS_END */
-function mergeMap(project, resultSelector, concurrent) {
-    if (concurrent === void 0) {
-        concurrent = Number.POSITIVE_INFINITY;
-    }
-    if (typeof resultSelector === 'function') {
-        return function (source) { return source.pipe(mergeMap(function (a, i) { return from(project(a, i)).pipe(map(function (b, ii) { return resultSelector(a, b, i, ii); })); }, concurrent)); };
-    }
-    else if (typeof resultSelector === 'number') {
-        concurrent = resultSelector;
-    }
-    return function (source) { return source.lift(new MergeMapOperator(project, concurrent)); };
-}
-var MergeMapOperator = /*@__PURE__*/ (function () {
-    function MergeMapOperator(project, concurrent) {
-        if (concurrent === void 0) {
-            concurrent = Number.POSITIVE_INFINITY;
-        }
-        this.project = project;
-        this.concurrent = concurrent;
-    }
-    MergeMapOperator.prototype.call = function (observer, source) {
-        return source.subscribe(new MergeMapSubscriber(observer, this.project, this.concurrent));
-    };
-    return MergeMapOperator;
-}());
-var MergeMapSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(MergeMapSubscriber, _super);
-    function MergeMapSubscriber(destination, project, concurrent) {
-        if (concurrent === void 0) {
-            concurrent = Number.POSITIVE_INFINITY;
-        }
-        var _this = _super.call(this, destination) || this;
-        _this.project = project;
-        _this.concurrent = concurrent;
-        _this.hasCompleted = false;
-        _this.buffer = [];
-        _this.active = 0;
-        _this.index = 0;
-        return _this;
-    }
-    MergeMapSubscriber.prototype._next = function (value) {
-        if (this.active < this.concurrent) {
-            this._tryNext(value);
-        }
-        else {
-            this.buffer.push(value);
-        }
-    };
-    MergeMapSubscriber.prototype._tryNext = function (value) {
-        var result;
-        var index = this.index++;
-        try {
-            result = this.project(value, index);
-        }
-        catch (err) {
-            this.destination.error(err);
-            return;
-        }
-        this.active++;
-        this._innerSub(result, value, index);
-    };
-    MergeMapSubscriber.prototype._innerSub = function (ish, value, index) {
-        var innerSubscriber = new InnerSubscriber(this, undefined, undefined);
-        var destination = this.destination;
-        destination.add(innerSubscriber);
-        subscribeToResult(this, ish, value, index, innerSubscriber);
-    };
-    MergeMapSubscriber.prototype._complete = function () {
-        this.hasCompleted = true;
-        if (this.active === 0 && this.buffer.length === 0) {
-            this.destination.complete();
-        }
-        this.unsubscribe();
-    };
-    MergeMapSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-        this.destination.next(innerValue);
-    };
-    MergeMapSubscriber.prototype.notifyComplete = function (innerSub) {
-        var buffer = this.buffer;
-        this.remove(innerSub);
-        this.active--;
-        if (buffer.length > 0) {
-            this._next(buffer.shift());
-        }
-        else if (this.active === 0 && this.hasCompleted) {
-            this.destination.complete();
-        }
-    };
-    return MergeMapSubscriber;
-}(OuterSubscriber));
-
-/** PURE_IMPORTS_START _mergeMap,_util_identity PURE_IMPORTS_END */
-function mergeAll(concurrent) {
-    if (concurrent === void 0) {
-        concurrent = Number.POSITIVE_INFINITY;
-    }
-    return mergeMap(identity, concurrent);
-}
-
-/** PURE_IMPORTS_START _mergeAll PURE_IMPORTS_END */
-function concatAll() {
-    return mergeAll(1);
-}
-
-/** PURE_IMPORTS_START _of,_operators_concatAll PURE_IMPORTS_END */
-function concat() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i] = arguments[_i];
-    }
-    return concatAll()(of.apply(void 0, observables));
-}
-
-/** PURE_IMPORTS_START _Observable,_util_isArray,_util_isFunction,_operators_map PURE_IMPORTS_END */
-function fromEvent(target, eventName, options, resultSelector) {
-    if (isFunction(options)) {
-        resultSelector = options;
-        options = undefined;
-    }
-    if (resultSelector) {
-        return fromEvent(target, eventName, options).pipe(map(function (args) { return isArray(args) ? resultSelector.apply(void 0, args) : resultSelector(args); }));
-    }
-    return new Observable(function (subscriber) {
-        function handler(e) {
-            if (arguments.length > 1) {
-                subscriber.next(Array.prototype.slice.call(arguments));
-            }
-            else {
-                subscriber.next(e);
-            }
-        }
-        setupSubscription(target, eventName, handler, subscriber, options);
-    });
-}
-function setupSubscription(sourceObj, eventName, handler, subscriber, options) {
-    var unsubscribe;
-    if (isEventTarget(sourceObj)) {
-        var source_1 = sourceObj;
-        sourceObj.addEventListener(eventName, handler, options);
-        unsubscribe = function () { return source_1.removeEventListener(eventName, handler, options); };
-    }
-    else if (isJQueryStyleEventEmitter(sourceObj)) {
-        var source_2 = sourceObj;
-        sourceObj.on(eventName, handler);
-        unsubscribe = function () { return source_2.off(eventName, handler); };
-    }
-    else if (isNodeStyleEventEmitter(sourceObj)) {
-        var source_3 = sourceObj;
-        sourceObj.addListener(eventName, handler);
-        unsubscribe = function () { return source_3.removeListener(eventName, handler); };
-    }
-    else if (sourceObj && sourceObj.length) {
-        for (var i = 0, len = sourceObj.length; i < len; i++) {
-            setupSubscription(sourceObj[i], eventName, handler, subscriber, options);
-        }
-    }
-    else {
-        throw new TypeError('Invalid event target');
-    }
-    subscriber.add(unsubscribe);
-}
-function isNodeStyleEventEmitter(sourceObj) {
-    return sourceObj && typeof sourceObj.addListener === 'function' && typeof sourceObj.removeListener === 'function';
-}
-function isJQueryStyleEventEmitter(sourceObj) {
-    return sourceObj && typeof sourceObj.on === 'function' && typeof sourceObj.off === 'function';
-}
-function isEventTarget(sourceObj) {
-    return sourceObj && typeof sourceObj.addEventListener === 'function' && typeof sourceObj.removeEventListener === 'function';
-}
-
-/** PURE_IMPORTS_START _isArray PURE_IMPORTS_END */
-function isNumeric(val) {
-    return !isArray(val) && (val - parseFloat(val) + 1) >= 0;
-}
-
-/** PURE_IMPORTS_START _Observable,_scheduler_async,_util_isNumeric PURE_IMPORTS_END */
-function interval(period, scheduler) {
-    if (period === void 0) {
-        period = 0;
-    }
-    if (scheduler === void 0) {
-        scheduler = async;
-    }
-    if (!isNumeric(period) || period < 0) {
-        period = 0;
-    }
-    if (!scheduler || typeof scheduler.schedule !== 'function') {
-        scheduler = async;
-    }
-    return new Observable(function (subscriber) {
-        subscriber.add(scheduler.schedule(dispatch, period, { subscriber: subscriber, counter: 0, period: period }));
-        return subscriber;
-    });
-}
-function dispatch(state) {
-    var subscriber = state.subscriber, counter = state.counter, period = state.period;
-    subscriber.next(counter);
-    this.schedule({ subscriber: subscriber, counter: counter + 1, period: period }, period);
-}
-
-/** PURE_IMPORTS_START tslib,_OuterSubscriber,_util_subscribeToResult PURE_IMPORTS_END */
-function debounce(durationSelector) {
-    return function (source) { return source.lift(new DebounceOperator(durationSelector)); };
-}
-var DebounceOperator = /*@__PURE__*/ (function () {
-    function DebounceOperator(durationSelector) {
-        this.durationSelector = durationSelector;
-    }
-    DebounceOperator.prototype.call = function (subscriber, source) {
-        return source.subscribe(new DebounceSubscriber(subscriber, this.durationSelector));
-    };
-    return DebounceOperator;
-}());
-var DebounceSubscriber = /*@__PURE__*/ (function (_super) {
-    __extends(DebounceSubscriber, _super);
-    function DebounceSubscriber(destination, durationSelector) {
-        var _this = _super.call(this, destination) || this;
-        _this.durationSelector = durationSelector;
-        _this.hasValue = false;
-        _this.durationSubscription = null;
-        return _this;
-    }
-    DebounceSubscriber.prototype._next = function (value) {
-        try {
-            var result = this.durationSelector.call(this, value);
-            if (result) {
-                this._tryNext(value, result);
-            }
-        }
-        catch (err) {
-            this.destination.error(err);
-        }
-    };
-    DebounceSubscriber.prototype._complete = function () {
-        this.emitValue();
-        this.destination.complete();
-    };
-    DebounceSubscriber.prototype._tryNext = function (value, duration) {
-        var subscription = this.durationSubscription;
-        this.value = value;
-        this.hasValue = true;
-        if (subscription) {
-            subscription.unsubscribe();
-            this.remove(subscription);
-        }
-        subscription = subscribeToResult(this, duration);
-        if (subscription && !subscription.closed) {
-            this.add(this.durationSubscription = subscription);
-        }
-    };
-    DebounceSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-        this.emitValue();
-    };
-    DebounceSubscriber.prototype.notifyComplete = function () {
-        this.emitValue();
-    };
-    DebounceSubscriber.prototype.emitValue = function () {
-        if (this.hasValue) {
-            var value = this.value;
-            var subscription = this.durationSubscription;
-            if (subscription) {
-                this.durationSubscription = null;
-                subscription.unsubscribe();
-                this.remove(subscription);
-            }
-            this.value = null;
-            this.hasValue = false;
-            _super.prototype._next.call(this, value);
-        }
-    };
-    return DebounceSubscriber;
-}(OuterSubscriber));
-
-/** PURE_IMPORTS_START _observable_concat,_util_isScheduler PURE_IMPORTS_END */
-function startWith() {
-    var array = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        array[_i] = arguments[_i];
-    }
-    var scheduler = array[array.length - 1];
-    if (isScheduler(scheduler)) {
-        array.pop();
-        return function (source) { return concat(array, source, scheduler); };
-    }
-    else {
-        return function (source) { return concat(array, source); };
-    }
-}
-
 // blingjs
-const $ = document.querySelector.bind(document);
-const $$ = document.querySelectorAll.bind(document);
+var $$1 = document.querySelector.bind(document);
+var $$ = document.querySelectorAll.bind(document);
 
 Element.prototype.$ = Element.prototype.querySelector;
 Element.prototype.$$ = Element.prototype.querySelectorAll;
 
-const NBSP = '\xa0';
-const numberFormatter = new Intl.NumberFormat();
-
 // thx Lighthouse's util.js
 function arithmeticMean(items) {
-  items = items.filter(item => item.weight > 0);
-  const results = items.reduce(
-    (result, item) => {
-      const score = item.result.score;
-      const weight = item.weight;
+  items = items.filter(function (item) { return item.weight > 0; });
+  var results = items.reduce(
+    function (result, item) {
+      var score = item.result.score;
+      var weight = item.weight;
       return {
         weight: result.weight + weight,
         sum: result.sum + score * weight,
@@ -1665,13 +108,13 @@ function arithmeticMean(items) {
 }
 
 function calculateRating(score) {
-	const RATINGS = {
+	var RATINGS = {
 		PASS: {label: 'pass', minScore: 0.9},
 		AVERAGE: {label: 'average', minScore: 0.5},
 		FAIL: {label: 'fail'},
 	};
 
-  let rating = RATINGS.FAIL.label;
+  var rating = RATINGS.FAIL.label;
   if (score >= RATINGS.PASS.minScore) {
     rating = RATINGS.PASS.label;
   } else if (score >= RATINGS.AVERAGE.minScore) {
@@ -1684,7 +127,7 @@ function calculateRating(score) {
  * V6 weights
  */
 
-const weights = {
+var weights = {
   v5: {
     FCP: 0.2,
     SI: 0.26666,
@@ -1705,7 +148,7 @@ const weights = {
 /**
  * V5/v6 scoring curves
  */
-const scoring = {
+var scoring = {
   FCP: {median: 4000, falloff: 2000, name: 'First Contentful Paint'},
   FMP: {median: 4000, falloff: 2000, name: 'First Meaningful Paint'},
   SI: {median: 5800, falloff: 2900, name: 'Speed Index'},
@@ -1716,49 +159,43 @@ const scoring = {
   CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
 };
 
-const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
-
-function updateGauge(container, category) {
-  const wrapper = container.$('.lh-gauge__wrapper');
-  wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(category.score)}`);
-
+function updateGauge(wrapper, category) {
   _setPerfGaugeExplodey(wrapper, category);
 }
 
 function _determineTrig(sizeSVG, percent, strokeWidth) {
   strokeWidth = strokeWidth || sizeSVG / 32;
 
-  const radiusInner = sizeSVG / strokeWidth;
-  const strokeGap = 0.5 * strokeWidth;
-  const radiusOuter = radiusInner + strokeGap + strokeWidth;
+  var radiusInner = sizeSVG / strokeWidth;
+  var strokeGap = 0.5 * strokeWidth;
+  var radiusOuter = radiusInner + strokeGap + strokeWidth;
 
-  const circumferenceInner = 2 * Math.PI * radiusInner;
+  var circumferenceInner = 2 * Math.PI * radiusInner;
   // arc length we need to subtract
   // for very small strokeWidth:radius ratios this is ≈ strokeWidth
   // angle = acute angle of isosceles △ with 2 edges equal to radius & 3rd equal to strokeWidth
   // angle formula given by law of cosines
-  const endDiffInner = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusInner, 2)) * radiusInner;
+  var endDiffInner = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusInner, 2)) * radiusInner;
 
-  const circumferenceOuter = 2 * Math.PI * radiusOuter;
-  const endDiffOuter = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusOuter, 2)) * radiusOuter;
+  var circumferenceOuter = 2 * Math.PI * radiusOuter;
+  var endDiffOuter = Math.acos(1 - 0.5 * Math.pow((0.5 * strokeWidth) / radiusOuter, 2)) * radiusOuter;
 
   return {
-    radiusInner,
-    radiusOuter,
-    circumferenceInner,
-    circumferenceOuter,
-    getArcLength: _ => Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)),
+    radiusInner: radiusInner,
+    radiusOuter: radiusOuter,
+    circumferenceInner: circumferenceInner,
+    circumferenceOuter: circumferenceOuter,
+    getArcLength: function (_) { return Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4)); },
     // isButt case is for metricArcHoverTarget
-    getMetricArcLength: (weightingPct, isButt) => {
+    getMetricArcLength: function (weightingPct, isButt) {
       // TODO: this math isn't perfect butt it's very close.
-      const linecapFactor = isButt ? 0 : 2 * endDiffOuter;
+      var linecapFactor = isButt ? 0 : 2 * endDiffOuter;
       return Math.max(0, +(weightingPct * circumferenceOuter - strokeGap - linecapFactor).toFixed(4));
     },
-    endDiffInner,
-    endDiffOuter,
-    strokeWidth,
-    strokeGap,
+    endDiffInner: endDiffInner,
+    endDiffOuter: endDiffOuter,
+    strokeWidth: strokeWidth,
+    strokeGap: strokeGap,
   };
 }
 
@@ -1767,48 +204,47 @@ function _determineTrig(sizeSVG, percent, strokeWidth) {
  * @param {LH.ReportResult.Category} category
  */
 function _setPerfGaugeExplodey(wrapper, category) {
-  const sizeSVG = 128;
-  const offsetSVG = -0.5 * sizeSVG;
+  var sizeSVG = 128;
+  var offsetSVG = -0.5 * sizeSVG;
 
-  const percent = Number(category.score);
-  const {
-    radiusInner,
-    radiusOuter,
-    circumferenceInner,
-    circumferenceOuter,
-    getArcLength,
-    getMetricArcLength,
-    endDiffInner,
-    endDiffOuter,
-    strokeWidth,
-    strokeGap,
-  } = _determineTrig(sizeSVG, percent);
+  var percent = Number(category.score);
+  var ref = _determineTrig(sizeSVG, percent);
+  var radiusInner = ref.radiusInner;
+  var radiusOuter = ref.radiusOuter;
+  var circumferenceInner = ref.circumferenceInner;
+  var circumferenceOuter = ref.circumferenceOuter;
+  var getArcLength = ref.getArcLength;
+  var getMetricArcLength = ref.getMetricArcLength;
+  var endDiffInner = ref.endDiffInner;
+  var endDiffOuter = ref.endDiffOuter;
+  var strokeWidth = ref.strokeWidth;
+  var strokeGap = ref.strokeGap;
 
-  const SVG = wrapper.querySelector('.lh-gauge');
-  const NS_URI = 'http://www.w3.org/2000/svg';
+  var SVG = wrapper.querySelector('.lh-gauge');
+  var NS_URI = 'http://www.w3.org/2000/svg';
 
   SVG.setAttribute('viewBox', [offsetSVG, offsetSVG, sizeSVG, sizeSVG].join(' '));
   SVG.style.setProperty('--stroke-width', strokeWidth);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
 
   // build the mask. Note this mask isn't within the wrapper, it's global.
-  const mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
-  const maskVisible = mask.querySelector('path');
-  const maskHidden = mask.querySelector('circle');
+  var mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
+  var maskVisible = mask.querySelector('path');
+  var maskHidden = mask.querySelector('circle');
 
   // a path is the most compact way to cover the SVG area with a rectangle
-  maskVisible.setAttribute('d', `M${offsetSVG}${offsetSVG}H${-offsetSVG}V${-offsetSVG}H${offsetSVG}`);
+  maskVisible.setAttribute('d', ("M" + offsetSVG + offsetSVG + "H" + (-offsetSVG) + "V" + (-offsetSVG) + "H" + offsetSVG));
   // SVG masks are luninance masks => white = fully opaque, black = transparent
-  maskVisible.setAttribute('fill', `#fff`);
+  maskVisible.setAttribute('fill', "#fff");
   // default fill is black, no need to set it exlicitly on circle
   // any strok applied doesn't matter
   maskHidden.setAttribute('r', radiusInner + 0.5 * strokeWidth);
 
-  const groupOuter = wrapper.querySelector('.lh-gauge__outer');
-  const groupInner = wrapper.querySelector('.lh-gauge__inner');
-  const cover = groupOuter.querySelector('.cover');
-  const gaugeArc = groupInner.querySelector('.lh-gauge__arc');
-  const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
+  var groupOuter = wrapper.querySelector('.lh-gauge__outer');
+  var groupInner = wrapper.querySelector('.lh-gauge__inner');
+  var cover = groupOuter.querySelector('.cover');
+  var gaugeArc = groupInner.querySelector('.lh-gauge__arc');
+  var gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
   groupOuter.style.setProperty('--radius', radiusOuter);
@@ -1816,62 +252,62 @@ function _setPerfGaugeExplodey(wrapper, category) {
   cover.setAttribute('stroke-width', strokeGap);
   SVG.style.setProperty('--radius', radiusInner);
 
-  gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
+  gaugeArc.setAttribute('stroke-dasharray', ((getArcLength()) + " " + ((circumferenceInner - getArcLength()).toFixed(4))));
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
 
   gaugePerc.textContent = Math.round(percent * 100);
 
-  const radiusTextOuter = radiusOuter + strokeWidth;
-  const radiusTextInner = radiusOuter - strokeWidth;
+  var radiusTextOuter = radiusOuter + strokeWidth;
+  var radiusTextInner = radiusOuter - strokeWidth;
 
-  const metrics = category.auditRefs.filter(r => r.group === 'metrics' && r.weight);
-  const totalWeight = metrics.reduce((sum, each) => (sum += each.weight), 0);
-  let offsetAdder = 0.25 * circumferenceOuter - endDiffOuter - 0.5 * strokeGap;
-  let angleAdder = -0.5 * Math.PI;
+  var metrics = category.auditRefs.filter(function (r) { return r.group === 'metrics' && r.weight; });
+  var totalWeight = metrics.reduce(function (sum, each) { return (sum += each.weight); }, 0);
+  var offsetAdder = 0.25 * circumferenceOuter - endDiffOuter - 0.5 * strokeGap;
+  var angleAdder = -0.5 * Math.PI;
 
-  metrics.forEach((metric, i) => {
+  metrics.forEach(function (metric, i) {
     // TODO(porting to real LHR..): in scorecalc we dont use the real audit ID just the acronym.
-    const alias = metric.id;
+    var alias = metric.id;
 
     // Hack
-    const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
+    var needsDomPopulation = !groupOuter.querySelector((".metric--" + alias));
 
     // HACK:This isn't ideal but it was quick. Handles both initialization and updates
-    const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
-    const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
-    const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
-    const metricArcHoverTarget = groupOuter.querySelector(`.metric--${alias} .lh-gauge-hover`) || document.createElementNS(NS_URI, 'circle');
-    const metricLabel = groupOuter.querySelector(`.metric--${alias} .metric__label`) || document.createElementNS(NS_URI, 'text');
-    const metricValue = groupOuter.querySelector(`.metric--${alias} .metric__value`) || document.createElementNS(NS_URI, 'text');
+    var metricGroup = groupOuter.querySelector((".metric--" + alias)) || document.createElementNS(NS_URI, 'g');
+    var metricArcMax = groupOuter.querySelector((".metric--" + alias + " .lh-gauge--faded")) || document.createElementNS(NS_URI, 'circle');
+    var metricArc = groupOuter.querySelector((".metric--" + alias + " .lh-gauge--miniarc")) || document.createElementNS(NS_URI, 'circle');
+    var metricArcHoverTarget = groupOuter.querySelector((".metric--" + alias + " .lh-gauge-hover")) || document.createElementNS(NS_URI, 'circle');
+    var metricLabel = groupOuter.querySelector((".metric--" + alias + " .metric__label")) || document.createElementNS(NS_URI, 'text');
+    var metricValue = groupOuter.querySelector((".metric--" + alias + " .metric__value")) || document.createElementNS(NS_URI, 'text');
 
-    metricGroup.classList.add('metric', `metric--${alias}`);
+    metricGroup.classList.add('metric', ("metric--" + alias));
     metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
     metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--miniarc');
     metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded', 'lh-gauge-hover');
 
-    const weightingPct = metric.weight / totalWeight;
-    const metricLengthMax = getMetricArcLength(weightingPct);
-    const metricPercent = metric.result.score * weightingPct;
-    const metricLength = getMetricArcLength(metricPercent);
-    const metricOffset = weightingPct * circumferenceOuter;
-    const metricHoverLength = getMetricArcLength(weightingPct, true);
+    var weightingPct = metric.weight / totalWeight;
+    var metricLengthMax = getMetricArcLength(weightingPct);
+    var metricPercent = metric.result.score * weightingPct;
+    var metricLength = getMetricArcLength(metricPercent);
+    var metricOffset = weightingPct * circumferenceOuter;
+    var metricHoverLength = getMetricArcLength(weightingPct, true);
 
-    metricGroup.style.setProperty('--metric-color', `var(--palette-${i})`);
-    metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
+    metricGroup.style.setProperty('--metric-color', ("var(--palette-" + i + ")"));
+    metricGroup.style.setProperty('--metric-offset', ("" + offsetAdder));
     metricGroup.style.setProperty('--i', i);
 
-    metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
-    metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
-    metricArcHoverTarget.setAttribute('stroke-dasharray', `${metricHoverLength} ${circumferenceOuter - metricHoverLength - endDiffOuter}`);
+    metricArcMax.setAttribute('stroke-dasharray', (metricLengthMax + " " + (circumferenceOuter - metricLengthMax)));
+    metricArc.style.setProperty('--metric-array', (metricLength + " " + (circumferenceOuter - metricLength)));
+    metricArcHoverTarget.setAttribute('stroke-dasharray', (metricHoverLength + " " + (circumferenceOuter - metricHoverLength - endDiffOuter)));
 
     metricLabel.classList.add('metric__label');
     metricValue.classList.add('metric__value');
     metricLabel.textContent = alias;
-    metricValue.textContent = `+${Math.round(metricPercent * 100)}`;
+    metricValue.textContent = "+" + (Math.round(metricPercent * 100));
 
-    const midAngle = angleAdder + weightingPct * Math.PI;
-    const cos = Math.cos(midAngle);
-    const sin = Math.sin(midAngle);
+    var midAngle = angleAdder + weightingPct * Math.PI;
+    var cos = Math.cos(midAngle);
+    var sin = Math.sin(midAngle);
 
     // only set non-default alignments
     switch (true) {
@@ -1919,17 +355,17 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // Hack. Not ideal.
-  if (SVG.dataset.listenersSetup) return;
+  if (SVG.dataset.listenersSetup) { return; }
   SVG.dataset.listenersSetup = true;
 
-  peekGauge(SVG);
+  // peekGauge(SVG);
 
   /*
     wrapper.state-expanded: gauge is exploded
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
     metric.metric-highlight: highlight this particular metric
   */
-  SVG.addEventListener('mouseover', e => {
+  SVG.addEventListener('mouseover', function (e) {
     // if hovering on the SVG and its expanded, get rid of everything
     if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
       // paul: not sure why we want to remove this.. seems like we want to keep it expanded...
@@ -1942,13 +378,12 @@ function _setPerfGaugeExplodey(wrapper, category) {
       return;
     }
 
-    const parent = e.target.parentNode;
+    var parent = e.target.parentNode;
 
     // if hovering on the primary (inner) part, then explode it but dont highlight
     if (parent && parent === groupInner) {
-      if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
+      if (!SVG.classList.contains('state--expanded')) { SVG.classList.add('state--expanded'); }
       else if (SVG.classList.contains('state--highlight')) {
-        SVG.classList.remove('state--highlight');
         SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
       return;
@@ -1958,15 +393,15 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
       // match the bg color of the gauge during a metric highlight
-      wrapper.style.setProperty('--color-highlight', `var(--palette-${parent.style.getPropertyValue('--i')})`);
+      wrapper.style.setProperty('--color-highlight', ("var(--palette-" + (parent.style.getPropertyValue('--i')) + ")"));
 
       if (!SVG.classList.contains('state--highlight')) {
         SVG.classList.add('state--highlight');
         parent.classList.add('metric--highlight');
       } else {
-        const highlighted = SVG.querySelector('.metric--highlight');
+        var highlighted = SVG.querySelector('.metric--highlight');
 
-        if (parent !== highlighted) {
+        if (highlighted && parent !== highlighted) {
           highlighted.classList.remove('metric--highlight');
           parent.classList.add('metric--highlight');
         }
@@ -1975,276 +410,281 @@ function _setPerfGaugeExplodey(wrapper, category) {
   });
 
   // clear on mouselave even if mousemove didn't catch it.
-  SVG.addEventListener('mouseleave', e => {
-    SVG.classList.remove('state--expanded');
+  SVG.addEventListener('mouseleave', function (e) {
     SVG.classList.remove('state--highlight');
-    const mh = SVG.querySelector('.metric--highlight');
+    var mh = SVG.querySelector('.metric--highlight');
     mh && mh.classList.remove('metric--highlight');
   });
-
-  // On the first run, tease with a little peek reveal
-  async function peekGauge(SVG) {
-    // Delay just a tad to let the user aclimatize beforehand.
-    await delay(1000);
-
-    // To visually get the outer ring to peek on the edge, we need the inner ring on top. This is SVG's equivalent to `innerElem.zIndex = 100`
-    const inner = SVG.querySelector('.lh-gauge__inner');
-    let id = `uniq-${Math.random()}`;
-    inner.setAttribute('id', id);
-    const useElem = document.createElementNS(NS_URI, 'use');
-    useElem.setAttribute('href', `#${id}`);
-    // for paint order this must come _after_ the outer.
-    SVG.appendChild(useElem);
-
-    const peekDurationSec = 2.5;
-    SVG.style.setProperty('--peek-dur', `${peekDurationSec}s`);
-    SVG.classList.add('state--peek', 'state--expanded');
-
-    // Fancy double cleanup
-    const cleanup = _ => SVG.classList.remove('state--peek', 'state--expanded') || useElem.remove();
-    const tId = setTimeout(_ => {
-      SVG.removeEventListener('mouseenter', handleEarlyInteraction);
-      cleanup();
-    }, peekDurationSec * 1000 * 1.5); // lil extra time just cuz
-    function handleEarlyInteraction() {
-      clearTimeout(tId);
-      cleanup();
-    }
-    SVG.addEventListener('mouseenter', handleEarlyInteraction, {once: true});
-  }
 }
 
-function main(weights, container) {
-  // Nake sure weights total to 1
-  const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
-  console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
-  const maxWeight = Math.max(...Object.values(weights));
+function determineMinMax(metricId) {
+  var metricScoring = scoring[metricId];
 
-  // The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
-  const giveElement = eventOrElem =>
-    eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
+  var valueAtScore100 = VALUE_AT_QUANTILE(
+    metricScoring.median,
+    metricScoring.falloff,
+    0.995
+  );
+  var valueAtScore5 = VALUE_AT_QUANTILE(
+    metricScoring.median,
+    metricScoring.falloff,
+    0.05
+  );
 
-  // Gotta avoid infinite loop since we dispatchEvent ourselves
-  const isManuallyDispatched = eventOrElem =>
-    eventOrElem instanceof Event && !eventOrElem.isTrusted;
+  var min = Math.floor(valueAtScore100 / 1000) * 1000;
+  var max = Math.ceil(valueAtScore5 / 1000) * 1000;
+  var step = 10;
 
-  const html = Object.keys(weights)
-    .map(id => {
-      const name = scoring[id].name;
-      return createRow(id, name);
-    })
-    .join('');
-
-  container.$('tbody').innerHTML = html;
-
-  function createRow(id, name) {
-    return `
-  <tr id="${id}">
-    <td>
-      <span class="lh-metric__score-icon"></span>
-    </td>
-    <td>${id} (${name})</td>
-    <td>
-      <input type="range" step=10 class="${id} metric-value" />
-      <output class="${id} value-output"></output>
-    </td>
-    <td></td>
-
-    <td>
-      <input type="range" class="${id} metric-score"/>
-      <output class="${id} score-output"></output>
-    </td>
-
-    <td>
-      <span class="${id} weight-text"></span>
-    </td>
-  </tr>`;
+  // Special handling for CLS
+  if (metricScoring.units === 'unitless') {
+    min = 0;
+    max = Math.ceil(valueAtScore5 * 100) / 100;
+    step = 0.01;
   }
 
-  // stamp out perf gauge
-  const tmpl = document.querySelector('#tmpl-lh-perf-gauge-explodey');
-  const tmplElem = document.importNode(tmpl.content, true);
-  container.$('.perfscore').append(tmplElem);
+  return {
+    min: min,
+    max: max,
+    step: step,
+  };
+}
 
-  // Set weighting column
-  container.$$('.weight-text').forEach(elem => {
-    const metricId = elem.closest('tr').id;
-    const weightStr = (weights[metricId] * 100).toLocaleString(undefined, {maximumFractionDigits: 1});
-    elem.textContent = `${weightStr}%`;
-  });
+var Metric = /*@__PURE__*/(function (Component) {
+  function Metric () {
+    Component.apply(this, arguments);
+  }
 
-  // Set up value sliders
-  const valueObservers = Array.from(container.$$('input.metric-value')).map(elem => {
-    const metricId = elem.closest('tr').id;
-    const metricScoring = scoring[metricId];
-    const outputElem = container.$(`.value-output.${metricId}`);
-    const scoreElem = container.$(`input.${metricId}.metric-score`);
+  if ( Component ) Metric.__proto__ = Component;
+  Metric.prototype = Object.create( Component && Component.prototype );
+  Metric.prototype.constructor = Metric;
 
-    // Calibrate min & max using scoring curve
-    const valueAtScore100 = VALUE_AT_QUANTILE(
-      metricScoring.median,
-      metricScoring.falloff,
-      0.995
+  Metric.prototype.onValueChange = function onValueChange (e, id) {
+    var obj;
+
+    this.props.app.setState(( obj = {}, obj[id] = e.target.valueAsNumber, obj ));
+  };
+
+  Metric.prototype.onScoreChange = function onScoreChange (e, id) {
+    var obj;
+
+    var score = e.target.valueAsNumber;
+    var metricScoring = scoring[id];
+    var computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, score / 100);
+
+    // Clamp because we can end up with Infinity
+    var ref = determineMinMax(id);
+    var min = ref.min;
+    var max = ref.max;
+    computedValue = Math.max(Math.min(computedValue, max), min);
+
+    this.props.app.setState(( obj = {}, obj[id] = Math.round(computedValue), obj ));
+  };
+
+  Metric.prototype.render = function render (ref) {
+    var this$1 = this;
+    var id = ref.id;
+    var value = ref.value;
+    var weight = ref.weight;
+    var maxWeight = ref.maxWeight;
+    var score = ref.score;
+
+    var ref$1 = determineMinMax(id);
+    var min = ref$1.min;
+    var max = ref$1.max;
+    var step = ref$1.step;
+    var name = scoring[id].name;
+
+    return h( 'tr', { class: ("lh-metric--" + (calculateRating(score / 100))) },
+      h( 'td', null,
+        h( 'span', { class: "lh-metric__score-icon" })
+      ),
+      h( 'td', null, (id + " (" + name + ")") ),
+      h( 'td', null,
+        h( 'input', { type: "range", min: min, value: value, max: max, step: step, class: (id + " metric-value"), onInput: function (e) { return this$1.onValueChange(e, id); } }),
+        h( 'output', { class: "${id} value-output" }, value)
+      ),
+      h( 'td', null ),
+
+      h( 'td', null,
+        h( 'input', { type: "range", class: (id + " metric-score"), style: ("width: " + (weight / maxWeight * 100) + "%"), value: score, onInput: function (e) { return this$1.onScoreChange(e, id); } }),
+        h( 'output', { class: (id + " score-output") }, score)
+      ),
+
+      h( 'td', null,
+        h( 'span', { class: (id + " weight-text") }, Math.round(weight * 10000) / 100, "%")
+      )
+    )
+  };
+
+  return Metric;
+}(m));
+
+var Gauge = /*@__PURE__*/(function (Component) {
+  function Gauge(props) {
+    Component.call(this, props);
+    this.ref = y();
+  }
+
+  if ( Component ) Gauge.__proto__ = Component;
+  Gauge.prototype = Object.create( Component && Component.prototype );
+  Gauge.prototype.constructor = Gauge;
+
+  Gauge.prototype.refreshGauge = function refreshGauge () {
+    updateGauge(this.ref.current, {
+      title: 'Performance',
+      auditRefs: this.props.auditRefs,
+      id: 'performance',
+      score: this.props.score,
+    });
+  };
+
+  Gauge.prototype.componentDidMount = function componentDidMount () {
+    this.refreshGauge();
+  };
+
+  Gauge.prototype.componentDidUpdate = function componentDidUpdate () {
+    this.refreshGauge();
+  };
+
+  Gauge.prototype.render = function render (ref) {
+    var score = ref.score;
+
+    return (
+      h( 'div', { ref: this.ref, class: ("lh-gauge__wrapper lh-gauge__wrapper--" + (calculateRating(score))) },
+        h( 'div', { class: 'lh-gauge__svg-wrapper' },
+          h( 'svg', { class: 'lh-gauge state--expanded' },
+            h( 'g', { class: 'lh-gauge__inner' },
+              h( 'circle', { class: 'lh-gauge__bg' }),
+              h( 'circle', { class: 'lh-gauge__base lh-gauge--faded' }),
+              h( 'circle', { class: 'lh-gauge__arc' }),
+              h( 'text', { class: 'lh-gauge__percentage' })
+            ),
+            h( 'g', { class: 'lh-gauge__outer' },
+              h( 'circle', { class: 'cover' })
+            )
+          )
+        )
+      )
     );
-    const valueAtScore5 = VALUE_AT_QUANTILE(
-      metricScoring.median,
-      metricScoring.falloff,
-      0.05
-    );
+  };
 
-    const min = Math.floor(valueAtScore100 / 1000) * 1000;
-    const max = Math.ceil(valueAtScore5 / 1000) * 1000;
-    elem.min = min;
-    elem.max = max;
+  return Gauge;
+}(m));
 
-    // Special handling for CLS
-    if (metricScoring.units === 'unitless') {
-      elem.min = 0;
-      elem.max = Math.ceil(valueAtScore5 * 100) / 100;
-      elem.step = 0.01;
-    }
+var ScoringGuide = /*@__PURE__*/(function (Component) {
+  function ScoringGuide () {
+    Component.apply(this, arguments);
+  }
 
-    // Restore cached value if available, otherwise generate reasonable random stuff
-    if (localStorage[`metricValues.${container.id}`]) {
-      const cachedValues = JSON.parse(localStorage[`metricValues.${container.id}`]);
-      elem.value = cachedValues[metricId];
-    } else {
-      elem.value = Math.max((Math.random() * (elem.max - elem.min)) / 2, min);
-    }
+  if ( Component ) ScoringGuide.__proto__ = Component;
+  ScoringGuide.prototype = Object.create( Component && Component.prototype );
+  ScoringGuide.prototype.constructor = ScoringGuide;
 
-    const obs = fromEvent(elem, 'input').pipe(startWith(elem));
-    // On value slider change, set text
-    obs.subscribe(eventOrElem => {
-      if (metricScoring.units === 'unitless') {
-        // We always want 2 fractional digits
-        outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-      } else {
-        // Rounded to nearest ten
-        const milliseconds = giveElement(eventOrElem).valueAsNumber;
-        outputElem.textContent = `${numberFormatter.format(milliseconds)}${NBSP}ms`;
-      }
+  ScoringGuide.prototype.render = function render (ref) {
+    var app = ref.app;
+    var name = ref.name;
+    var values = ref.values;
+    var weights = ref.weights;
+
+    // Make sure weights total to 1
+    var weightSum = Object.values(weights).reduce(function (agg, val) { return (agg += val); });
+    console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
+
+    var metrics = Object.keys(weights).map(function (id) {
+      var metricScoring = scoring[id];
+      return {
+        id: id,
+        weight: weights[id],
+        value: values[id],
+        score: Math.round(QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, values[id]) * 100),
+      };
     });
 
-    // On value slider change, set score
-    obs.subscribe(eventOrElem => {
-      if (isManuallyDispatched(eventOrElem)) return;
-      const elem = giveElement(eventOrElem);
-
-      const computedScore = (
-        QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, elem.value) * 100
-      );
-
-      scoreElem.value = computedScore;
-      scoreElem.dispatchEvent(new Event('input'));
+    var auditRefs = metrics.map(function (metric) {
+      return {
+        id: metric.id,
+        weight: metric.weight,
+        group: 'metrics',
+        result: {
+          score: metric.score / 100,
+        },
+      };
     });
 
-    return obs;
-  });
+    var score = arithmeticMean(auditRefs);
+    var maxWeight = Math.max.apply(Math, Object.values(weights));
 
-  // Cache the metric values to localStorage (debounced at 1s)
-  combineLatest(...valueObservers)
-    .pipe(
-      map(([...elems]) => {
-        return Object.fromEntries(
-          elems.map(eventOrElem => {
-            const elem = giveElement(eventOrElem);
-            const metricId = elem.closest('tr').id;
-            return [metricId, elem.value];
+    var title = h( 'h2', null, name );
+    if (name === 'v6') {
+      title = h( 'h2', null, "v6", h( 'i', null, " ", h( 'a', { href: "https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0" }, "beta.0") ) );
+    }
+
+    return h( 'form', { class: "wrapper" },
+      title,
+
+      h( 'table', null,
+        h( 'thead', null,
+          h( 'tr', null,
+            h( 'th', { class: "th--metric", colspan: "2" }),
+            h( 'th', { class: "th--value" }, "Value"),
+            h( 'th', { class: "th--spacer" }),
+            h( 'th', { class: "th--score" }, "Metric Score"),
+            h( 'th', { class: "th--weight" }, "Weighting")
+          )
+        ),
+        h( 'tbody', null,
+          metrics.map(function (metric) {
+            return h( Metric, Object.assign({}, { app: app, maxWeight: maxWeight }, metric))
           })
-        );
-      })
+        )
+      ),
+
+      h( 'div', { class: "perfscore" },
+        h( Gauge, { score: score, auditRefs: auditRefs })
+      )
     )
-    .pipe(debounce(() => interval(200)))
-    .subscribe(values => {
-      localStorage[`metricValues.${container.id}`] = JSON.stringify(values);
-    });
+  };
 
-  // Setup the score sliders
-  const scoreObservers = Array.from(container.$$('input.metric-score')).map(elem => {
-    const metricId = elem.closest('tr').id;
-    const metricScoring = scoring[metricId];
-    const rangeElem = container.$(`.metric-score.${metricId}`);
-    const outputElem = container.$(`.score-output.${metricId}`);
-    const valueElem = container.$(`input.${metricId}.metric-value`);
+  return ScoringGuide;
+}(m));
 
-    const scaledWidth = weights[metricId] / maxWeight;
-    rangeElem.style.width = `${scaledWidth * 100}%`;
+var App = /*@__PURE__*/(function (Component) {
+  function App(props) {
+    Component.call(this, props);
+    this.state = {};
+    for (var id in scoring) {
+      this.state[id] = scoring[id].median;
+    }
+  }
 
-    const obs = fromEvent(rangeElem, 'input').pipe(startWith(rangeElem));
-    obs.subscribe(eventOrElem => {
-      const elem = giveElement(eventOrElem);
-      const score = elem.value;
-      // Set class for icon
-      elem.closest('tr').className = `lh-metric--${calculateRating(score / 100)}`;
-      outputElem.textContent = score;
-    });
+  if ( Component ) App.__proto__ = Component;
+  App.prototype = Object.create( Component && Component.prototype );
+  App.prototype.constructor = App;
 
-    // On score slider change, update values (backwards direction!)
-    obs.subscribe(eventOrElem => {
-      if (isManuallyDispatched(eventOrElem)) return;
-      const elem = giveElement(eventOrElem);
-
-      const currentScore = elem.valueAsNumber;
-      let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, currentScore / 100);
-
-      // // if the new potential value's score is the same as it already is.. don't touch, otherwise the a TTI might be tweaked a few ms.
-      // const computedScore = QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, computedValue) * 100;
-      // if (Math.round(computedScore) === currentScore) return;
-
-      if (metricScoring.units !== 'unitless') {
-        computedValue = (computedValue);
-      }
-
-      // Clamp because we can end up with Infinity
-      valueElem.valueAsNumber = Math.min(computedValue, valueElem.max);
-    });
-
-    return obs;
-  });
-
-  // Compute the perf score
-  combineLatest(...scoreObservers)
-    .pipe(
-      map(([...elems]) => {
-        const auditRefs = elems.map(eventOrElem => {
-          const elem = giveElement(eventOrElem);
-          const metricId = elem.closest('tr').id;
-          return {
-            id: metricId,
-            weight: weights[metricId],
-            group: 'metrics',
-            result: {
-              score: elem.value / 100,
-            },
-          };
-        });
-
-        // return a LHR ReportResult category
-        const category = {
-          "title": "Performance",
-          "auditRefs": auditRefs,
-          id: 'performance',
-          score: arithmeticMean(auditRefs)
-        };
-        return category;
-      })
+  App.prototype.render = function render () {
+    return h( 'div', null,
+      h( ScoringGuide, { app: this, name: "v6", values: this.state, weights: weights.v6 }),
+      h( ScoringGuide, { app: this, name: "v5", values: this.state, weights: weights.v5 })
     )
-    .subscribe(category => {
-      updateGauge(container, category);
-    });
+  };
+
+  return App;
+}(m));
+
+function main2() {
+  if (new URLSearchParams(location.search).has('v6')) {
+    $$1('#v5').hidden = true;
+    $$1('footer').hidden = true;
+    $$1('h1').hidden = true;
+  }
+  else if (new URLSearchParams(location.search).has('v5')) {
+    $$1('#v6').hidden = true;
+    $$1('footer').hidden = true;
+    $$1('h1').hidden = true;
+  }
+  H(h( App, null ), $$1('#container'));
 }
 
-if (new URLSearchParams(location.search).has('v6')) {
-  $('#v5').hidden = true;
-  $('footer').hidden = true;
-  $('h1').hidden = true;
-}
-else if (new URLSearchParams(location.search).has('v5')) {
-  $('#v6').hidden = true;
-  $('footer').hidden = true;
-  $('h1').hidden = true;
-}
-
-main(weights.v6, $('#v6'));
-main(weights.v5, $('#v5'));
+// just one call to main because i'm basic like that
+main2();
 //# sourceMappingURL=calc.js.map
