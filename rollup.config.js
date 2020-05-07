@@ -15,7 +15,10 @@ export default {
     buble({
       jsx: 'h',
       objectAssign: 'Object.assign',
-      transforms: { asyncAwait: false },
+      transforms: {
+        asyncAwait: false,
+        forOf: false,
+      },
 		}),
     commonjs(),
   ]
