@@ -111,7 +111,7 @@ class Gauge extends Component {
     return (
       <div ref={this.ref} class={`lh-gauge__wrapper lh-gauge__wrapper--${calculateRating(score)}`}>
         <div class='lh-gauge__svg-wrapper'>
-          <svg class='lh-gauge'>
+          <svg class='lh-gauge state--expanded'>
             <g class='lh-gauge__inner'>
               <circle class='lh-gauge__bg' />
               <circle class='lh-gauge__base lh-gauge--faded' />
@@ -160,7 +160,7 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v6') {
-      title = <h2>v6<i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0">beta.0</a></i></h2>;
+      title = <h2>v6<i> <a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0">beta.0</a></i></h2>;
     }
 
     return <form class="wrapper">

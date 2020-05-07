@@ -377,7 +377,7 @@ text {
   color: var(--color-fail);
 }
 .state--expanded {
-  color: var(--color-gray-600);
+  /* color: var(--color-gray-600); */
   transition: color .3s;
 }
 .state--highlight {
@@ -434,6 +434,12 @@ text {
   stroke-dasharray: var(--metric-array);
   transition: 0.3s calc(.005s + var(--i)*.05s);
 }
+
+.state--expanded .lh-gauge__base {
+  fill: var(--color-gray-600);
+  stroke: var(--color-gray-600);
+}
+
 .state--expanded .lh-gauge__inner .lh-gauge__arc {
   opacity: 0;
 }

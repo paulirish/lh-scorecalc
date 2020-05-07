@@ -206,7 +206,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   if (SVG.dataset.listenersSetup) return;
   SVG.dataset.listenersSetup = true;
 
-  peekGauge(SVG);
+  // peekGauge(SVG);
 
   /*
     wrapper.state-expanded: gauge is exploded
@@ -249,7 +249,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
       } else {
         const highlighted = SVG.querySelector('.metric--highlight');
 
-        if (parent !== highlighted) {
+        if (highlighted && parent !== highlighted) {
           highlighted.classList.remove('metric--highlight');
           parent.classList.add('metric--highlight');
         }
