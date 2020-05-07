@@ -432,7 +432,7 @@ text {
 .state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: .999;
   stroke-dasharray: var(--metric-array);
-  transition: 0.3s calc(.005s + var(--i)*.05s);
+  transition: 0.3s; /*  calc(.005s + var(--i)*.05s); entrace animation */
 }
 
 .state--expanded .lh-gauge__base {

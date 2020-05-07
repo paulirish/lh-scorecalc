@@ -149,14 +149,14 @@ var weights = {
  * V5/v6 scoring curves
  */
 var scoring = {
-  FCP: {median: 4000, falloff: 2000, name: 'First Contentful Paint'},
-  FMP: {median: 4000, falloff: 2000, name: 'First Meaningful Paint'},
-  SI: {median: 5800, falloff: 2900, name: 'Speed Index'},
-  TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
-  FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
-  TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'},
-  LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'},
-  CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
+  FCP: {median: 4000, falloff: 2000, auditId: 'first-contentful-paint', name: 'First Contentful Paint'},
+  FMP: {median: 4000, falloff: 2000, auditId: 'first-meaningful-paint', name: 'First Meaningful Paint'},
+  SI: {median: 5800, falloff: 2900, auditId: 'speed-index', name: 'Speed Index'},
+  TTI: {median: 7300, falloff: 2900, auditId: 'interactive', name: 'Time to Interactive'},
+  FCI: {median: 6500, falloff: 2900, auditId: 'first-cpu-idle', name: 'First CPU Idle'},
+  TBT: {median: 600, falloff: 200, auditId: 'total-blocking-time', name: 'Total Blocking Time'},
+  LCP: {median: 4000, falloff: 2000, auditId: 'largest-contentful-paint', name: 'Largest Contentful Paint'},
+  CLS: {median: 0.25, falloff: 0.054, auditId: 'cumulative-layout-shift', name: 'Cumulative Layout Shift', units: 'unitless'},
 };
 
 function updateGauge(wrapper, category) {
@@ -639,18 +639,46 @@ var ScoringGuide = /*@__PURE__*/(function (Component) {
   return ScoringGuide;
 }(m));
 
+var debounce = function (callback, time, interval) {
+    if ( time === void 0 ) time = 250;
+
+    return (function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
+
+    clearTimeout(interval);
+    interval = setTimeout(function () { return callback.apply(void 0, args); }, time);
+  });
+};
+
 var App = /*@__PURE__*/(function (Component) {
   function App(props) {
     Component.call(this, props);
-    this.state = {};
-    for (var id in scoring) {
-      this.state[id] = scoring[id].median;
-    }
+    this.state = getInitialState();
   }
 
   if ( Component ) App.__proto__ = Component;
   App.prototype = Object.create( Component && Component.prototype );
   App.prototype.constructor = App;
+
+  App.prototype.componentDidUpdate = function componentDidUpdate () {
+    var this$1 = this;
+
+
+    // debounce just a tad, as its noisy
+    debounce(function (_) {
+      var url = new URL(location.href);
+      var auditIdValuePairs = Object.entries(this$1.state).map(function (ref) {
+        var id = ref[0];
+        var value = ref[1];
+
+        return [scoring[id].auditId,value];
+      });
+      var params = new URLSearchParams(auditIdValuePairs);
+      url.hash = params.toString();
+      history.replaceState(this$1.state, '', url.toString());
+    })();
+  };
 
   App.prototype.render = function render () {
     return h( 'div', null,
@@ -662,20 +690,29 @@ var App = /*@__PURE__*/(function (Component) {
   return App;
 }(m));
 
-function main2() {
-  if (new URLSearchParams(location.search).has('v6')) {
-    $$1('#v5').hidden = true;
-    $$1('footer').hidden = true;
-    $$1('h1').hidden = true;
+function getInitialState() {
+  var state = {};
+
+  // Set defaults as median.
+  for (var id in scoring) {
+    state[id] = scoring[id].median;
   }
-  else if (new URLSearchParams(location.search).has('v5')) {
-    $$1('#v6').hidden = true;
-    $$1('footer').hidden = true;
-    $$1('h1').hidden = true;
+
+  // Load from query string.
+  var params = new URLSearchParams(location.hash.substr(1));
+  for (var [id$1, metric] of Object.entries(scoring)) {
+    if (!params.has(metric.auditId)) { continue; }
+    var value = Number(params.get(metric.auditId));
+    state[id$1] = value;
   }
+
+  return state;
+}
+
+function main() {
   H(h( App, null ), $$1('#container'));
 }
 
 // just one call to main because i'm basic like that
-main2();
+main();
 //# sourceMappingURL=calc.js.map
