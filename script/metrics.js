@@ -25,12 +25,12 @@ export const weights = {
  * V5/v6 scoring curves
  */
 export const scoring = {
-  FCP: {median: 4000, falloff: 2000, name: 'First Contentful Paint'},
-  FMP: {median: 4000, falloff: 2000, name: 'First Meaningful Paint'},
-  SI: {median: 5800, falloff: 2900, name: 'Speed Index'},
-  TTI: {median: 7300, falloff: 2900, name: 'Time to Interactive'},
-  FCI: {median: 6500, falloff: 2900, name: 'First CPU Idle'},
-  TBT: {median: 600, falloff: 200, name: 'Total Blocking Time'},
-  LCP: {median: 4000, falloff: 2000, name: 'Largest Contentful Paint'},
-  CLS: {median: 0.25, falloff: 0.054, name: 'Cumulative Layout Shift', units: 'unitless'},
+  FCP: {median: 4000, falloff: 2000, auditId: 'first-contentful-paint', name: 'First Contentful Paint'},
+  FMP: {median: 4000, falloff: 2000, auditId: 'first-meaningful-paint', name: 'First Meaningful Paint'},
+  SI: {median: 5800, falloff: 2900, auditId: 'speed-index', name: 'Speed Index'},
+  TTI: {median: 7300, falloff: 2900, auditId: 'interactive', name: 'Time to Interactive'},
+  FCI: {median: 6500, falloff: 2900, auditId: 'first-cpu-idle', name: 'First CPU Idle'},
+  TBT: {median: 600, falloff: 200, auditId: 'total-blocking-time', name: 'Total Blocking Time'},
+  LCP: {median: 4000, falloff: 2000, auditId: 'largest-contentful-paint', name: 'Largest Contentful Paint'},
+  CLS: {median: 0.25, falloff: 0.054, auditId: 'cumulative-layout-shift', name: 'Cumulative Layout Shift', units: 'unitless'},
 };

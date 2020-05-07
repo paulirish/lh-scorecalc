@@ -1,7 +1,7 @@
 import { h, render, createRef, Component } from 'preact';
 import { QUANTILE_AT_VALUE, VALUE_AT_QUANTILE } from './math.js';
 import { $, calculateRating, arithmeticMean } from './util.js';
-import { weights as WEIGHTS, scoring, weights } from './metrics.js';
+import { weights as WEIGHTS, scoring } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
 function determineMinMax(metricId) {
@@ -190,13 +190,28 @@ class ScoringGuide extends Component {
   }
 }
 
+const debounce = (callback, time = 250, interval) =>
+  ((...args) => {
+    clearTimeout(interval);
+    interval = setTimeout(() => callback(...args), time);
+  });
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    for (const id in scoring) {
-      this.state[id] = scoring[id].median;
-    }
+    this.state = getInitialState();
+  }
+
+  componentDidUpdate() {
+
+    // debounce just a tad, as its noisy
+    debounce(_ => {
+      const url = new URL(location.href);
+      const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => [scoring[id].auditId,value]);
+      const params = new URLSearchParams(auditIdValuePairs);
+      url.hash = params.toString();
+      history.replaceState(this.state, '', url.toString());
+    })();
   }
 
   render() {
@@ -207,19 +222,28 @@ class App extends Component {
   }
 }
 
-function main2() {
-  if (new URLSearchParams(location.search).has('v6')) {
-    $('#v5').hidden = true;
-    $('footer').hidden = true;
-    $('h1').hidden = true;
+function getInitialState() {
+  const state = {};
+
+  // Set defaults as median.
+  for (const id in scoring) {
+    state[id] = scoring[id].median;
   }
-  else if (new URLSearchParams(location.search).has('v5')) {
-    $('#v6').hidden = true;
-    $('footer').hidden = true;
-    $('h1').hidden = true;
+
+  // Load from query string.
+  const params = new URLSearchParams(location.hash.substr(1));
+  for (const [id, metric] of Object.entries(scoring)) {
+    if (!params.has(metric.auditId)) continue;
+    const value = Number(params.get(metric.auditId));
+    state[id] = value;
   }
+
+  return state;
+}
+
+function main() {
   render(<App></App>, $('#container'));
 }
 
 // just one call to main because i'm basic like that
-main2();
+main();
