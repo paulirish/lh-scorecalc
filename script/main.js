@@ -1,241 +1,225 @@
-import {QUANTILE_AT_VALUE, VALUE_AT_QUANTILE} from './math.js';
-import {fromEvent, combineLatest, interval} from 'rxjs';
-import {map, startWith, debounce} from 'rxjs/operators';
-import {$, $$, calculateRating, arithmeticMean, NBSP, numberFormatter} from './util.js';
-import {weights, scoring} from './metrics.js';
+import { h, render, createRef, Component } from 'preact';
+import { QUANTILE_AT_VALUE, VALUE_AT_QUANTILE } from './math.js';
+import { $, calculateRating, arithmeticMean } from './util.js';
+import { weights as WEIGHTS, scoring, weights } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
+function determineMinMax(metricId) {
+  const metricScoring = scoring[metricId];
 
-function main(weights, container) {
-  // Nake sure weights total to 1
-  const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
-  console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
-  const maxWeight = Math.max(...Object.values(weights));
+  const valueAtScore100 = VALUE_AT_QUANTILE(
+    metricScoring.median,
+    metricScoring.falloff,
+    0.995
+  );
+  const valueAtScore5 = VALUE_AT_QUANTILE(
+    metricScoring.median,
+    metricScoring.falloff,
+    0.05
+  );
 
-  // The observables are initiated (via startWith) an element, but after that they get events. This normalizes.
-  const giveElement = eventOrElem =>
-    eventOrElem instanceof Event ? eventOrElem.target : eventOrElem;
+  let min = Math.floor(valueAtScore100 / 1000) * 1000;
+  let max = Math.ceil(valueAtScore5 / 1000) * 1000;
+  let step = 10;
 
-  // Gotta avoid infinite loop since we dispatchEvent ourselves
-  const isManuallyDispatched = eventOrElem =>
-    eventOrElem instanceof Event && !eventOrElem.isTrusted;
-
-  const html = Object.keys(weights)
-    .map(id => {
-      const name = scoring[id].name;
-      return createRow(id, name);
-    })
-    .join('');
-
-  container.$('tbody').innerHTML = html;
-
-  function createRow(id, name) {
-    return `
-  <tr id="${id}">
-    <td>
-      <span class="lh-metric__score-icon"></span>
-    </td>
-    <td>${id} (${name})</td>
-    <td>
-      <input type="range" step=10 class="${id} metric-value" />
-      <output class="${id} value-output"></output>
-    </td>
-    <td></td>
-
-    <td>
-      <input type="range" class="${id} metric-score"/>
-      <output class="${id} score-output"></output>
-    </td>
-
-    <td>
-      <span class="${id} weight-text"></span>
-    </td>
-  </tr>`;
+  // Special handling for CLS
+  if (metricScoring.units === 'unitless') {
+    min = 0;
+    max = Math.ceil(valueAtScore5 * 100) / 100;
+    step = 0.01;
   }
 
-  // stamp out perf gauge
-  const tmpl = document.querySelector('#tmpl-lh-perf-gauge-explodey');
-  const tmplElem = document.importNode(tmpl.content, true);
-  container.$('.perfscore').append(tmplElem);
+  return {
+    min,
+    max,
+    step,
+  };
+}
 
-  // Set weighting column
-  container.$$('.weight-text').forEach(elem => {
-    const metricId = elem.closest('tr').id;
-    const weightStr = (weights[metricId] * 100).toLocaleString(undefined, {maximumFractionDigits: 1});
-    elem.textContent = `${weightStr}%`;
-  });
+class Metric extends Component {
+  onValueChange(e, id) {
+    this.props.app.setState({
+      [id]: e.target.valueAsNumber,
+    });
+  }
 
-  // Set up value sliders
-  const valueObservers = Array.from(container.$$('input.metric-value')).map(elem => {
-    const metricId = elem.closest('tr').id;
-    const metricScoring = scoring[metricId];
-    const outputElem = container.$(`.value-output.${metricId}`);
-    const scoreElem = container.$(`input.${metricId}.metric-score`);
+  onScoreChange(e, id) {
+    const score = e.target.valueAsNumber;
+    const metricScoring = scoring[id];
+    let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, score / 100);
 
-    // Calibrate min & max using scoring curve
-    const valueAtScore100 = VALUE_AT_QUANTILE(
-      metricScoring.median,
-      metricScoring.falloff,
-      0.995
+    // Clamp because we can end up with Infinity
+    const { min, max } = determineMinMax(id);
+    computedValue = Math.max(Math.min(computedValue, max), min);
+
+    this.props.app.setState({
+      [id]: Math.round(computedValue),
+    });
+  }
+
+  render({ id, value, weight, maxWeight, score }) {
+    const { min, max, step } = determineMinMax(id);
+    const name = scoring[id].name;
+
+    return <tr class={`lh-metric--${calculateRating(score / 100)}`}>
+      <td>
+        <span class="lh-metric__score-icon"></span>
+      </td>
+      <td>{`${id} (${name})`}</td>
+      <td>
+        <input type="range" min={min} value={value} max={max} step={step} class={`${id} metric-value`} onInput={(e) => this.onValueChange(e, id)} />
+        <output class="${id} value-output">{value}</output>
+      </td>
+      <td></td>
+
+      <td>
+        <input type="range" class={`${id} metric-score`} style={`width: ${weight / maxWeight * 100}%`} value={score} onInput={(e) => this.onScoreChange(e, id)} />
+        <output class={`${id} score-output`}>{score}</output>
+      </td>
+
+      <td>
+        <span class={`${id} weight-text`}>{Math.round(weight * 10000) / 100}%</span>
+      </td>
+    </tr>
+  }
+}
+
+class Gauge extends Component {
+  constructor(props) {
+    super(props);
+    this.ref = createRef();
+  }
+
+  refreshGauge() {
+    updateGauge(this.ref.current, {
+      title: 'Performance',
+      auditRefs: this.props.auditRefs,
+      id: 'performance',
+      score: this.props.score,
+    });
+  }
+
+  componentDidMount() {
+    this.refreshGauge();
+  }
+
+  componentDidUpdate() {
+    this.refreshGauge();
+  }
+
+  render({ score }) {
+    return (
+      <div ref={this.ref} class={`lh-gauge__wrapper lh-gauge__wrapper--${calculateRating(score)}`}>
+        <div class='lh-gauge__svg-wrapper'>
+          <svg class='lh-gauge'>
+            <g class='lh-gauge__inner'>
+              <circle class='lh-gauge__bg' />
+              <circle class='lh-gauge__base lh-gauge--faded' />
+              <circle class='lh-gauge__arc' />
+              <text class='lh-gauge__percentage'></text>
+            </g>
+            <g class='lh-gauge__outer'>
+              <circle class='cover' />
+            </g>
+          </svg>
+        </div>
+      </div>
     );
-    const valueAtScore5 = VALUE_AT_QUANTILE(
-      metricScoring.median,
-      metricScoring.falloff,
-      0.05
-    );
+  }
+}
 
-    const min = Math.floor(valueAtScore100 / 1000) * 1000;
-    const max = Math.ceil(valueAtScore5 / 1000) * 1000;
-    elem.min = min;
-    elem.max = max;
+class ScoringGuide extends Component {
+  render({ app, name, values, weights }) {
+    // Make sure weights total to 1
+    const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
+    console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
 
-    // Special handling for CLS
-    if (metricScoring.units === 'unitless') {
-      elem.min = 0;
-      elem.max = Math.ceil(valueAtScore5 * 100) / 100;
-      elem.step = 0.01;
+    const metrics = Object.keys(weights).map(id => {
+      const metricScoring = scoring[id];
+      return {
+        id,
+        weight: weights[id],
+        value: values[id],
+        score: Math.round(QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, values[id]) * 100),
+      };
+    });
+
+    const auditRefs = metrics.map(metric => {
+      return {
+        id: metric.id,
+        weight: metric.weight,
+        group: 'metrics',
+        result: {
+          score: metric.score / 100,
+        },
+      };
+    });
+
+    const score = arithmeticMean(auditRefs);
+    const maxWeight = Math.max(...Object.values(weights));
+
+    let title = <h2>{name}</h2>;
+    if (name === 'v6') {
+      title = <h2>v6<i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0">beta.0</a></i></h2>;
     }
 
-    // Restore cached value if available, otherwise generate reasonable random stuff
-    if (localStorage[`metricValues.${container.id}`]) {
-      const cachedValues = JSON.parse(localStorage[`metricValues.${container.id}`]);
-      elem.value = cachedValues[metricId];
-    } else {
-      elem.value = Math.max((Math.random() * (elem.max - elem.min)) / 2, min);
+    return <form class="wrapper">
+      {title}
+
+      <table>
+        <thead>
+          <tr>
+            <th class="th--metric" colspan="2"></th>
+            <th class="th--value">Value</th>
+            <th class="th--spacer"></th>
+            <th class="th--score">Metric Score</th>
+            <th class="th--weight">Weighting</th>
+          </tr>
+        </thead>
+        <tbody>
+          {metrics.map(metric => {
+            return <Metric app={app} maxWeight={maxWeight} {...metric}></Metric>
+          })}
+        </tbody>
+      </table>
+
+      <div class="perfscore">
+        <Gauge score={score} auditRefs={auditRefs}></Gauge>
+      </div>
+    </form>
+  }
+}
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    for (const id in scoring) {
+      this.state[id] = scoring[id].median;
     }
+  }
 
-    const obs = fromEvent(elem, 'input').pipe(startWith(elem));
-    // On value slider change, set text
-    obs.subscribe(eventOrElem => {
-      if (metricScoring.units === 'unitless') {
-        // We always want 2 fractional digits
-        outputElem.textContent = giveElement(eventOrElem).valueAsNumber.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-      } else {
-        // Rounded to nearest ten
-        const milliseconds = giveElement(eventOrElem).valueAsNumber;
-        outputElem.textContent = `${numberFormatter.format(milliseconds)}${NBSP}ms`;
-      }
-    });
-
-    // On value slider change, set score
-    obs.subscribe(eventOrElem => {
-      if (isManuallyDispatched(eventOrElem)) return;
-      const elem = giveElement(eventOrElem);
-
-      const computedScore = (
-        QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, elem.value) * 100
-      );
-
-      scoreElem.value = computedScore;
-      scoreElem.dispatchEvent(new Event('input'));
-    });
-
-    return obs;
-  });
-
-  // Cache the metric values to localStorage (debounced at 1s)
-  combineLatest(...valueObservers)
-    .pipe(
-      map(([...elems]) => {
-        return Object.fromEntries(
-          elems.map(eventOrElem => {
-            const elem = giveElement(eventOrElem);
-            const metricId = elem.closest('tr').id;
-            return [metricId, elem.value];
-          })
-        );
-      })
-    )
-    .pipe(debounce(() => interval(200)))
-    .subscribe(values => {
-      localStorage[`metricValues.${container.id}`] = JSON.stringify(values);
-    });
-
-  // Setup the score sliders
-  const scoreObservers = Array.from(container.$$('input.metric-score')).map(elem => {
-    const metricId = elem.closest('tr').id;
-    const metricScoring = scoring[metricId];
-    const rangeElem = container.$(`.metric-score.${metricId}`);
-    const outputElem = container.$(`.score-output.${metricId}`);
-    const valueElem = container.$(`input.${metricId}.metric-value`);
-
-    const scaledWidth = weights[metricId] / maxWeight;
-    rangeElem.style.width = `${scaledWidth * 100}%`;
-
-    const obs = fromEvent(rangeElem, 'input').pipe(startWith(rangeElem));
-    obs.subscribe(eventOrElem => {
-      const elem = giveElement(eventOrElem);
-      const score = elem.value;
-      // Set class for icon
-      elem.closest('tr').className = `lh-metric--${calculateRating(score / 100)}`;
-      outputElem.textContent = score;
-    });
-
-    // On score slider change, update values (backwards direction!)
-    obs.subscribe(eventOrElem => {
-      if (isManuallyDispatched(eventOrElem)) return;
-      const elem = giveElement(eventOrElem);
-
-      const currentScore = elem.valueAsNumber;
-      let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, currentScore / 100);
-
-      // // if the new potential value's score is the same as it already is.. don't touch, otherwise the a TTI might be tweaked a few ms.
-      // const computedScore = QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, computedValue) * 100;
-      // if (Math.round(computedScore) === currentScore) return;
-
-      if (metricScoring.units !== 'unitless') {
-        computedValue = (computedValue);
-      }
-
-      // Clamp because we can end up with Infinity
-      valueElem.valueAsNumber = Math.min(computedValue, valueElem.max);
-    });
-
-    return obs;
-  });
-
-  // Compute the perf score
-  combineLatest(...scoreObservers)
-    .pipe(
-      map(([...elems]) => {
-        const auditRefs = elems.map(eventOrElem => {
-          const elem = giveElement(eventOrElem);
-          const metricId = elem.closest('tr').id;
-          return {
-            id: metricId,
-            weight: weights[metricId],
-            group: 'metrics',
-            result: {
-              score: elem.value / 100,
-            },
-          };
-        });
-
-        // return a LHR ReportResult category
-        const category = {
-          "title": "Performance",
-          "auditRefs": auditRefs,
-          id: 'performance',
-          score: arithmeticMean(auditRefs)
-        };
-        return category;
-      })
-    )
-    .subscribe(category => {
-      updateGauge(container, category);
-    });
+  render() {
+    return <div>
+      <ScoringGuide app={this} name="v6" values={this.state} weights={WEIGHTS.v6}></ScoringGuide>
+      <ScoringGuide app={this} name="v5" values={this.state} weights={WEIGHTS.v5}></ScoringGuide>
+    </div>
+  }
 }
 
-if (new URLSearchParams(location.search).has('v6')) {
-  $('#v5').hidden = true;
-  $('footer').hidden = true;
-  $('h1').hidden = true;
-}
-else if (new URLSearchParams(location.search).has('v5')) {
-  $('#v6').hidden = true;
-  $('footer').hidden = true;
-  $('h1').hidden = true;
+function main2() {
+  if (new URLSearchParams(location.search).has('v6')) {
+    $('#v5').hidden = true;
+    $('footer').hidden = true;
+    $('h1').hidden = true;
+  }
+  else if (new URLSearchParams(location.search).has('v5')) {
+    $('#v6').hidden = true;
+    $('footer').hidden = true;
+    $('h1').hidden = true;
+  }
+  render(<App></App>, $('#container'));
 }
 
-main(weights.v6, $('#v6'));
-main(weights.v5, $('#v5'));
+// just one call to main because i'm basic like that
+main2();
