@@ -198,11 +198,14 @@ class App extends Component {
 
   componentDidUpdate() {
     const url = new URL(location.href);
-    let params = {};
+
+    const params = new URLSearchParams();
     for (const [id, value] of Object.entries(this.state)) {
       const metric = scoring[id];
-      url.searchParams.set(metric.auditId, value);
+      params.set(metric.auditId, value);
     }
+    url.hash = params.toString();
+
     history.replaceState(this.state, '', url.toString());
   }
 
@@ -223,7 +226,7 @@ function getInitialState() {
   }
 
   // Load from query string.
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(location.hash.substr(1));
   for (const [id, metric] of Object.entries(scoring)) {
     if (!params.has(metric.auditId)) continue;
     const value = Number(params.get(metric.auditId));
