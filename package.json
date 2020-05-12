@@ -7,7 +7,7 @@
     "watch": "find . script -depth 1 -type f | entr yarn build",
     "build": "rollup -c",
     "clean": "rm -rf dist",
-    "deploy:ghpages": "yarn gh-pages --dist dist",
+    "deploy:ghpages": "yarn gh-pages --dist dist --repo git@github.com:GoogleChrome/lighthouse.git --dest scorecalc --add --message scorecalc-update",
     "deploy:copy": "mkdir -p dist && cp -r index.html *.css calc.* dist",
     "deploy": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:ghpages",
     "test": "echo \"Error: no test specified\" && exit 1"
