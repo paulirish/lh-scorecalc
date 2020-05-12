@@ -1,6 +1,6 @@
 import { h, render, createRef, Component } from 'preact';
 import { QUANTILE_AT_VALUE, VALUE_AT_QUANTILE } from './math.js';
-import { $, calculateRating, arithmeticMean } from './util.js';
+import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './util.js';
 import { weights as WEIGHTS, scoring } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
@@ -59,16 +59,21 @@ class Metric extends Component {
 
   render({ id, value, weight, maxWeight, score }) {
     const { min, max, step } = determineMinMax(id);
-    const name = scoring[id].name;
+    const metricScoring = scoring[id];
+    const valueFormatted = metricScoring.units === 'unitless' ?
+      value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) :
+      // TODO: Use https://github.com/tc39/proposal-unified-intl-numberformat#i-units when Safari/FF support it
+      `${numberFormatter.format(value)}${NBSP}ms`;
+    const weightFormatted = (weight * 100).toLocaleString(undefined, {maximumFractionDigits: 1});
 
     return <tr class={`lh-metric--${calculateRating(score / 100)}`}>
       <td>
         <span class="lh-metric__score-icon"></span>
       </td>
-      <td>{`${id} (${name})`}</td>
+      <td>{`${id} (${metricScoring.name})`}</td>
       <td>
         <input type="range" min={min} value={value} max={max} step={step} class={`${id} metric-value`} onInput={(e) => this.onValueChange(e, id)} />
-        <output class="${id} value-output">{value}</output>
+        <output class="${id} value-output">{valueFormatted}</output>
       </td>
       <td></td>
 
@@ -78,7 +83,7 @@ class Metric extends Component {
       </td>
 
       <td>
-        <span class={`${id} weight-text`}>{Math.round(weight * 10000) / 100}%</span>
+        <span class={`${id} weight-text`}>{weightFormatted}%</span>
       </td>
     </tr>
   }
