@@ -4,6 +4,8 @@ import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './uti
 import { weights as WEIGHTS, scoring } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
+const params = new URLSearchParams(location.hash.substr(1));
+
 function determineMinMax(metricId) {
   const metricScoring = scoring[metricId];
 
@@ -34,6 +36,13 @@ function determineMinMax(metricId) {
     max,
     step,
   };
+}
+
+/**
+ * @param {string} version
+ */
+function getMajorVersion(version) {
+  return version.split('.')[0];
 }
 
 class Metric extends Component {
@@ -208,7 +217,6 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-
     // debounce just a tad, as its noisy
     debounce(_ => {
       const url = new URL(location.href);
@@ -220,9 +228,14 @@ class App extends Component {
   }
 
   render() {
+    const versions = params.has('version') ?
+      params.get('version').split(',').map(getMajorVersion) :
+      ['6', '5'];
+    const scoringGuides = versions.map(version => {
+      return <ScoringGuide app={this} name={`v${version}`} values={this.state} weights={WEIGHTS.v6}></ScoringGuide>;
+    });
     return <div>
-      <ScoringGuide app={this} name="v6" values={this.state} weights={WEIGHTS.v6}></ScoringGuide>
-      <ScoringGuide app={this} name="v5" values={this.state} weights={WEIGHTS.v5}></ScoringGuide>
+      {scoringGuides}
     </div>
   }
 }
@@ -236,7 +249,6 @@ function getInitialState() {
   }
 
   // Load from query string.
-  const params = new URLSearchParams(location.hash.substr(1));
   for (const [id, metric] of Object.entries(scoring)) {
     if (!params.has(metric.auditId)) continue;
     const value = Number(params.get(metric.auditId));
