@@ -52,8 +52,12 @@ class Metric extends Component {
     const { min, max } = determineMinMax(id);
     computedValue = Math.max(Math.min(computedValue, max), min);
 
+    if (metricScoring.units !== 'unitless') {
+      computedValue = Math.round(computedValue);
+    }
+
     this.props.app.setState({
-      [id]: Math.round(computedValue),
+      [id]: computedValue,
     });
   }
 
