@@ -1,14 +1,12 @@
 import { h, render, createRef, Component } from 'preact';
 import { QUANTILE_AT_VALUE, VALUE_AT_QUANTILE } from './math.js';
 import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './util.js';
-import { weights as WEIGHTS, scoring } from './metrics.js';
+import { scoringGuides } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
 const params = new URLSearchParams(location.hash.substr(1));
 
-function determineMinMax(metricId) {
-  const metricScoring = scoring[metricId];
-
+function determineMinMax(metricScoring) {
   const valueAtScore100 = VALUE_AT_QUANTILE(
     metricScoring.median,
     metricScoring.falloff,
@@ -46,19 +44,22 @@ function getMajorVersion(version) {
 }
 
 class Metric extends Component {
-  onValueChange(e, id) {
+  onValueChange(e) {
+    const {id} = this.props;
+
     this.props.app.setState({
       [id]: e.target.valueAsNumber,
     });
   }
 
-  onScoreChange(e, id) {
+  onScoreChange(e) {
+    const {id, metricScoring} = this.props;
+
     const score = e.target.valueAsNumber;
-    const metricScoring = scoring[id];
     let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, score / 100);
 
     // Clamp because we can end up with Infinity
-    const { min, max } = determineMinMax(id);
+    const { min, max } = determineMinMax(metricScoring);
     computedValue = Math.max(Math.min(computedValue, max), min);
 
     this.props.app.setState({
@@ -66,9 +67,9 @@ class Metric extends Component {
     });
   }
 
-  render({ id, value, weight, maxWeight, score }) {
-    const { min, max, step } = determineMinMax(id);
-    const metricScoring = scoring[id];
+  render({ id, value, score, weightMax, metricScoring }) {
+    const { min, max, step } = determineMinMax(metricScoring, id);
+    const weight = metricScoring.weight;
     const valueFormatted = metricScoring.units === 'unitless' ?
       value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) :
       // TODO: Use https://github.com/tc39/proposal-unified-intl-numberformat#i-units when Safari/FF support it
@@ -81,13 +82,13 @@ class Metric extends Component {
       </td>
       <td>{`${id} (${metricScoring.name})`}</td>
       <td>
-        <input type="range" min={min} value={value} max={max} step={step} class={`${id} metric-value`} onInput={(e) => this.onValueChange(e, id)} />
+        <input type="range" min={min} value={value} max={max} step={step} class={`${id} metric-value`} onInput={(e) => this.onValueChange(e)} />
         <output class="${id} value-output">{valueFormatted}</output>
       </td>
       <td></td>
 
       <td>
-        <input type="range" class={`${id} metric-score`} style={`width: ${weight / maxWeight * 100}%`} value={score} onInput={(e) => this.onScoreChange(e, id)} />
+        <input type="range" class={`${id} metric-score`} style={`width: ${weight / weightMax * 100}%`} value={score} onInput={(e) => this.onScoreChange(e)} />
         <output class={`${id} score-output`}>{score}</output>
       </td>
 
@@ -143,16 +144,18 @@ class Gauge extends Component {
 }
 
 class ScoringGuide extends Component {
-  render({ app, name, values, weights }) {
+  render({ app, name, values, scoring }) {
     // Make sure weights total to 1
-    const weightSum = Object.values(weights).reduce((agg, val) => (agg += val));
+    const weights = Object.values(scoring).map(metricScoring => metricScoring.weight);
+    const weightSum = weights.reduce((agg, val) => (agg += val));
+    const weightMax = Math.max(...Object.values(weights));
     console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
 
-    const metrics = Object.keys(weights).map(id => {
+    const metrics = Object.keys(scoring).map(id => {
       const metricScoring = scoring[id];
       return {
         id,
-        weight: weights[id],
+        metricScoring,
         value: values[id],
         score: Math.round(QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, values[id]) * 100),
       };
@@ -161,7 +164,7 @@ class ScoringGuide extends Component {
     const auditRefs = metrics.map(metric => {
       return {
         id: metric.id,
-        weight: metric.weight,
+        weight: metric.metricScoring.weight,
         group: 'metrics',
         result: {
           score: metric.score / 100,
@@ -170,7 +173,6 @@ class ScoringGuide extends Component {
     });
 
     const score = arithmeticMean(auditRefs);
-    const maxWeight = Math.max(...Object.values(weights));
 
     let title = <h2>{name}</h2>;
     if (name === 'v6') {
@@ -192,7 +194,7 @@ class ScoringGuide extends Component {
         </thead>
         <tbody>
           {metrics.map(metric => {
-            return <Metric app={app} maxWeight={maxWeight} {...metric}></Metric>
+            return <Metric app={app} weightMax={weightMax} metricScoring={metric.metricScoring} {...metric}></Metric>
           })}
         </tbody>
       </table>
@@ -220,7 +222,10 @@ class App extends Component {
     // debounce just a tad, as its noisy
     debounce(_ => {
       const url = new URL(location.href);
-      const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => [scoring[id].auditId,value]);
+      const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => {
+        const auditId = (scoringGuides.v5[id] || scoringGuides.v6[id]).auditId;
+        return [auditId, value];
+      });
       const params = new URLSearchParams(auditIdValuePairs);
       url.hash = params.toString();
       history.replaceState(this.state, '', url.toString());
@@ -232,11 +237,12 @@ class App extends Component {
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
-    const scoringGuides = versions.map(version => {
-      return <ScoringGuide app={this} name={`v${version}`} values={this.state} weights={WEIGHTS.v6}></ScoringGuide>;
+    const scoringGuideEls = versions.map(version => {
+      const key = `v${version}`;
+      return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key]}></ScoringGuide>;
     });
     return <div>
-      {scoringGuides}
+      {scoringGuideEls}
     </div>
   }
 }
@@ -245,14 +251,15 @@ function getInitialState() {
   const state = {};
 
   // Set defaults as median.
-  for (const id in scoring) {
-    state[id] = scoring[id].median;
+  const metricScorings = {...scoringGuides.v6, ...scoringGuides.v5};
+  for (const id in metricScorings) {
+    state[id] = metricScorings[id].median;
   }
 
   // Load from query string.
-  for (const [id, metric] of Object.entries(scoring)) {
-    if (!params.has(metric.auditId)) continue;
-    const value = Number(params.get(metric.auditId));
+  for (const [id, metricScoring] of Object.entries(metricScorings)) {
+    if (!params.has(metricScoring.auditId)) continue;
+    const value = Number(params.get(metricScoring.auditId));
     state[id] = value;
   }
 
