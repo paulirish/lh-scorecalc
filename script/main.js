@@ -228,6 +228,7 @@ class App extends Component {
   }
 
   render() {
+    // URL can specify which versions we'll show. Default to 6 and 5.
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
