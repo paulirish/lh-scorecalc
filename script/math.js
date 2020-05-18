@@ -85,4 +85,3 @@ export function VALUE_AT_QUANTILE({median, podr, p10}, quantile) {
 
   return Math.exp(location + shape * Math.SQRT2 * internalErfInv_(1 - 2 * quantile));
 }
-
