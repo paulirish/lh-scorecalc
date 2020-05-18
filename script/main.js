@@ -7,16 +7,8 @@ import { updateGauge } from './gauge.js';
 const params = new URLSearchParams(location.hash.substr(1));
 
 function determineMinMax(metricScoring) {
-  const valueAtScore100 = VALUE_AT_QUANTILE(
-    metricScoring.median,
-    metricScoring.falloff,
-    0.995
-  );
-  const valueAtScore5 = VALUE_AT_QUANTILE(
-    metricScoring.median,
-    metricScoring.falloff,
-    0.05
-  );
+  const valueAtScore100 = VALUE_AT_QUANTILE(metricScoring, 0.995);
+  const valueAtScore5 = VALUE_AT_QUANTILE(metricScoring, 0.05);
 
   let min = Math.floor(valueAtScore100 / 1000) * 1000;
   let max = Math.ceil(valueAtScore5 / 1000) * 1000;
@@ -56,7 +48,7 @@ class Metric extends Component {
     const {id, metricScoring} = this.props;
 
     const score = e.target.valueAsNumber;
-    let computedValue = VALUE_AT_QUANTILE(metricScoring.median, metricScoring.falloff, score / 100);
+    let computedValue = VALUE_AT_QUANTILE(metricScoring, score / 100);
 
     // Clamp because we can end up with Infinity
     const { min, max } = determineMinMax(metricScoring);
@@ -161,7 +153,7 @@ class ScoringGuide extends Component {
         id,
         metricScoring,
         value: values[id],
-        score: Math.round(QUANTILE_AT_VALUE(metricScoring.median, metricScoring.falloff, values[id]) * 100),
+        score: Math.round(QUANTILE_AT_VALUE(metricScoring, values[id]) * 100),
       };
     });
 
@@ -240,9 +232,10 @@ class App extends Component {
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
+    const device = params.get('device') || 'mobile';;
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
-      return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key]}></ScoringGuide>;
+      return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
     return <div>
       {scoringGuideEls}

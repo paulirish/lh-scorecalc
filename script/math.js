@@ -26,19 +26,22 @@ function internalErf_(x) {
  * quantile (1-percentile) of that distribution at value. All
  * arguments should be in the same units (e.g. milliseconds).
  *
- * @param {number} median
- * @param {number} falloff
+ * @param {{median: number, podr?: number, p10?: number}} curve
  * @param {number} value
  * @return The complement of the quantile at value.
  * @customfunction
  */
-export function QUANTILE_AT_VALUE(median, falloff, value) {
+export function QUANTILE_AT_VALUE({median, podr, p10}, value) {
+  if (!podr) {
+    podr = p10; // lol TODO
+  }
+
   var location = Math.log(median);
 
-  // The "falloff" value specified the location of the smaller of the positive
+  // The "podr" value specified the location of the smaller of the positive
   // roots of the third derivative of the log-normal CDF. Calculate the shape
   // parameter in terms of that value and the median.
-  var logRatio = Math.log(falloff / median);
+  var logRatio = Math.log(podr / median);
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
 
   var standardizedX = (Math.log(value) - location) / (Math.SQRT2 * shape);
@@ -63,19 +66,21 @@ function internalErfInv_(x) {
 }
 
 /**
- * Calculates the value at the given quantile. Median, falloff, and
+ * Calculates the value at the given quantile. Median, podr, and
  * expected value should all be in the same units (e.g. milliseconds).
  * quantile should be within [0,1].
  *
- * @param {number} median
- * @param {number} falloff
- * @param {number} quantile
+ * @param {{median: number, podr?: number, p10?: number}} curve
  * @return The value at this quantile.
  * @customfunction
  */
-export function VALUE_AT_QUANTILE(median, falloff, quantile) {
+export function VALUE_AT_QUANTILE({median, podr, p10}, quantile) {
+  if (!podr) {
+    podr = p10; // lol TODO
+  }
+
   var location = Math.log(median);
-  var logRatio = Math.log(falloff / median);
+  var logRatio = Math.log(podr / median);
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
 
   return Math.exp(location + shape * Math.SQRT2 * internalErfInv_(1 - 2 * quantile));
