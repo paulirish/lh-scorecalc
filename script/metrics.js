@@ -5,9 +5,11 @@ export const metrics = {
   TTI: {auditId: 'interactive', name: 'Time to Interactive'},
   TBT: {auditId: 'total-blocking-time', name: 'Total Blocking Time'},
   CLS: {auditId: 'cumulative-layout-shift', name: 'Cumulative Layout Shift', units: 'unitless'},
+  FMP: {auditId: 'first-meaningful-paint', name: 'First Meaningful Paint'},
+  FCI: {auditId: 'first-cpu-idle', name: 'First CPU Idle'},
 };
 
-const curves = {
+export const curves = {
   v6: {
     mobile: {
       FCP: {weight: 0.15, median: 4000, p10: 2336},

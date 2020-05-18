@@ -1,7 +1,7 @@
 import { h, render, createRef, Component } from 'preact';
 import { QUANTILE_AT_VALUE, VALUE_AT_QUANTILE } from './math.js';
 import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './util.js';
-import { scoringGuides } from './metrics.js';
+import { metrics, scoringGuides } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
 const params = new URLSearchParams(location.hash.substr(1));
@@ -151,7 +151,7 @@ class ScoringGuide extends Component {
     const weightMax = Math.max(...Object.values(weights));
     console.assert(weightSum > 0.999 && weightSum < 1.0001); // lol rounding is hard.
 
-    const metrics = Object.keys(scoring).map(id => {
+    const metricsData = Object.keys(scoring).map(id => {
       const metricScoring = scoring[id];
       return {
         id,
@@ -161,7 +161,7 @@ class ScoringGuide extends Component {
       };
     });
 
-    const auditRefs = metrics.map(metric => {
+    const auditRefs = metricsData.map(metric => {
       return {
         id: metric.id,
         weight: metric.metricScoring.weight,
@@ -193,7 +193,7 @@ class ScoringGuide extends Component {
           </tr>
         </thead>
         <tbody>
-          {metrics.map(metric => {
+          {metricsData.map(metric => {
             return <Metric app={app} weightMax={weightMax} metricScoring={metric.metricScoring} {...metric}></Metric>
           })}
         </tbody>
@@ -223,8 +223,7 @@ class App extends Component {
     debounce(_ => {
       const url = new URL(location.href);
       const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => {
-        const auditId = (scoringGuides.v5[id] || scoringGuides.v6[id]).auditId;
-        return [auditId, value];
+        return [metrics[id].auditId, value];
       });
       const params = new URLSearchParams(auditIdValuePairs);
       url.hash = params.toString();
@@ -257,9 +256,9 @@ function getInitialState() {
   }
 
   // Load from query string.
-  for (const [id, metricScoring] of Object.entries(metricScorings)) {
-    if (!params.has(metricScoring.auditId)) continue;
-    const value = Number(params.get(metricScoring.auditId));
+  for (const [id, metric] of Object.entries(metrics)) {
+    if (!params.has(metric.auditId)) continue;
+    const value = Number(params.get(metric.auditId));
     state[id] = value;
   }
 
