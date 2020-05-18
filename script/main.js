@@ -233,7 +233,7 @@ class App extends Component {
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
     const scoringGuides = versions.map(version => {
-      return <ScoringGuide app={this} name={`v${version}`} values={this.state} weights={WEIGHTS.v6}></ScoringGuide>;
+      return <ScoringGuide app={this} name={`v${version}`} values={this.state} weights={WEIGHTS[`v${version}`]}></ScoringGuide>;
     });
     return <div>
       {scoringGuides}
