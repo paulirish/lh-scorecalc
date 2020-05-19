@@ -33,7 +33,7 @@ function internalErf_(x) {
  */
 export function QUANTILE_AT_VALUE({median, podr, p10}, value) {
   if (!podr) {
-    podr = p10; // lol TODO
+    podr = derivePodrFromP10(median, p10);
   }
 
   var location = Math.log(median);
@@ -76,7 +76,7 @@ function internalErfInv_(x) {
  */
 export function VALUE_AT_QUANTILE({median, podr, p10}, quantile) {
   if (!podr) {
-    podr = p10; // lol TODO
+    podr = derivePodrFromP10(median, p10);
   }
 
   var location = Math.log(median);
@@ -84,4 +84,13 @@ export function VALUE_AT_QUANTILE({median, podr, p10}, quantile) {
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
 
   return Math.exp(location + shape * Math.SQRT2 * internalErfInv_(1 - 2 * quantile));
+}
+
+// https://www.desmos.com/calculator/oqlvmezbze
+function derivePodrFromP10(median, p10) {
+  const u = Math.ln(median);
+  const shape = Math.abs(Math.ln(p10) - u) / Math.sqrt(20.9061938024368232);
+  const inner1 = -3 * u - Math.sqrt(4 + u * u);
+  const p10 = Math.exp(u + shape/2 * inner1)
+  return p10;
 }
