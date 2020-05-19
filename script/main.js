@@ -232,7 +232,7 @@ class App extends Component {
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
-    const device = params.get('device') || 'mobile';;
+    const device = params.get('device') || 'mobile';
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
       return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key][device]}></ScoringGuide>;

@@ -88,9 +88,9 @@ export function VALUE_AT_QUANTILE({median, podr, p10}, quantile) {
 
 // https://www.desmos.com/calculator/oqlvmezbze
 function derivePodrFromP10(median, p10) {
-  const u = Math.ln(median);
-  const shape = Math.abs(Math.ln(p10) - u) / Math.sqrt(20.9061938024368232);
+  const u = Math.log(median);
+  const shape = Math.abs(Math.log(p10) - u) / Math.sqrt(20.9061938024368232);
   const inner1 = -3 * u - Math.sqrt(4 + u * u);
-  const p10 = Math.exp(u + shape/2 * inner1)
-  return p10;
+  const podr = Math.exp(u + shape/2 * inner1)
+  return podr;
 }
