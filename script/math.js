@@ -41,6 +41,7 @@ export function QUANTILE_AT_VALUE({median, podr, p10}, value) {
   // The "podr" value specified the location of the smaller of the positive
   // roots of the third derivative of the log-normal CDF. Calculate the shape
   // parameter in terms of that value and the median.
+  // See https://www.desmos.com/calculator/2t1ugwykrl
   var logRatio = Math.log(podr / median);
   var shape = Math.sqrt(1 - 3 * logRatio - Math.sqrt((logRatio - 3) * (logRatio - 3) - 8)) / 2;
 
