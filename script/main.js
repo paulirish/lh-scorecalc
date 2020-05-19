@@ -247,7 +247,7 @@ function getInitialState() {
   const state = {};
 
   // Set defaults as median.
-  const metricScorings = {...scoringGuides.v6, ...scoringGuides.v5};
+  const metricScorings = {...scoringGuides.v6.desktop, ...scoringGuides.v5.desktop};
   for (const id in metricScorings) {
     state[id] = metricScorings[id].median;
   }
