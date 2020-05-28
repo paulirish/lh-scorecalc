@@ -4,6 +4,8 @@ import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './uti
 import { metrics, scoringGuides } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
+import "preact/debug";
+
 const params = new URLSearchParams(location.hash.substr(1));
 
 function determineMinMax(metricScoring) {
@@ -139,8 +141,31 @@ class Gauge extends Component {
   }
 }
 
+class DeviceSelector extends Component {
+
+  onValueChange(e) {
+    this.props.app.setState({
+      'device': e.target.value,
+    });
+  }
+
+  render({device}) {
+    return (
+      <label> type:
+        <select value={device} onInput={(e) => this.onValueChange(e)}>
+          <option value="desktop">desktop</option>
+          <option value="mobile">mobile</option>
+        </select>
+      </label>
+    )
+  }
+}
+
 class ScoringGuide extends Component {
-  render({ app, name, values, scoring }) {
+  render({ app, name, values, versionKey }) {
+    const device = values.device;
+    const scoring = scoringGuides[versionKey][device];
+
     // Make sure weights total to 1
     const weights = Object.values(scoring).map(metricScoring => metricScoring.weight);
     const weightSum = weights.reduce((agg, val) => (agg += val));
@@ -219,8 +244,9 @@ class App extends Component {
     debounce(_ => {
       const url = new URL(location.href);
       const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => {
+        if (id === 'device') return;
         return [metrics[id].auditId, value];
-      });
+      }).filter(Boolean);
       const params = new URLSearchParams(auditIdValuePairs);
       url.hash = params.toString();
       history.replaceState(this.state, '', url.toString());
@@ -232,20 +258,12 @@ class App extends Component {
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
-    let device = params.get('device');
-    // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
-    if (device && device !== 'mobile' && device !== 'desktop') {
-      console.warn(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
-      device = 'mobile';
-    } else if (!device) {
-      // Device not expressed in the params
-      device = 'mobile';
-    }
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
-      return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key][device]}></ScoringGuide>;
+      return <ScoringGuide app={this} name={key} versionKey={key} values={this.state}></ScoringGuide>;
     });
     return <div>
+      <DeviceSelector app={this} device={this.state.device}></DeviceSelector>
       {scoringGuideEls}
     </div>
   }
@@ -266,6 +284,19 @@ function getInitialState() {
     const value = Number(params.get(metric.auditId));
     state[id] = value;
   }
+
+
+  let device = params.get('device');
+  // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
+  if (device && device !== 'mobile' && device !== 'desktop') {
+    console.warn(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
+    device = 'mobile';
+  } else if (!device) {
+    // Device not expressed in the params
+    device = 'mobile';
+  }
+
+  state.device = device;
 
   return state;
 }
