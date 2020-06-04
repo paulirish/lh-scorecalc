@@ -25,7 +25,7 @@ export const curves = {
       LCP: {weight: 0.25, median: 2400, p10: 1200},
       TTI: {weight: 0.15, median: 4500, p10: 2468},
       TBT: {weight: 0.25, median: 350, p10: 150},
-      CLS: {weight: 0.05, median: 0, p10: 0.1},
+      CLS: {weight: 0.05, median: 0.25, p10: 0.1},
     },
   },
   v5: {
