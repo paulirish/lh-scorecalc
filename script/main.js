@@ -233,9 +233,13 @@ class App extends Component {
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
     let device = params.get('device');
-    // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
-    if (device && device !== 'mobile' && device !== 'desktop') {
-      console.warning(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
+    if (device && device === 'none') {
+      // Some misconfigured clients are set to emulatedFormFactor=none, which is real bad in v6.
+      console.warn(`emulatedFormFactor set to 'none'. Falling back to desktop scoring. https://github.com/GoogleChrome/lighthouse/issues/10836`);
+      device = 'desktop';
+      // Default to mobile if it's not desktop or mobile. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
+    } else if (device && device !== 'mobile' && device !== 'desktop') {
+      console.warn(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
       device = 'mobile';
     } else if (!device) {
       // Device not expressed in the params
