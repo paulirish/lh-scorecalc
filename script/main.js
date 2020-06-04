@@ -232,7 +232,15 @@ class App extends Component {
     const versions = params.has('version') ?
       params.getAll('version').map(getMajorVersion) :
       ['6', '5'];
-    const device = params.get('device') || 'mobile';
+    let device = params.get('device');
+    // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
+    if (device && device !== 'mobile' && device !== 'desktop') {
+      console.warning(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
+      device = 'mobile';
+    } else if (!device) {
+      // Device not expressed in the params
+      device = 'mobile';
+    }
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
       return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key][device]}></ScoringGuide>;
