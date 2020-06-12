@@ -40,7 +40,10 @@ class Metric extends Component {
     const {id} = this.props;
 
     this.props.app.setState({
-      [id]: e.target.valueAsNumber,
+      metricValues: {
+        ...this.props.app.state.metricValues,
+        [id]: e.target.valueAsNumber,
+      },
     });
   }
 
@@ -59,7 +62,10 @@ class Metric extends Component {
     }
 
     this.props.app.setState({
-      [id]: computedValue,
+      metricValues: {
+        ...this.props.app.state.metricValues,
+        [id]: computedValue,
+      },
     });
   }
 
@@ -212,62 +218,82 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = getInitialState();
+    this.onDeviceChange = this.onDeviceChange.bind(this);
   }
 
   componentDidUpdate() {
+    const {versions, device, metricValues} = this.state;
+
     // debounce just a tad, as its noisy
     debounce(_ => {
       const url = new URL(location.href);
-      const auditIdValuePairs = Object.entries(this.state).map(([id, value]) => {
+      const auditIdValuePairs = Object.entries(metricValues).map(([id, value]) => {
         return [metrics[id].auditId, value];
       });
       const params = new URLSearchParams(auditIdValuePairs);
+      params.set('device', device);
+      for (const version of versions) params.append('version', version);
       url.hash = params.toString();
       history.replaceState(this.state, '', url.toString());
     })();
   }
 
+  onDeviceChange(e) {
+    this.setState({device: e.target.value});
+  }
+
   render() {
-    // URL can specify which versions we'll show. Default to 6 and 5.
-    const versions = params.has('version') ?
-      params.getAll('version').map(getMajorVersion) :
-      ['6', '5'];
-    let device = params.get('device');
-    // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
-    if (device && device !== 'mobile' && device !== 'desktop') {
-      console.warn(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
-      device = 'mobile';
-    } else if (!device) {
-      // Device not expressed in the params
-      device = 'mobile';
-    }
+    const {versions, device, metricValues} = this.state;
+
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
-      return <ScoringGuide app={this} name={key} values={this.state} scoring={scoringGuides[key][device]}></ScoringGuide>;
+      return <ScoringGuide app={this} name={key} values={metricValues} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
     return <div>
+      <select name="device" value={device} onChange={this.onDeviceChange} >
+        <option value="mobile">Mobile</option>
+        <option value="desktop">Desktop</option>
+      </select>
       {scoringGuideEls}
     </div>
   }
 }
 
 function getInitialState() {
-  const state = {};
-
+  // Default to 6 and 5.
+  const versions = params.has('version') ?
+    params.getAll('version').map(getMajorVersion) :
+    ['6', '5'];
+  
+  // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
+  let device = params.get('device');
+  if (device && device !== 'mobile' && device !== 'desktop') {
+    console.warn(`Invalid emulatedFormFactors value: ${device}. Fallback to mobile scoring.`);
+    device = 'mobile';
+  } else if (!device) {
+    // Device not expressed in the params
+    device = 'mobile';
+  }
+  
   // Set defaults as median.
+  const metricValues = {};
   const metricScorings = {...scoringGuides.v6.desktop, ...scoringGuides.v5.desktop};
   for (const id in metricScorings) {
-    state[id] = metricScorings[id].median;
+    metricValues[id] = metricScorings[id].median;
   }
 
   // Load from query string.
-  for (const [id, metric] of Object.entries(metrics)) {
+  for (const [id, metric] of Object.entries(metricValues)) {
     if (!params.has(metric.auditId)) continue;
     const value = Number(params.get(metric.auditId));
-    state[id] = value;
+    metricValues[id] = value;
   }
 
-  return state;
+  return {
+    versions,
+    device,
+    metricValues,
+  };;
 }
 
 function main() {
