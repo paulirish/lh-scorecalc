@@ -249,11 +249,15 @@ class App extends Component {
       const key = `v${version}`;
       return <ScoringGuide app={this} name={key} values={metricValues} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
-    return <div>
-      <select name="device" value={device} onChange={this.onDeviceChange} >
-        <option value="mobile">Mobile</option>
-        <option value="desktop">Desktop</option>
-      </select>
+    return <div class="app">
+      <fieldset class="wrapper">
+        <label>Device type:
+          <select name="device" value={device} onChange={this.onDeviceChange} >
+            <option value="mobile">Mobile</option>
+            <option value="desktop">Desktop</option>
+          </select>
+        </label>
+      </fieldset>
       {scoringGuideEls}
     </div>
   }
@@ -264,7 +268,7 @@ function getInitialState() {
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
     ['6', '5'];
-  
+
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
   if (device && device !== 'mobile' && device !== 'desktop') {
@@ -274,7 +278,7 @@ function getInitialState() {
     // Device not expressed in the params
     device = 'mobile';
   }
-  
+
   // Set defaults as median.
   const metricValues = {};
   const metricScorings = {...scoringGuides.v6.desktop, ...scoringGuides.v5.desktop};

@@ -38,10 +38,11 @@ table {
   margin: 0 auto;
 }
 
-th {
+th, fieldset {
   font-weight: normal;
   color: var(--color-gray-600);
   word-break: normal;
+  border: 0; /* clearing the fieldset's default `border: 2px groove threedface` lol */
   border-bottom: 1px solid var(--color-gray-200);
 }
 
@@ -120,8 +121,6 @@ footer {
   display: block !important;
 }
 
-
-
 .wrapper {
   max-width: 1020px;
   margin: 60px auto;
@@ -129,6 +128,11 @@ footer {
 
   display: flex;
   align-items: center;
+}
+
+fieldset.wrapper {
+  text-align: center;
+  margin: 30px auto;
 }
 
 /* the SVG pretty big so we'll subtract some of its whitespace */
