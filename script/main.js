@@ -285,7 +285,6 @@ function getInitialState() {
   // Load from query string.
   for (const [id, metric] of Object.entries(metrics)) {
     const value = params.get(id) || params.get(metric.auditId);
-    console.log(value, id, metric)
     if (value === undefined) continue;
     metricValues[id] = Number(value);
   }
