@@ -4,8 +4,6 @@ import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './uti
 import { metrics, scoringGuides } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
-import "preact/debug";
-
 const params = new URLSearchParams(location.hash.substr(1));
 
 function determineMinMax(metricScoring) {
