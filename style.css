@@ -38,7 +38,7 @@ table {
   margin: 0 auto;
 }
 
-th, fieldset {
+th, .controls {
   font-weight: normal;
   color: var(--color-gray-600);
   word-break: normal;
@@ -130,9 +130,17 @@ footer {
   align-items: center;
 }
 
-fieldset.wrapper {
-  text-align: center;
+.controls {
   margin: 30px auto;
+  justify-content: center;
+  border: 0;
+}
+select {
+  color: var(--color-gray-600);
+}
+
+label {
+  margin: 0 10px;
 }
 
 /* the SVG pretty big so we'll subtract some of its whitespace */
