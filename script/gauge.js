@@ -113,6 +113,13 @@ function _setPerfGaugeExplodey(wrapper, category) {
   let offsetAdder = 0.25 * circumferenceOuter - endDiffOuter - 0.5 * strokeGap;
   let angleAdder = -0.5 * Math.PI;
 
+  // Extra hack on top of the HACK for element reuse below. Delete any metric elems that aren't needed anymore (happens when the same gauge goes from v5 to v6)
+  groupOuter.querySelectorAll('.metric').forEach(metricElem => {
+    const classNamesToRetain = metrics.map(metric => `metric--${metric.id}`);
+    const match = classNamesToRetain.find(selector => metricElem.classList.contains(selector));
+    if (!match) metricElem.remove();
+  });
+
   metrics.forEach((metric, i) => {
     // TODO(porting to real LHR..): in scorecalc we dont use the real audit ID just the acronym.
     const alias = metric.id;
@@ -120,7 +127,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // Hack
     const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
 
-    // HACK:This isn't ideal but it was quick. Handles both initialization and updates
+    // HACK:This isn't ideal but it was quick. Create element during initialization or reuse existing during updates
     const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
     const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
     const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');

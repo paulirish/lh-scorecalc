@@ -42,7 +42,6 @@ th, .controls {
   font-weight: normal;
   color: var(--color-gray-600);
   word-break: normal;
-  border: 0; /* clearing the fieldset's default `border: 2px groove threedface` lol */
   border-bottom: 1px solid var(--color-gray-200);
 }
 
