@@ -219,6 +219,7 @@ class App extends Component {
     super(props);
     this.state = getInitialState();
     this.onDeviceChange = this.onDeviceChange.bind(this);
+    this.onVersionsChange = this.onVersionsChange.bind(this);
     // debounce to avoid flooding with new URLs
     this.debouncedUpdatePermalink = debounce(this.updatePermalink);
   }
@@ -244,6 +245,10 @@ class App extends Component {
     this.setState({device: e.target.value});
   }
 
+  onVersionsChange(e) {
+    this.setState({versions: e.target.value.split(',')});
+  }
+
   render() {
     const {versions, device, metricValues} = this.state;
 
@@ -252,14 +257,21 @@ class App extends Component {
       return <ScoringGuide app={this} name={key} values={metricValues} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
     return <div class="app">
-      <fieldset class="wrapper">
+      <div class="controls wrapper">
         <label>Device type:
           <select name="device" value={device} onChange={this.onDeviceChange} >
             <option value="mobile">Mobile</option>
             <option value="desktop">Desktop</option>
           </select>
         </label>
-      </fieldset>
+        <label>Versions:
+          <select name="versions" value={versions.sort().reverse().join(',')} onChange={this.onVersionsChange} >
+            <option value="6,5">show all</option>
+            <option value="6">v6</option>
+            <option value="5">v5</option>
+          </select>
+        </label>
+      </div>
       {scoringGuideEls}
     </div>
   }
