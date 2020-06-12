@@ -228,7 +228,7 @@ class App extends Component {
     debounce(_ => {
       const url = new URL(location.href);
       const auditIdValuePairs = Object.entries(metricValues).map(([id, value]) => {
-        return [metrics[id].auditId, value];
+        return [id, value];
       });
       const params = new URLSearchParams(auditIdValuePairs);
       params.set('device', device);
@@ -287,10 +287,10 @@ function getInitialState() {
   }
 
   // Load from query string.
-  for (const [id, metric] of Object.entries(metricValues)) {
-    if (!params.has(metric.auditId)) continue;
-    const value = Number(params.get(metric.auditId));
-    metricValues[id] = value;
+  for (const [id, metric] of Object.entries(metrics)) {
+    const value = params.get(id) || params.get(metric.auditId);
+    if (value === undefined) continue;
+    metricValues[id] = Number(value);
   }
 
   return {
