@@ -9,13 +9,14 @@
     "clean": "rm -rf dist",
     "deploy:ghpages": "yarn gh-pages --dist dist --repo git@github.com:GoogleChrome/lighthouse.git --dest scorecalc --add --message scorecalc-update",
     "deploy:copy": "mkdir -p dist && cp -r index.html *.css calc.* dist",
-    "deploy": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:ghpages",
+    "deploy": "env NODE_ENV=production yarn clean && yarn build && yarn deploy:copy && yarn deploy:ghpages",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.3",
     "gh-pages": "^2.2.0",
     "rollup": "^2.6.1",
     "rollup-plugin-commonjs": "^10.1.0",

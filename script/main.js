@@ -4,6 +4,10 @@ import { $, NBSP, numberFormatter, calculateRating, arithmeticMean } from './uti
 import { metrics, scoringGuides } from './metrics.js';
 import { updateGauge } from './gauge.js';
 
+if (process.env.NODE_ENV !== 'production') {
+  require('react/debug');
+}
+
 const params = new URLSearchParams(location.hash.substr(1));
 
 function determineMinMax(metricScoring) {
