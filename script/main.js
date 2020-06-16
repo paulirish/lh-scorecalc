@@ -220,23 +220,25 @@ class App extends Component {
     this.state = getInitialState();
     this.onDeviceChange = this.onDeviceChange.bind(this);
     this.onVersionsChange = this.onVersionsChange.bind(this);
+    // debounce to avoid flooding with new URLs
+    this.debouncedUpdatePermalink = debounce(this.updatePermalink);
+  }
+
+  updatePermalink(state) {
+    const {versions, device, metricValues} = state;
+    const url = new URL(location.href);
+    const auditIdValuePairs = Object.entries(metricValues).map(([id, value]) => {
+      return [id, value];
+    });
+    const params = new URLSearchParams(auditIdValuePairs);
+    params.set('device', device);
+    for (const version of versions) params.append('version', version);
+    url.hash = params.toString();
+    history.replaceState(state, '', url.toString());
   }
 
   componentDidUpdate() {
-    const {versions, device, metricValues} = this.state;
-
-    // debounce just a tad, as its noisy
-    debounce(_ => {
-      const url = new URL(location.href);
-      const auditIdValuePairs = Object.entries(metricValues).map(([id, value]) => {
-        return [id, value];
-      });
-      const params = new URLSearchParams(auditIdValuePairs);
-      params.set('device', device);
-      for (const version of versions) params.append('version', version);
-      url.hash = params.toString();
-      history.replaceState(this.state, '', url.toString());
-    })();
+    this.debouncedUpdatePermalink(this.state);
   }
 
   onDeviceChange(e) {
