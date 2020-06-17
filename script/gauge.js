@@ -72,7 +72,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const NS_URI = 'http://www.w3.org/2000/svg';
 
   SVG.setAttribute('viewBox', [offsetSVG, offsetSVG, sizeSVG, sizeSVG].join(' '));
-  SVG.style.setProperty('--stroke-width', strokeWidth);
+  SVG.style.setProperty('--stroke-width', `${strokeWidth}px`);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
 
   const groupOuter = wrapper.querySelector('.lh-gauge__outer');
