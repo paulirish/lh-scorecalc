@@ -59,7 +59,7 @@ circle {
 }
 
 text {
-  font-size: calc(var(--radius)*.2px);
+  font-size: calc(var(--radius) * 0.2);
 }
 
 .lh-gauge {
@@ -126,7 +126,7 @@ text {
 }
 .lh-gauge__arc--metric:not(.lh-gauge--faded) {
   opacity: 0;
-  stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
+  stroke-dasharray: 0 calc(var(--circle-meas) * var(--radius));
   transition: 0s .005s;
 }
 .state--expanded .lh-gauge__arc--metric:not(.lh-gauge--faded) {
@@ -385,10 +385,10 @@ function _setPerfGauge(wrapper, category) {
   const gaugeArcLength = Math.max(0, +(percent * circumferenceInner - 2 * endDiffInner).toFixed(4));
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
-  groupOuter.style.setProperty('--radius', radiusOuter);
-  cover.style.setProperty('--radius', .5 * (radiusInner + radiusOuter));
+  groupOuter.style.setProperty('--radius', `${radiusOuter}px`);
+  cover.style.setProperty('--radius', `${.5 * (radiusInner + radiusOuter)}px`);
   cover.setAttribute('stroke-width', strokeGap);
-  SVG.style.setProperty('--radius', radiusInner);
+  SVG.style.setProperty('--radius', `${radiusInner}px`);
 
   gaugeArc.setAttribute('stroke-dasharray', `${gaugeArcLength} ${(circumferenceInner - gaugeArcLength).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', .25 * circumferenceInner - endDiffInner);
