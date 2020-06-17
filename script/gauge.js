@@ -75,19 +75,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
   SVG.style.setProperty('--stroke-width', strokeWidth);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
 
-  // build the mask. Note this mask isn't within the wrapper, it's global.
-  const mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
-  const maskVisible = mask.querySelector('path');
-  const maskHidden = mask.querySelector('circle');
-
-  // a path is the most compact way to cover the SVG area with a rectangle
-  maskVisible.setAttribute('d', `M${offsetSVG}${offsetSVG}H${-offsetSVG}V${-offsetSVG}H${offsetSVG}`);
-  // SVG masks are luninance masks => white = fully opaque, black = transparent
-  maskVisible.setAttribute('fill', `#fff`);
-  // default fill is black, no need to set it exlicitly on circle
-  // any strok applied doesn't matter
-  maskHidden.setAttribute('r', radiusInner + 0.5 * strokeWidth);
-
   const groupOuter = wrapper.querySelector('.lh-gauge__outer');
   const groupInner = wrapper.querySelector('.lh-gauge__inner');
   const cover = groupOuter.querySelector('.cover');

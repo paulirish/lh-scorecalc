@@ -406,9 +406,7 @@ text {
 .state--highlight .lh-gauge__cutout {
   opacity: 0;
 }
-.lh-gauge__outer {
-  mask: url(#lh-gauge__mask);
-}
+
 .lh-gauge__inner {
   color: inherit;
 }
