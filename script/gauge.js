@@ -95,10 +95,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
-  groupOuter.style.setProperty('--radius', radiusOuter);
-  cover.style.setProperty('--radius', 0.5 * (radiusInner + radiusOuter));
+  groupOuter.style.setProperty('--radius', `${radiusOuter}px`);
+  cover.style.setProperty('--radius', `${0.5 * (radiusInner + radiusOuter)}px`);
   cover.setAttribute('stroke-width', strokeGap);
-  SVG.style.setProperty('--radius', radiusInner);
+  SVG.style.setProperty('--radius', `${radiusInner}px`);
 
   gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
