@@ -358,7 +358,7 @@ circle {
 }
 
 text {
-  font-size: calc(var(--radius)*.2px);
+  font-size: calc(var(--radius) * 0.2);
 }
 
 
@@ -406,9 +406,7 @@ text {
 .state--highlight .lh-gauge__cutout {
   opacity: 0;
 }
-.lh-gauge__outer {
-  mask: url(#lh-gauge__mask);
-}
+
 .lh-gauge__inner {
   color: inherit;
 }
@@ -437,7 +435,7 @@ text {
 }
 .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: 0;
-  stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
+  stroke-dasharray: 0 calc(var(--circle-meas) * var(--radius));
   transition: 0s .005s;
 }
 .state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
@@ -461,7 +459,7 @@ text {
   dominant-baseline: middle;
   fill: currentcolor;
   opacity: .999;
-  font-size: calc(var(--radius)*.625px);
+  font-size: calc(var(--radius) * 0.625);
   transition: opacity .3s ease-in;
 }
 .state--highlight .lh-gauge__percentage {

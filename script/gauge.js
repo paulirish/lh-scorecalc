@@ -72,21 +72,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const NS_URI = 'http://www.w3.org/2000/svg';
 
   SVG.setAttribute('viewBox', [offsetSVG, offsetSVG, sizeSVG, sizeSVG].join(' '));
-  SVG.style.setProperty('--stroke-width', strokeWidth);
+  SVG.style.setProperty('--stroke-width', `${strokeWidth}px`);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
-
-  // build the mask. Note this mask isn't within the wrapper, it's global.
-  const mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
-  const maskVisible = mask.querySelector('path');
-  const maskHidden = mask.querySelector('circle');
-
-  // a path is the most compact way to cover the SVG area with a rectangle
-  maskVisible.setAttribute('d', `M${offsetSVG}${offsetSVG}H${-offsetSVG}V${-offsetSVG}H${offsetSVG}`);
-  // SVG masks are luninance masks => white = fully opaque, black = transparent
-  maskVisible.setAttribute('fill', `#fff`);
-  // default fill is black, no need to set it exlicitly on circle
-  // any strok applied doesn't matter
-  maskHidden.setAttribute('r', radiusInner + 0.5 * strokeWidth);
 
   const groupOuter = wrapper.querySelector('.lh-gauge__outer');
   const groupInner = wrapper.querySelector('.lh-gauge__inner');
@@ -95,10 +82,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
-  groupOuter.style.setProperty('--radius', radiusOuter);
-  cover.style.setProperty('--radius', 0.5 * (radiusInner + radiusOuter));
+  groupOuter.style.setProperty('--radius', `${radiusOuter}px`);
+  cover.style.setProperty('--radius', `${0.5 * (radiusInner + radiusOuter)}px`);
   cover.setAttribute('stroke-width', strokeGap);
-  SVG.style.setProperty('--radius', radiusInner);
+  SVG.style.setProperty('--radius', `${radiusInner}px`);
 
   gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
