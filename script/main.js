@@ -178,7 +178,7 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v6') {
-      title = <h2><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0" target="_blank">v6</a></h2>;
+      title = <h2>latest<br/><i>v6, v7</i></h2>;
     }
 
     return <form class="wrapper">
@@ -249,8 +249,21 @@ class App extends Component {
     this.setState({versions: e.target.value.split(',')});
   }
 
+  collapseVersions(versions) {
+    versions.forEach((version, i) => {
+      if (version < 5) {
+        throw new Error(`Unsupported Lighthouse version (${version})`);
+      }
+      if (version < 6) return;
+      // Back to most recent _even_ version. (As of v6, Lighthouse's even versions change scoring, but odd versions don't.)
+      versions[i] = version - (version % 2)
+    });
+  }
+
   render() {
     const {versions, device, metricValues} = this.state;
+
+    this.collapseVersions(versions);
 
     const scoringGuideEls = versions.map(version => {
       const key = `v${version}`;
@@ -267,7 +280,7 @@ class App extends Component {
         <label>Versions:
           <select name="versions" value={versions.sort().reverse().join(',')} onChange={this.onVersionsChange} >
             <option value="6,5">show all</option>
-            <option value="6">v6</option>
+            <option value="6">v6, v7</option>
             <option value="5">v5</option>
           </select>
         </label>
@@ -278,10 +291,9 @@ class App extends Component {
 }
 
 function getInitialState() {
-  // Default to 6 and 5.
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['6', '5'];
+    ['6'];
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');

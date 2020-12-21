@@ -49,6 +49,11 @@ function makeScoringGuide(curves) {
 }
 
 export const scoringGuides = {
+  // v7 scoring is identical to v6
+  v7: {
+    mobile: makeScoringGuide(curves.v6.mobile),
+    desktop: makeScoringGuide(curves.v6.desktop),
+  },
   v6: {
     mobile: makeScoringGuide(curves.v6.mobile),
     desktop: makeScoringGuide(curves.v6.desktop),
