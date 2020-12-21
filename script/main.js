@@ -256,7 +256,7 @@ class App extends Component {
       }
       if (version < 6) return;
       // Back to most recent _even_ version. (As of v6, Lighthouse's even versions change scoring, but odd versions don't.)
-      versions[i] = version - (version % 2)
+      if (version % 2 === 1) versions[i] = version - 1
     });
   }
 
