@@ -249,23 +249,23 @@ class App extends Component {
     this.setState({versions: e.target.value.split(',')});
   }
 
-  collapseVersions(versions) {
-    versions.forEach((version, i) => {
-      if (version < 5) {
+  normalizeVersions(versions) {
+    return versions.map(version => {
+      if (parseInt(version) < 5) {
         throw new Error(`Unsupported Lighthouse version (${version})`);
       }
-      if (version < 6) return;
-      // Back to most recent _even_ version. (As of v6, Lighthouse's even versions change scoring, but odd versions don't.)
-      if (version % 2 === 1) versions[i] = version - 1
-    });
+      // In the future we might want a more generalized `version % 2 === 1` thing, but for now, hardcode the change.
+      if (parseInt(version) === 7) return 6..toString();
+      return version.toString();
+    }).sort().reverse();
   }
 
   render() {
     const {versions, device, metricValues} = this.state;
 
-    this.collapseVersions(versions);
+    const normalizedVersions = this.normalizeVersions(versions);
 
-    const scoringGuideEls = versions.map(version => {
+    const scoringGuideEls = normalizedVersions.map(version => {
       const key = `v${version}`;
       return <ScoringGuide app={this} name={key} values={metricValues} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
@@ -278,7 +278,7 @@ class App extends Component {
           </select>
         </label>
         <label>Versions:
-          <select name="versions" value={versions.sort().reverse().join(',')} onChange={this.onVersionsChange} >
+          <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
             <option value="6,5">show all</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
