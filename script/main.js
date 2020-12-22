@@ -178,7 +178,7 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v6') {
-      title = <h2>latest<br/><i>v6, v7</i></h2>;
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v6, v7</a></i></h2>;
     }
 
     return <form class="wrapper">
