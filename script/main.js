@@ -178,7 +178,7 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v6') {
-      title = <h2><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0" target="_blank">v6</a></h2>;
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v6, v7</a></i></h2>;
     }
 
     return <form class="wrapper">
@@ -249,10 +249,23 @@ class App extends Component {
     this.setState({versions: e.target.value.split(',')});
   }
 
+  normalizeVersions(versions) {
+    return versions.map(version => {
+      if (parseInt(version) < 5) {
+        throw new Error(`Unsupported Lighthouse version (${version})`);
+      }
+      // In the future we might want a more generalized `version % 2 === 1` thing, but for now, hardcode the change.
+      if (parseInt(version) === 7) return 6..toString();
+      return version.toString();
+    }).sort().reverse();
+  }
+
   render() {
     const {versions, device, metricValues} = this.state;
 
-    const scoringGuideEls = versions.map(version => {
+    const normalizedVersions = this.normalizeVersions(versions);
+
+    const scoringGuideEls = normalizedVersions.map(version => {
       const key = `v${version}`;
       return <ScoringGuide app={this} name={key} values={metricValues} scoring={scoringGuides[key][device]}></ScoringGuide>;
     });
@@ -265,9 +278,9 @@ class App extends Component {
           </select>
         </label>
         <label>Versions:
-          <select name="versions" value={versions.sort().reverse().join(',')} onChange={this.onVersionsChange} >
+          <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
             <option value="6,5">show all</option>
-            <option value="6">v6</option>
+            <option value="6">v6, v7</option>
             <option value="5">v5</option>
           </select>
         </label>
@@ -278,10 +291,9 @@ class App extends Component {
 }
 
 function getInitialState() {
-  // Default to 6 and 5.
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['6', '5'];
+    ['6'];
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
