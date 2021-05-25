@@ -310,7 +310,7 @@ function getInitialState() {
 
   const metricValues = {};
   // If no metric values come in w/ params, initalize with mobile medians (score of 50)
-  const metricScorings = {...scoringGuides.v5.mobile, ...scoringGuides.v6.mobile}; // v5 is neccessary for FCI
+  const metricScorings = {...scoringGuides.v5.mobile, ...scoringGuides.v8.mobile}; // v5 is neccessary for FCI
   for (const id in metricScorings) {
     metricValues[id] = metricScorings[id].median;
   }
