@@ -296,7 +296,7 @@ class App extends Component {
 function getInitialState() {
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['8'];
+    ['6']; // version to show by default
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
