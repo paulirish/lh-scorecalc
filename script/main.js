@@ -177,8 +177,10 @@ class ScoringGuide extends Component {
     const score = arithmeticMean(auditRefs);
 
     let title = <h2>{name}</h2>;
-    if (name === 'v6') {
-      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v6, v7</a></i></h2>;
+    if (name === 'v8') {
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v8</a></i></h2>;
+    } else if (name === 'v6') {
+      title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v6, v7</a></i></h2>;
     }
 
     return <form class="wrapper">
@@ -279,7 +281,8 @@ class App extends Component {
         </label>
         <label>Versions:
           <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
-            <option value="6,5">show all</option>
+            <option value="8,6,5">show all</option>
+            <option value="8">v8</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
           </select>
@@ -293,7 +296,7 @@ class App extends Component {
 function getInitialState() {
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['6'];
+    ['8'];
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
