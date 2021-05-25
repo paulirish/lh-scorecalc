@@ -305,17 +305,17 @@ function getInitialState() {
     device = 'mobile';
   }
 
-  // Set defaults as median.
   const metricValues = {};
-  const metricScorings = {...scoringGuides.v6.desktop, ...scoringGuides.v5.desktop};
+  // If no metric values come in w/ params, initalize with mobile medians (score of 50)
+  const metricScorings = {...scoringGuides.v5.mobile, ...scoringGuides.v6.mobile}; // v5 is neccessary for FCI
   for (const id in metricScorings) {
     metricValues[id] = metricScorings[id].median;
   }
 
-  // Load from query string.
+  // Populate metricValues from query string.
   for (const [id, metric] of Object.entries(metrics)) {
     const value = params.get(id) || params.get(metric.auditId);
-    if (value === undefined) continue;
+    if (!value) continue;
     metricValues[id] = Number(value);
   }
 
