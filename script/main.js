@@ -315,7 +315,7 @@ function getInitialState() {
   // Populate metricValues from query string.
   for (const [id, metric] of Object.entries(metrics)) {
     const value = params.get(id) || params.get(metric.auditId);
-    if (value === null) continue;
+    if (!value) continue;
     metricValues[id] = Number(value);
   }
 
