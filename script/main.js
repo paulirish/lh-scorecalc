@@ -178,9 +178,9 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v8') {
-      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v8</a></i></h2>;
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v8.0.0">v8</a></i></h2>;
     } else if (name === 'v6') {
-      title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/">v6, v7</a></i></h2>;
+      title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0">v6, v7</a></i></h2>;
     }
 
     return <form class="wrapper">
@@ -296,7 +296,7 @@ class App extends Component {
 function getInitialState() {
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['6']; // version to show by default
+    ['6', '8']; // version to show by default
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
