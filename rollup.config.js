@@ -17,10 +17,7 @@ export default {
     buble({
       jsx: 'h',
       objectAssign: 'Object.assign',
-      transforms: {
-        asyncAwait: false,
-        forOf: false,
-      },
+      target: { chrome: 71, safari: 11.1, firefox: 64 }, // roughly disable ES feature transpilation
 		}),
     commonjs(),
     visualizer(), // build and view stats.html
