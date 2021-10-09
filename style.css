@@ -60,8 +60,12 @@ tbody td:nth-child(1) {
 
 /* metric value */
 tbody td:nth-child(3) {
-  width: 210px;
   text-align: right;
+}
+
+input.metric-value, tbody td:nth-child(3) {
+  max-width: 210px;
+  width: 18vw;
 }
 
 tbody td:nth-child(4) {
@@ -79,9 +83,7 @@ tbody td:nth-child(6) {
   text-align: right;
 }
 
-input.metric-value {
-  width: 210px;
-}
+
 input.metric-score {
   opacity: 0.85;
 }
