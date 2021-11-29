@@ -67,14 +67,10 @@ function makeScoringGuide(curves) {
 }
 
 export const scoringGuides = {
+  // v9 => v8 and v7 => v6 is handled in normalizeVersions()
   v8: {
     mobile: makeScoringGuide(curves.v8.mobile),
     desktop: makeScoringGuide(curves.v8.desktop),
-  },
-  // v7 scoring is identical to v6
-  v7: {
-    mobile: makeScoringGuide(curves.v6.mobile),
-    desktop: makeScoringGuide(curves.v6.desktop),
   },
   v6: {
     mobile: makeScoringGuide(curves.v6.mobile),

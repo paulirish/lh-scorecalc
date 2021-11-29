@@ -178,7 +178,7 @@ class ScoringGuide extends Component {
 
     let title = <h2>{name}</h2>;
     if (name === 'v8') {
-      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v8.0.0">v8</a></i></h2>;
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v8.0.0">v8, v9</a></i></h2>;
     } else if (name === 'v6') {
       title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0">v6, v7</a></i></h2>;
     }
@@ -256,8 +256,8 @@ class App extends Component {
       if (parseInt(version) < 5) {
         throw new Error(`Unsupported Lighthouse version (${version})`);
       }
-      // In the future we might want a more generalized `version % 2 === 1` thing, but for now, hardcode the change.
-      if (parseInt(version) === 7) return 6..toString();
+      // Odd-number major versions are identical (score-wise to the previous one)
+      if (version % 2 === 1) return parseInt(version, 10) - 1;
       return version.toString();
     }).sort().reverse();
   }
@@ -282,7 +282,7 @@ class App extends Component {
         <label>Versions:
           <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
             <option value="8,6,5">show all</option>
-            <option value="8">v8</option>
+            <option value="8">v8+</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
           </select>
@@ -296,7 +296,7 @@ class App extends Component {
 function getInitialState() {
   const versions = params.has('version') ?
     params.getAll('version').map(getMajorVersion) :
-    ['6', '8']; // version to show by default
+    ['8']; // version (or versions) to show by default
 
   // Default to mobile if it's not matching our known emulatedFormFactors. https://github.com/GoogleChrome/lighthouse/blob/master/types/externs.d.ts#:~:text=emulatedFormFactor
   let device = params.get('device');
