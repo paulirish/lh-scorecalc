@@ -253,11 +253,13 @@ class App extends Component {
 
   normalizeVersions(versions) {
     return versions.map(version => {
+      version = parseInt(version, 10);
       if (parseInt(version) < 5) {
         throw new Error(`Unsupported Lighthouse version (${version})`);
       }
+      if (version === 5) return 5;
       // Odd-number major versions are identical (score-wise to the previous one)
-      if (version % 2 === 1) return (parseInt(version, 10) - 1).toString();
+      if (version % 2 === 1) return (version - 1).toString();
       return version.toString();
     }).sort().reverse();
   }
