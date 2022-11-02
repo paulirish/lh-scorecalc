@@ -6,11 +6,7 @@ import {calculateRating} from './util.js';
 
 const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
 
-export function updateGauge(container, category) {
-  const wrapper = container.$('.lh-gauge__wrapper');
-  wrapper.className = 'lh-gauge__wrapper'; // clear any other labels already set
-  wrapper.classList.add(`lh-gauge__wrapper--${calculateRating(category.score)}`);
-
+export function updateGauge(wrapper, category) {
   _setPerfGaugeExplodey(wrapper, category);
 }
 
@@ -76,21 +72,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const NS_URI = 'http://www.w3.org/2000/svg';
 
   SVG.setAttribute('viewBox', [offsetSVG, offsetSVG, sizeSVG, sizeSVG].join(' '));
-  SVG.style.setProperty('--stroke-width', strokeWidth);
+  SVG.style.setProperty('--stroke-width', `${strokeWidth}px`);
   SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
-
-  // build the mask. Note this mask isn't within the wrapper, it's global.
-  const mask = wrapper.ownerDocument.querySelector('#lh-gauge__mask');
-  const maskVisible = mask.querySelector('path');
-  const maskHidden = mask.querySelector('circle');
-
-  // a path is the most compact way to cover the SVG area with a rectangle
-  maskVisible.setAttribute('d', `M${offsetSVG}${offsetSVG}H${-offsetSVG}V${-offsetSVG}H${offsetSVG}`);
-  // SVG masks are luninance masks => white = fully opaque, black = transparent
-  maskVisible.setAttribute('fill', `#fff`);
-  // default fill is black, no need to set it exlicitly on circle
-  // any strok applied doesn't matter
-  maskHidden.setAttribute('r', radiusInner + 0.5 * strokeWidth);
 
   const groupOuter = wrapper.querySelector('.lh-gauge__outer');
   const groupInner = wrapper.querySelector('.lh-gauge__inner');
@@ -99,10 +82,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
   const gaugePerc = groupInner.querySelector('.lh-gauge__percentage');
 
   groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
-  groupOuter.style.setProperty('--radius', radiusOuter);
-  cover.style.setProperty('--radius', 0.5 * (radiusInner + radiusOuter));
+  groupOuter.style.setProperty('--radius', `${radiusOuter}px`);
+  cover.style.setProperty('--radius', `${0.5 * (radiusInner + radiusOuter)}px`);
   cover.setAttribute('stroke-width', strokeGap);
-  SVG.style.setProperty('--radius', radiusInner);
+  SVG.style.setProperty('--radius', `${radiusInner}px`);
 
   gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
   gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
@@ -117,6 +100,13 @@ function _setPerfGaugeExplodey(wrapper, category) {
   let offsetAdder = 0.25 * circumferenceOuter - endDiffOuter - 0.5 * strokeGap;
   let angleAdder = -0.5 * Math.PI;
 
+  // Extra hack on top of the HACK for element reuse below. Delete any metric elems that aren't needed anymore (happens when the same gauge goes from v5 to v6)
+  groupOuter.querySelectorAll('.metric').forEach(metricElem => {
+    const classNamesToRetain = metrics.map(metric => `metric--${metric.id}`);
+    const match = classNamesToRetain.find(selector => metricElem.classList.contains(selector));
+    if (!match) metricElem.remove();
+  });
+
   metrics.forEach((metric, i) => {
     // TODO(porting to real LHR..): in scorecalc we dont use the real audit ID just the acronym.
     const alias = metric.id;
@@ -124,7 +114,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // Hack
     const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
 
-    // HACK:This isn't ideal but it was quick. Handles both initialization and updates
+    // HACK:This isn't ideal but it was quick. Create element during initialization or reuse existing during updates
     const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
     const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
     const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
@@ -210,7 +200,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   if (SVG.dataset.listenersSetup) return;
   SVG.dataset.listenersSetup = true;
 
-  peekGauge(SVG);
+  // peekGauge(SVG);
 
   /*
     wrapper.state-expanded: gauge is exploded
@@ -233,16 +223,6 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     const parent = e.target.parentNode;
 
-    // if hovering on the primary (inner) part, then explode it but dont highlight
-    if (parent && parent === groupInner) {
-      if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
-      else if (SVG.classList.contains('state--highlight')) {
-        SVG.classList.remove('state--highlight');
-        SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
-      }
-      return;
-    }
-
     // if hovering on a metric, highlight that one.
     // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
@@ -255,7 +235,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
       } else {
         const highlighted = SVG.querySelector('.metric--highlight');
 
-        if (parent !== highlighted) {
+        if (highlighted && parent !== highlighted) {
           highlighted.classList.remove('metric--highlight');
           parent.classList.add('metric--highlight');
         }

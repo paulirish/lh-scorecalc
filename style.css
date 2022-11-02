@@ -38,7 +38,7 @@ table {
   margin: 0 auto;
 }
 
-th {
+th, .controls {
   font-weight: normal;
   color: var(--color-gray-600);
   word-break: normal;
@@ -60,8 +60,12 @@ tbody td:nth-child(1) {
 
 /* metric value */
 tbody td:nth-child(3) {
-  width: 210px;
   text-align: right;
+}
+
+input.metric-value, tbody td:nth-child(3) {
+  max-width: 210px;
+  width: 18vw;
 }
 
 tbody td:nth-child(4) {
@@ -79,9 +83,7 @@ tbody td:nth-child(6) {
   text-align: right;
 }
 
-input.metric-value {
-  width: 210px;
-}
+
 input.metric-score {
   opacity: 0.85;
 }
@@ -120,7 +122,11 @@ footer {
   display: block !important;
 }
 
-
+@media screen and (max-width: 1040px) {
+  footer {
+    padding: 0 20px;
+  }
+}
 
 .wrapper {
   max-width: 1020px;
@@ -129,6 +135,19 @@ footer {
 
   display: flex;
   align-items: center;
+}
+
+.controls {
+  margin: 30px auto;
+  justify-content: center;
+  border: 0;
+}
+select {
+  color: var(--color-gray-600);
+}
+
+label {
+  margin: 0 10px;
 }
 
 /* the SVG pretty big so we'll subtract some of its whitespace */
@@ -347,7 +366,7 @@ circle {
 }
 
 text {
-  font-size: calc(var(--radius)*.2px);
+  font-size: calc(var(--radius) * 0.2);
 }
 
 
@@ -382,7 +401,7 @@ text {
   color: var(--color-fail);
 }
 .state--expanded {
-  color: var(--color-gray-600);
+  /* color: var(--color-gray-600); */
   transition: color .3s;
 }
 .state--highlight {
@@ -400,9 +419,7 @@ text {
 .state--highlight .lh-gauge__cutout {
   opacity: 0;
 }
-.lh-gauge__outer {
-  mask: url(#lh-gauge__mask);
-}
+
 .lh-gauge__inner {
   color: inherit;
 }
@@ -431,14 +448,20 @@ text {
 }
 .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: 0;
-  stroke-dasharray: 0 calc(var(--circle-meas)*var(--radius));
+  stroke-dasharray: 0 calc(var(--circle-meas) * var(--radius));
   transition: 0s .005s;
 }
 .state--expanded .lh-gauge__arc--metric.lh-gauge--miniarc {
   opacity: .999;
   stroke-dasharray: var(--metric-array);
-  transition: 0.3s calc(.005s + var(--i)*.05s);
+  transition: 0.3s; /*  calc(.005s + var(--i)*.05s); entrace animation */
 }
+
+.state--expanded .lh-gauge__base {
+  fill: var(--color-gray-600);
+  stroke: var(--color-gray-600);
+}
+
 .state--expanded .lh-gauge__inner .lh-gauge__arc {
   opacity: 0;
 }
@@ -449,7 +472,7 @@ text {
   dominant-baseline: middle;
   fill: currentcolor;
   opacity: .999;
-  font-size: calc(var(--radius)*.625px);
+  font-size: calc(var(--radius) * 0.625);
   transition: opacity .3s ease-in;
 }
 .state--highlight .lh-gauge__percentage {

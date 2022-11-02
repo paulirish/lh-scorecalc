@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
 <!--     ToDO
 features:
-- set v5 and v6 values at the same time?  also store values together in localStorage?
+- store values together in localStorage?
 
 bugs:
 - when values are set in beginning (random or localstorage restored), the metric value can shift a little bit thanks to the observer on the score values. it only happens in this case. why? we dont know. but its dumb.
@@ -52,83 +52,28 @@ bugs:
 
   </h1>
 
-
-  <form class="wrapper" id="v5">
-    <h2>v5</h2>
-
-    <table>
-      <thead>
-        <tr>
-          <th class="th--metric" colspan="2"></th>
-          <th class="th--value">Value</th>
-          <th class="th--spacer"></th>
-          <th class="th--score">Metric Score</th>
-          <th class="th--weight">Weighting</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-
-    <div class="perfscore">
-
-    </div>
-  </form>
-
-
-  <form class="wrapper" id="v6">
-    <h2>v6<br><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0-beta.0">beta.0</a></i></h2>
-    <table>
-      <thead>
-        <tr>
-          <th class="th--metric" colspan="2"></th>
-          <th class="th--value">Value</th>
-          <th class="th--spacer"></th>
-          <th class="th--score">Metric Score</th>
-          <th class="th--weight">Weighting</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-
-    <div class="perfscore">
-
-    </div>
-  </form>
+  <div id="container"></div>
 
   <footer class=wrapper>
-    See also <a href="https://web.dev/performance-scoring/">web.dev/performance-scoring</a> and <a href="https://github.com/GoogleChrome/lighthouse/blob/master/docs/scoring.md">scoring.md</a>.
+    Learn more about scoring at <a href="https://web.dev/performance-scoring/">web.dev/performance-scoring</a>.
     <br>
     <details>
-      <summary>Scores under 5 are not supported by this UI. <abbr>Why?</abbr>
+      <summary>Scores under 5/100 are not supported by this UI. <abbr>Why?</abbr>
       </summary>
       <a href="https://www.desmos.com/calculator/dufar5rf4g">Lighthouse uses log-normal curves</a>, which have extremely long tails. If this UI supported them then 50% of the "Value" slider's width would be devoted to scores under 8, which significantly reduces the usability of the slider.
     </details>
   </footer>
 
-
   <script defer type=module src="./calc.js"></script>
 
-  <template id='tmpl-lh-perf-gauge-explodey'>
-    <div class='lh-gauge__wrapper'>
-      <div class='lh-gauge__svg-wrapper'>
-        <svg class='lh-gauge'>
-          <g class='lh-gauge__inner'>
-            <circle class='lh-gauge__bg' />
-            <circle class='lh-gauge__base lh-gauge--faded' />
-            <circle class='lh-gauge__arc' />
-            <text class='lh-gauge__percentage'></text>
-          </g>
-          <g class='lh-gauge__outer'>
-            <circle class='cover' />
-          </g>
-        </svg>
-      </div>
-    </div>
-  </template>
-  <mask id='lh-gauge__mask' color='#000'>
-    <path></path>
-    <circle class='lh-gauge__cutout'></circle>
-  </mask>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-85519014-7', 'auto');
+  ga('send', 'pageview');
+</script>
+
 </html>
