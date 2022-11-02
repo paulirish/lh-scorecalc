@@ -356,6 +356,11 @@ text {
   width: 225px;
   stroke-width: var(--stroke-width);
   stroke-linecap: round;
+  
+  /* for better rendering perf */
+  contain: strict;
+  height: 225px;
+  will-change: transform;
 }
 .lh-gauge--faded {
   opacity: 0.1;
@@ -414,7 +419,7 @@ text {
   color: var(--metric-color);
   stroke-dashoffset: var(--metric-offset);
 }
-.lh-gauge-hover {
+.lh-gauge-hovertarget {
   color: currentcolor;
   opacity: 0.001;
   stroke-linecap: butt;
@@ -508,7 +513,7 @@ text {
 .state--peek .lh-gauge__inner .lh-gauge__arc {
   opacity: 1;
 }
-.state--peek .lh-gauge__arc.lh-gauge--faded:not(.lh-gauge-hover) {
+.state--peek .lh-gauge__arc.lh-gauge--faded {
   opacity: 0.3; /* just a tad stronger cuz its fighting with a big solid arg */
 }
 /* do i need to set expanded and override this? */
@@ -529,3 +534,20 @@ text {
    50% {  transform: scale(0.92); opacity: 1; }
    100% { transform: scale(0.8); opacity: 0.8; }
  }
+
+
+/* for explody hax */
+thead,
+table td:nth-child(2),
+table td:nth-child(4),
+table td:nth-child(5),
+table td:nth-child(6),
+h2 {
+  display: none;
+}
+
+
+.wrapper {
+  width: 620px;
+}
+  

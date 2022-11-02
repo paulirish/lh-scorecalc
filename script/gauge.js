@@ -128,14 +128,14 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
     const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
     const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
-    const metricArcHoverTarget = groupOuter.querySelector(`.metric--${alias} .lh-gauge-hover`) || document.createElementNS(NS_URI, 'circle');
+    const metricArcHoverTarget = groupOuter.querySelector(`.metric--${alias} .lh-gauge-hovertarget`) || document.createElementNS(NS_URI, 'circle');
     const metricLabel = groupOuter.querySelector(`.metric--${alias} .metric__label`) || document.createElementNS(NS_URI, 'text');
     const metricValue = groupOuter.querySelector(`.metric--${alias} .metric__value`) || document.createElementNS(NS_URI, 'text');
 
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded');
     metricArc.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--miniarc');
-    metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge--faded', 'lh-gauge-hover');
+    metricArcHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge-hovertarget');
 
     const weightingPct = metric.weight / totalWeight;
     const metricLengthMax = getMetricArcLength(weightingPct);
@@ -217,10 +217,11 @@ function _setPerfGaugeExplodey(wrapper, category) {
     wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
     metric.metric-highlight: highlight this particular metric
   */
-  SVG.addEventListener('mouseover', e => {
-    // if hovering on the SVG and its expanded, get rid of everything
-    if (e.target === SVG && wrapper.classList.contains('state--expanded')) {
-      // paul: not sure why we want to remove this.. seems like we want to keep it expanded...
+  SVG.addEventListener('pointerover', e => {
+    console.log(e.target);
+
+    // If hovering outside of the arcs, reset back to unexploded state
+    if (e.target === SVG && SVG.classList.contains('state--expanded')) {
       SVG.classList.remove('state--expanded');
 
       if (SVG.classList.contains('state--highlight')) {
@@ -264,7 +265,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
   // clear on mouselave even if mousemove didn't catch it.
   SVG.addEventListener('mouseleave', e => {
-    SVG.classList.remove('state--expanded');
+    // SVG.classList.remove('state--expanded');
     SVG.classList.remove('state--highlight');
     const mh = SVG.querySelector('.metric--highlight');
     mh && mh.classList.remove('metric--highlight');
