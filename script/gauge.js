@@ -227,6 +227,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     if (parent && parent === groupInner) {
       if (!SVG.classList.contains('state--expanded')) SVG.classList.add('state--expanded');
       else if (SVG.classList.contains('state--highlight')) {
+        SVG.classList.remove('state--highlight');
         SVG.querySelector('.metric--highlight').classList.remove('metric--highlight');
       }
       return;
@@ -247,6 +248,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
         if (parent !== highlighted) {
           highlighted.classList.remove('metric--highlight');
           parent.classList.add('metric--highlight');
+          console.log({highlighted, parent});
         }
       }
     }
@@ -264,6 +266,9 @@ function _setPerfGaugeExplodey(wrapper, category) {
   async function peekGauge(SVG) {
     // Delay just a tad to let the user aclimatize beforehand.
     await delay(1000);
+
+    // Early exit if it's already engaged
+    if (SVG.classList.contains('state--expanded')) return;
 
     // To visually get the outer ring to peek on the edge, we need the inner ring on top. This is SVG's equivalent to `innerElem.zIndex = 100`
     const inner = SVG.querySelector('.lh-gauge__inner');
