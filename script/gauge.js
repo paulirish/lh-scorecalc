@@ -196,6 +196,15 @@ function _setPerfGaugeExplodey(wrapper, category) {
     angleAdder += weightingPct * 2 * Math.PI;
   });
 
+  // Catch pointerover movement between the hovertarget arcs. Without this the metric-highlights can clear when moving between.
+  const underHoverTarget = groupOuter.querySelector(`.lh-gauge-underhovertarget`) || document.createElementNS(NS_URI, 'circle');
+  underHoverTarget.classList.add('lh-gauge__arc', 'lh-gauge__arc--metric', 'lh-gauge-hovertarget', 'lh-gauge-underhovertarget');
+  const underHoverLength = getMetricArcLength(1, true);
+  underHoverTarget.setAttribute('stroke-dasharray', `${underHoverLength} ${circumferenceOuter - underHoverLength - endDiffOuter}`);
+  if (!underHoverTarget.isConnected) {
+    groupOuter.prepend(underHoverTarget);
+  }
+
   // Hack. Not ideal.
   if (SVG.dataset.listenersSetup) return;
   SVG.dataset.listenersSetup = true;
