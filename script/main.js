@@ -128,7 +128,7 @@ class Gauge extends Component {
     return (
       <div ref={this.ref} class={`lh-gauge__wrapper lh-gauge__wrapper--${calculateRating(score)}`}>
         <div class='lh-gauge__svg-wrapper'>
-          <svg class='lh-gauge state--expanded'>
+          <svg class='lh-gauge'>
             <g class='lh-gauge__inner'>
               <circle class='lh-gauge__bg' />
               <circle class='lh-gauge__base lh-gauge--faded' />
