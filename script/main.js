@@ -177,8 +177,10 @@ class ScoringGuide extends Component {
     const score = arithmeticMean(auditRefs);
 
     let title = <h2>{name}</h2>;
-    if (name === 'v8') {
-      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v8.0.0">v8, v9</a></i></h2>;
+    if (name === 'v10') {
+      title = <h2>latest<br/><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v10.0.0">v10</a></i></h2>;
+    } else if (name === 'v8') {
+      title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v8.0.0">v8, v9</a></i></h2>;
     } else if (name === 'v6') {
       title = <h2><i><a href="https://github.com/GoogleChrome/lighthouse/releases/tag/v6.0.0">v6, v7</a></i></h2>;
     }
@@ -259,9 +261,9 @@ class App extends Component {
       }
       if (version === 5) return 5;
       // Odd-number major versions are identical (score-wise to the previous one)
-      if (version % 2 === 1) return (version - 1).toString();
-      return version.toString();
-    }).sort().reverse();
+      if (version % 2 === 1) return (version - 1);
+      return version;
+    });
   }
 
   render() {
@@ -284,7 +286,8 @@ class App extends Component {
         </label>
         <label>Versions:
           <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
-            <option value="8,6,5">show all</option>
+            <option value="10,8,6,5">show all</option>
+            <option value="10">v10</option>
             <option value="8">v8, v9</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
