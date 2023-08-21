@@ -287,7 +287,7 @@ class App extends Component {
         <label>Versions:
           <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
             <option value="10,8,6,5">show all</option>
-            <option value="10">v10</option>
+            <option value="10">v10, v11</option>
             <option value="8">v8, v9</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
