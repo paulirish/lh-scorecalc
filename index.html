@@ -66,6 +66,24 @@ bugs:
 
   <script defer type=module src="./calc.js"></script>
 
+  <template id='tmpl-lh-perf-gauge-explodey'>
+    <div class='lh-gauge__wrapper'>
+      <div class='lh-gauge__svg-wrapper'>
+        <svg class='lh-gauge'>
+          <g class='lh-gauge__inner'>
+            <circle class='lh-gauge__bg' />
+            <circle class='lh-gauge__base lh-gauge--faded' />
+            <circle class='lh-gauge__arc' />
+            <text class='lh-gauge__percentage'></text>
+          </g>
+          <g class='lh-gauge__outer'>
+            <circle class='cover' />
+          </g>
+        </svg>
+      </div>
+    </div>
+  </template>
+
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
