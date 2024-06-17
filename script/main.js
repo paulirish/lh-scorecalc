@@ -256,13 +256,23 @@ class App extends Component {
   normalizeVersions(versions) {
     return versions.map(version => {
       version = parseInt(version, 10);
-      if (parseInt(version) < 5) {
+      if (version < 5) {
         throw new Error(`Unsupported Lighthouse version (${version})`);
       }
-      if (version === 5) return 5;
-      // Odd-number major versions are identical (score-wise to the previous one)
-      if (version % 2 === 1) return (version - 1);
-      return version;
+      
+      switch (version) {
+        default:
+        case 12:
+        case 11:
+        case 10:
+          return 10;
+        case 9:
+        case 8:
+          return 8;
+        case 7:
+        case 6:
+          return 6;
+      }
     });
   }
 
@@ -287,7 +297,7 @@ class App extends Component {
         <label>Versions:
           <select name="versions" value={normalizedVersions.join(',')} onChange={this.onVersionsChange} >
             <option value="10,8,6,5">show all</option>
-            <option value="10">v10, v11</option>
+            <option value="10">v10, v11, v12</option>
             <option value="8">v8, v9</option>
             <option value="6">v6, v7</option>
             <option value="5">v5</option>
