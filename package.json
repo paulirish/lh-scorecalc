@@ -20,7 +20,8 @@
     "rollup": "^2.45.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-visualizer": "^5.4.1"
+    "rollup-plugin-visualizer": "^5.4.1",
+    "sirv-cli": "^2.0.2"
   },
   "dependencies": {
     "@rollup/plugin-buble": "^0.21.3",

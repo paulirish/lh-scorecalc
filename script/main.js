@@ -77,7 +77,7 @@ class Metric extends Component {
       // TODO: Use https://github.com/tc39/proposal-unified-intl-numberformat#i-units when Safari/FF support it
       `${numberFormatter.format(value)}${NBSP}ms`;
     const weightFormatted = (weight * 100).toLocaleString(undefined, {maximumFractionDigits: 1});
-
+    
     return <tr class={`lh-metric--${calculateRating(score / 100)}`}>
       <td>
         <span class="lh-metric__score-icon"></span>
@@ -155,12 +155,16 @@ class ScoringGuide extends Component {
 
     const metricsData = Object.keys(scoring).map(id => {
       const metricScoring = scoring[id];
-      return {
+
+      const result = {
         id,
         metricScoring,
         value: values[id],
         score: Math.round(QUANTILE_AT_VALUE(metricScoring, values[id]) * 100),
       };
+
+      console.log('score render', result)
+      return result;
     });
 
     const auditRefs = metricsData.map(metric => {

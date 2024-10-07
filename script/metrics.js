@@ -7,22 +7,21 @@ export const metrics = {
   CLS: {auditId: 'cumulative-layout-shift', name: 'Cumulative Layout Shift', units: 'unitless'},
   FMP: {auditId: 'first-meaningful-paint', name: 'First Meaningful Paint'},
   FCI: {auditId: 'first-cpu-idle', name: 'First CPU Idle'},
+  INP: {auditId: 'interaction-to-next-paint', name: 'Interaction to Next Paint'},
 };
 
 export const curves = {
   v10: {
     mobile: {
-      FCP: {weight: 0.10, median: 3000, p10: 1800},
-      SI: {weight: 0.10, median: 5800, p10: 3387},
-      LCP: {weight: 0.25, median: 4000, p10: 2500},
-      TBT: {weight: 0.30, median: 600,  p10: 200},
+      FCP: {weight: 0.15, median: 3000, p10: 1800},
+      LCP: {weight: 0.30, median: 4000, p10: 2500},
+      INP: {weight: 0.30, median: 500,  p10: 200},
       CLS: {weight: 0.25, median: 0.25, p10: 0.1},
     },
     desktop: {
       FCP: {weight: 0.10, median: 1600, p10: 934},
-      SI: {weight: 0.10, median: 2300, p10: 1311},
       LCP: {weight: 0.25, median: 2400, p10: 1200},
-      TBT: {weight: 0.30, median: 350, p10: 150},
+      INP: {weight: 0.30, median: 500,  p10: 200},
       CLS: {weight: 0.25, median: 0.25, p10: 0.1},
     },
   },
@@ -34,6 +33,7 @@ export const curves = {
       TTI: {weight: 0.10, median: 7300, p10: 3785},
       TBT: {weight: 0.30, median: 600,  p10: 200},
       CLS: {weight: 0.15, median: 0.25, p10: 0.1},
+      INP: {weight: 0.30, median: 500,  p10: 200},
     },
     desktop: {
       FCP: {weight: 0.10, median: 1600, p10: 934},
@@ -42,6 +42,7 @@ export const curves = {
       TTI: {weight: 0.10, median: 4500, p10: 2468},
       TBT: {weight: 0.30, median: 350, p10: 150},
       CLS: {weight: 0.15, median: 0.25, p10: 0.1},
+      INP: {weight: 0.30, median: 500,  p10: 200},
     },
   },
   v6: {
